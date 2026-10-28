@@ -376,7 +376,9 @@
         var result = await response.json();
 
         if (!response.ok || result.success === 'false' || result.success === false) {
-          throw new Error('Не удалось отправить форму');
+          // FormSubmit вернул ошибку (например, форма ещё не активирована)
+          var reason = result && result.message ? result.message : 'Не удалось отправить форму';
+          throw new Error(reason);
         }
 
         // Успех — прячем форму и показываем сообщение
@@ -387,7 +389,12 @@
         responseEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (error) {
         console.error('Ошибка отправки:', error);
-        status.textContent = 'Не получилось отправить. Попробуй ещё раз.';
+        // Показываем причину, если она пришла от FormSubmit, иначе общее сообщение
+        var msg = error && error.message ? error.message : '';
+        var isFormSubmitMsg = msg && msg !== 'Не удалось отправить форму' && msg !== 'Failed to fetch';
+        status.textContent = isFormSubmitMsg
+          ? msg
+          : 'Не получилось отправить. Попробуй ещё раз.';
         status.classList.add('is-error');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Отправить';
