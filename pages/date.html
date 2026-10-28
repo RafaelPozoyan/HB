@@ -4,9 +4,137 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Запись на свидание с Рафулей</title>
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
   <link rel="stylesheet" href="../css/gate.css">
   <link rel="stylesheet" href="../css/theme.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <style>
+    /* Форма ответа на приглашение */
+    .response-form {
+      margin-top: 26px;
+      text-align: left;
+    }
+
+    .response-form__label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e6dcf2;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
+
+    .response-form__field {
+      margin-top: 16px;
+    }
+
+    .response-form__field:first-of-type {
+      margin-top: 0;
+    }
+
+    /* Однострочное поле (вопросы про время/место/еду) */
+    .response-form__input {
+      min-height: 0;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      resize: none;
+    }
+
+    .response-form__textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(208, 178, 240, .22);
+      border-radius: 14px;
+      background: rgba(10, 8, 15, .42);
+      padding: 10px 15px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 1.5;
+      resize: vertical;
+      min-height: 46px;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, opacity .2s ease, background .2s ease;
+    }
+
+    .response-form__textarea::placeholder {
+      color: #82788f;
+    }
+
+    .response-form__textarea:focus {
+      border-color: #c5a5e8;
+      box-shadow: 0 0 0 3px rgba(208, 178, 240, .1);
+    }
+
+    .response-form__textarea[readonly] {
+      opacity: .75;
+      cursor: default;
+      background: rgba(208, 178, 240, .06);
+    }
+
+    /* Маленькая тихая кнопка «Я не знаю» под каждым полем */
+    .dont-know-btn {
+      margin-top: 8px;
+      padding: 6px 12px;
+      border: 1px solid rgba(208, 178, 240, .22);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .02);
+      color: #cbbcd9;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+
+    .dont-know-btn:hover {
+      border-color: rgba(208, 178, 240, .45);
+      background: rgba(208, 178, 240, .08);
+      color: #e8d9f7;
+    }
+
+    .dont-know-btn.is-active {
+      border-color: rgba(208, 178, 240, .6);
+      background: rgba(208, 178, 240, .16);
+      color: #f0e7fa;
+    }
+
+    .response-form__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .response-form__actions .btn {
+      margin-top: 0;
+    }
+
+    .response-form__status {
+      margin-top: 16px;
+      min-height: 22px;
+      font-size: 14px;
+    }
+
+    .response-form__status.is-error {
+      color: #f2949c;
+    }
+
+    .response-form__status.is-ok {
+      color: #7fe0a6;
+    }
+
+    /* Сообщение об успешной отправке */
+    #response.is-ok {
+      margin-top: 22px;
+      color: #c8f7d8;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
 
@@ -21,16 +149,106 @@
 <main class="page">
   <header class="page-heading">
     <h1>Запись на свидание<br>с Рафулей</h1>
-    <p>ВСТАВЬ СЮДА ТЕКСТ</p>
   </header>
 
   <div class="text-panel">
-    <h2>Алина, приглашаю тебя на свидание 💜</h2>
-    <p>ВСТАВЬ СЮДА ТЕКСТ</p>
+    <div id="intro">
+      <h2>Алина, приглашаю тебя на свидание 💜</h2>
+      <p>Заполни форму и все будет исполнено!</p>
 
-    <button type="button" id="accept" class="btn btn--primary">
-      Принять приглашение ✨
-    </button>
+      <!-- Кнопка открывает форму ответа -->
+      <button type="button" id="accept" class="btn btn--primary">
+        Принять приглашение ✨
+      </button>
+    </div>
+
+    <!-- Форма ответа: показывается после нажатия «Принять приглашение» -->
+    <form
+      id="response-form"
+      class="response-form"
+      action="https://formsubmit.co/2fa32a0ce8b7e889ff90c78fa28c2ccb"
+      method="POST"
+      hidden
+    >
+      <!-- Служебные поля FormSubmit -->
+      <input type="hidden" name="_subject" value="Ответ на приглашение на свидание 💜">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <div class="response-form__field" data-field>
+        <label for="q-when" class="response-form__label">Когда вы хотите пойти?</label>
+        <input
+          type="text"
+          id="q-when"
+          name="Когда пойти"
+          class="response-form__textarea response-form__input"
+          placeholder="Введите ответ или выберите Я не знаю ☹️"
+          required
+        >
+        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+      </div>
+
+      <div class="response-form__field" data-field>
+        <label for="q-where" class="response-form__label">Куда вы хотите пойти?</label>
+        <input
+          type="text"
+          id="q-where"
+          name="Куда пойти"
+          class="response-form__textarea response-form__input"
+          placeholder="Введите ответ или выберите Я не знаю ☹️"
+          required
+        >
+        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+      </div>
+
+      <div class="response-form__field" data-field>
+        <label for="q-food" class="response-form__label">Что вы будете кушать?</label>
+        <input
+          type="text"
+          id="q-food"
+          name="Что кушать"
+          class="response-form__textarea response-form__input"
+          placeholder="Введите ответ или выберите Я не знаю ☹️"
+          required
+        >
+        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+      </div>
+
+      <div class="response-form__field" data-field>
+        <label for="q-walk" class="response-form__label">Где вы будете гулять?</label>
+        <input
+          type="text"
+          id="q-walk"
+          name="Где гулять"
+          class="response-form__textarea response-form__input"
+          placeholder="Введите ответ или выберите Я не знаю ☹️"
+          required
+        >
+        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+      </div>
+
+      <div class="response-form__field" data-field>
+        <label for="q-wishes" class="response-form__label">Особые пожелания</label>
+        <textarea
+          id="q-wishes"
+          name="Особые пожелания"
+          class="response-form__textarea"
+          placeholder="Всё, что важно учесть..."
+          rows="3"
+          required
+        ></textarea>
+        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+      </div>
+
+      <div class="response-form__actions">
+        <button type="submit" id="send-answer" class="btn btn--primary">
+          Отправить
+        </button>
+      </div>
+
+      <p id="response-status" class="response-form__status" role="status" aria-live="polite"></p>
+    </form>
 
     <p id="response" aria-live="polite"></p>
   </div>
@@ -39,10 +257,143 @@
 </main>
 
 <script>
-  document.getElementById("accept").addEventListener("click", () => {
-    document.getElementById("response").textContent =
-      "Приглашение принято! Осталось выбрать день 💜";
-  });
+  (function () {
+    var acceptBtn = document.getElementById('accept');
+    var form = document.getElementById('response-form');
+    var status = document.getElementById('response-status');
+    var submitBtn = document.getElementById('send-answer');
+
+    var DONT_KNOW_TEXT = 'Я не знаю ☹️';
+
+    // Все поля формы
+    var fields = [
+      document.getElementById('q-when'),
+      document.getElementById('q-where'),
+      document.getElementById('q-food'),
+      document.getElementById('q-walk'),
+      document.getElementById('q-wishes')
+    ];
+
+    // Запоминаем исходные плейсхолдеры
+    fields.forEach(function (el) {
+      el.dataset.originalPlaceholder = el.placeholder;
+    });
+
+    function isDontKnow(el) {
+      return el.readOnly && el.value === DONT_KNOW_TEXT;
+    }
+
+    // Показать форму после «Принять приглашение»
+    acceptBtn.addEventListener('click', function () {
+      form.hidden = false;
+      document.getElementById('intro').hidden = true;
+      document.getElementById('response').textContent = '';
+      fields[0].focus();
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    function clearStatus() {
+      status.textContent = '';
+      status.classList.remove('is-error', 'is-ok');
+    }
+
+    // Кнопки «Я не знаю» под каждым полем — заполняют только своё поле
+    form.querySelectorAll('[data-dont-know]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var field = btn.closest('[data-field]');
+        var input = field.querySelector('input, textarea');
+        var active = btn.classList.toggle('is-active');
+
+        if (active) {
+          input.value = DONT_KNOW_TEXT;
+          input.readOnly = true;
+          input.removeAttribute('required');
+          input.placeholder = '';
+          btn.setAttribute('aria-pressed', 'true');
+        } else {
+          input.value = '';
+          input.readOnly = false;
+          input.setAttribute('required', '');
+          input.placeholder = input.dataset.originalPlaceholder || '';
+          btn.setAttribute('aria-pressed', 'false');
+        }
+        clearStatus();
+      });
+    });
+
+    // Очищаем ошибку, когда пользователь снова начинает печатать
+    fields.forEach(function (el) {
+      el.addEventListener('input', function () {
+        if (status.classList.contains('is-error')) {
+          clearStatus();
+        }
+      });
+    });
+
+    // Валидация перед отправкой
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      clearStatus();
+
+      for (var i = 0; i < fields.length; i++) {
+        var el = fields[i];
+        // поле обязательно, если не выбрано «Я не знаю» и оно пустое
+        if (!isDontKnow(el) && !el.value.trim()) {
+          el.focus();
+          status.textContent = 'Пожалуйста, ответь на все вопросы или выбери «Я не знаю ☹️» под нужным полем.';
+          status.classList.add('is-error');
+          return;
+        }
+      }
+
+      // Собираем данные формы в объект
+      var payload = {
+        _subject: 'Ответ на приглашение на свидание 💜',
+        _template: 'table',
+        _captcha: 'false'
+      };
+      fields.forEach(function (el) {
+        payload[el.name] = el.value.trim();
+      });
+
+      // Блокируем кнопку, чтобы не отправить дважды
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Отправляем...';
+
+      try {
+        var response = await fetch(
+          'https://formsubmit.co/ajax/2fa32a0ce8b7e889ff90c78fa28c2ccb',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        var result = await response.json();
+
+        if (!response.ok || result.success === 'false' || result.success === false) {
+          throw new Error('Не удалось отправить форму');
+        }
+
+        // Успех — прячем форму и показываем сообщение
+        form.hidden = true;
+        var responseEl = document.getElementById('response');
+        responseEl.textContent = 'Ваши ответы направлены Рафуле, ждите ответа!';
+        responseEl.classList.add('is-ok');
+        responseEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (error) {
+        console.error('Ошибка отправки:', error);
+        status.textContent = 'Не получилось отправить. Попробуй ещё раз.';
+        status.classList.add('is-error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Отправить';
+      }
+    });
+  })();
 </script>
 
 <script src="../js/gate.js"></script>

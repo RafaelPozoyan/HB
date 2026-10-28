@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Близкие Алиночки</title>
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
   <link rel="stylesheet" href="../css/gate.css">
   <link rel="stylesheet" href="../css/theme.css">
   <link rel="stylesheet" href="../css/pages.css">
@@ -16,6 +20,67 @@
       gap: clamp(36px, 6vw, 90px);
       max-width: 1050px;
       margin: 0 auto;
+    }
+
+    /* Список одинаковых участков (фото + открытка) */
+    .loved-stack {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(56px, 9vw, 120px);
+    }
+
+    /* Чередование сторон: у чётных участков фото справа, текст слева.
+       Только для двухколоночной (десктопной) раскладки — на телефоне
+       колонка одна, и фото всегда идёт сверху. */
+    @media (min-width: 801px) {
+      .loved-layout:nth-child(even) > .reveal:first-child { order: 2; }
+      .loved-layout:nth-child(even) > .reveal:last-child  { order: 1; }
+    }
+
+    /* Тихий декоративный разделитель между участками */
+    .loved-layout {
+      position: relative;
+    }
+
+    /* Линия по центру промежутка между участками (кроме первого) */
+    .loved-layout:not(:first-child)::before {
+      content: "";
+      position: absolute;
+      top: calc(-1 * clamp(56px, 9vw, 120px) / 2);
+      left: 6%;
+      right: 6%;
+      height: 1px;
+      transform: translateY(-50%);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(208, 178, 240, .22) 22%,
+        rgba(208, 178, 240, .30) 50%,
+        rgba(208, 178, 240, .22) 78%,
+        transparent
+      );
+      pointer-events: none;
+    }
+
+    /* Маленький ромбик-акцент по центру линии */
+    .loved-layout:not(:first-child)::after {
+      content: "";
+      position: absolute;
+      top: calc(-1 * clamp(56px, 9vw, 120px) / 2);
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 1.5px;
+      background: rgba(208, 178, 240, .55);
+      transform: translate(-50%, -50%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .loved-layout::before,
+      .loved-layout::after {
+        transition: none;
+      }
     }
 
     .photo-frame {
@@ -150,10 +215,49 @@
 
     /* Обратная сторона — с текстом поздравления */
     .flip-card__back {
+      position: relative;
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      /* запас снизу, чтобы подпись не наезжала на текст */
+      padding-bottom: clamp(52px, 8vw, 74px);
+    }
+
+    /* Цитата в конце поздравления */
+    .flip-card__quote {
+      position: relative;
+      margin: 22px 0 0;
+      padding: 16px 18px 16px 24px;
+      border-left: 3px solid rgba(208, 178, 240, .6);
+      border-radius: 0 12px 12px 0;
+      background: rgba(208, 178, 240, .07);
+      color: #e6dcef;
+      font-style: italic;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .flip-card__quote cite {
+      display: block;
+      margin-top: 10px;
+      font-style: normal;
+      font-size: 13px;
+      letter-spacing: .03em;
+      color: #b79be0;
+    }
+
+    /* Подпись (картинка) в правом нижнем углу */
+    .flip-card__sign {
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      width: 96px;
+      max-width: 28%;
+      height: auto;
+      opacity: .9;
+      pointer-events: none;
+      user-select: none;
     }
 
     .flip-card__back .loved-text__title {
@@ -221,51 +325,410 @@
     <h1>Люди, которые<br>делают жизнь теплее</h1>
   </header>
 
-  <div class="loved-layout">
-    <div class="reveal">
-      <div class="photo-float">
-        <div class="photo-frame photo-reveal">
-          <img
-            src="../assets/images/photo4.png"
-            alt="Фотография Алины"
-            loading="lazy"
-          >
+  <div class="loved-stack">
+    <!-- Участок 1 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от мамы</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от мамы</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="reveal">
-      <div class="flip-card" id="rafulya-card">
-        <div class="flip-card__inner">
-          <!-- Лицевая сторона: заголовок и подсказка -->
-          <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
-            <h2 class="loved-text__title">Поздравление от Рафули</h2>
-            <span class="flip-card__hint">
-              Нажми, чтобы открыть открытку
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
-                <path d="M21 3v6h-6"></path>
-              </svg>
-            </span>
+    <!-- Участок 2 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
           </div>
+        </div>
+      </div>
 
-          <!-- Обратная сторона: текст поздравления -->
-          <div class="flip-card__face flip-card__back">
-            <h2 class="loved-text__title">Поздравление от Рафули</h2>
-            <p>
-              Алина, спасибо тебе большое за то, что ты есть в моей жизни.
-            </p>
-            <p>
-              Ты всегда была именно тем человеком, который напрямую влияет на меня, и я буду
-              делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
-            </p>
-            <p>
-              Для чувства любви не существует цены — только жизнь одна.<br>Фильм «Юнона и Авось» 
-            </p>
-            <p>
-              С днём рождения, мелкая!!!
-            </p>
-            <span class="flip-card__back-hint">Нажми ещё раз, чтобы закрыть</span>
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от бабушки</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от бабушки</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Участок 3 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от сестры</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от сестры</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Участок 4 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от Кати</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от Кати</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Участок 5 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от Саши</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от Саши</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Участок 6 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от Саши</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от Саши</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Участок 7 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от Ксюнделя</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от Ксюнделя</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Участок 8 -->
+    <div class="loved-layout">
+      <div class="reveal">
+        <div class="photo-float">
+          <div class="photo-frame photo-reveal">
+            <img
+              src="../assets/images/photo4.png"
+              alt="Фотография Алины"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-card__inner">
+            <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+              <h2 class="loved-text__title">Поздравление от Рафули</h2>
+              <span class="flip-card__hint">
+                Нажми, чтобы открыть открытку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                  <path d="M21 3v6h-6"></path>
+                </svg>
+              </span>
+            </div>
+
+            <div class="flip-card__face flip-card__back">
+              <h2 class="loved-text__title">Поздравление от Рафули</h2>
+              <p>
+                Алина, спасибо тебе большое за то, что ты есть в моей жизни. Ты прекрасна. Причем, прекрасна абсолютно всем. Все твои плюсы и минусы делают тебя именно тем человеком, которого я искренне люблю.
+              </p>
+              <p>
+                Ты всегда была именно тем человеком, который фактом своего существования делал меня лучше и давал мотивацию становиться лучше с каждым днем. Я буду
+                делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+              </p>
+              <p>
+                С днём рождения, мелкая!!!
+              </p>
+              <img
+                class="flip-card__sign"
+                src="../assets/images/signs/raf.png"
+                alt="Подпись Рафули"
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -276,26 +739,29 @@
 </main>
 
 <script>
-  // Переворот карточки поздравления по клику (и по Enter/Space с клавиатуры)
+  // Переворот карточек поздравления по клику (и по Enter/Space с клавиатуры).
+  // Обрабатываем все карточки на странице.
   (function () {
-    var card = document.getElementById('rafulya-card');
-    if (!card) return;
+    var cards = document.querySelectorAll('.flip-card');
 
-    var front = card.querySelector('.flip-card__front');
+    cards.forEach(function (card) {
+      var front = card.querySelector('.flip-card__front');
+      if (!front) return;
 
-    function toggle() {
-      card.classList.toggle('is-flipped');
-      var flipped = card.classList.contains('is-flipped');
-      front.setAttribute('aria-pressed', flipped ? 'true' : 'false');
-    }
+      function toggle() {
+        card.classList.toggle('is-flipped');
+        var flipped = card.classList.contains('is-flipped');
+        front.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+      }
 
     card.addEventListener('click', toggle);
 
-    card.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-        e.preventDefault();
-        toggle();
-      }
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          toggle();
+        }
+      });
     });
   })();
 </script>
