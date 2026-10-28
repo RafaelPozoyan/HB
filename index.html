@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#121019">
+  <meta name="description" content="С днём рождения, Алина! Особенный сайт для особенного человека.">
+  <title>С днём рождения, Алина! 💜</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            night: '#121019',
+            panel: '#1b1725',
+            lavender: '#d0b2f0',
+            lilac: '#a78bfa',
+            softpink: '#f0b9d5'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      margin: 0;
+      background: #121019;
+      color: #f6f0fa;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 15% 15%, rgba(167, 139, 250, .15), transparent 40%),
+        radial-gradient(ellipse at 85% 65%, rgba(240, 185, 213, .10), transparent 40%);
+    }
+
+    .aurora {
+      position: fixed;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: .12;
+      pointer-events: none;
+      z-index: -1;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+
+    .aurora-one {
+      top: 5%;
+      left: -150px;
+      background: #a78bfa;
+    }
+
+    .aurora-two {
+      right: -150px;
+      bottom: 5%;
+      background: #f0b9d5;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(35px, -25px, 0); }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    .fade-up {
+      animation: fadeUp .8s ease both;
+    }
+
+    .delay-1 { animation-delay: .15s; }
+    .delay-2 { animation-delay: .3s; }
+    .delay-3 { animation-delay: .45s; }
+
+    .gradient-text {
+      color: #d0b2f0;
+      background: linear-gradient(110deg, #f0b9d5, #d0b2f0 50%, #a78bfa);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glass {
+      background: rgba(27, 23, 37, .72);
+      border: 1px solid rgba(208, 178, 240, .13);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .nav-link {
+      color: #c0b6cc;
+      transition: color .25s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: #f0b9d5;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      background: linear-gradient(110deg, #d0b2f0, #f0b9d5);
+      color: #211829;
+      font-weight: 700;
+      transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
+      box-shadow: 0 8px 30px rgba(208, 178, 240, .14);
+    }
+
+    .primary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(208, 178, 240, .28);
+    }
+
+    .primary-button:active {
+      transform: translateY(-1px);
+    }
+
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 23px;
+      border: 1px solid rgba(208, 178, 240, .25);
+      border-radius: 999px;
+      color: #e8d9f7;
+      background: rgba(255, 255, 255, .025);
+      transition: background .25s ease, border-color .25s ease, transform .25s ease;
+    }
+
+    .secondary-button:hover {
+      background: rgba(208, 178, 240, .09);
+      border-color: rgba(208, 178, 240, .5);
+      transform: translateY(-2px);
+    }
+
+    .photo-frame {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      margin-inline: auto;
+      padding: 10px;
+      background: rgba(255, 255, 255, .045);
+      border: 1px solid rgba(208, 178, 240, .17);
+      border-radius: 24px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, .24);
+      transition: transform .35s ease, border-color .35s ease;
+    }
+
+    .photo-frame:hover {
+      transform: translateY(-5px) rotate(-.5deg);
+      border-color: rgba(208, 178, 240, .38);
+    }
+
+    .photo-frame img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 16px;
+      background: #24202e;
+    }
+
+    .photo-caption {
+      padding: 16px 8px 8px;
+      text-align: center;
+      color: #bdb2ca;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid rgba(208, 178, 240, .18);
+      border-radius: 999px;
+      background: rgba(208, 178, 240, .06);
+      color: #d9c6ed;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+
+    .memory-copy p {
+      color: #c0b6cc;
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .memory-copy h2 {
+      line-height: 1.08;
+      letter-spacing: -.045em;
+    }
+
+    .text-field {
+      width: 100%;
+      border: 1px solid rgba(208, 178, 240, .2);
+      border-radius: 16px;
+      background: rgba(10, 8, 15, .42);
+      padding: 15px 17px;
+      color: #f6f0fa;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .text-field::placeholder {
+      color: #82788f;
+    }
+
+    .text-field:focus {
+      border-color: #c5a5e8;
+      box-shadow: 0 0 0 3px rgba(208, 178, 240, .1);
+    }
+
+    .heart {
+      display: inline-block;
+      animation: heartbeat 1.8s ease-in-out infinite;
+    }
+
+    .progress-track {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      z-index: 60;
+      background: transparent;
+    }
+
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #a78bfa, #f0b9d5);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #wish-status {
+      min-height: 24px;
+      color: #d0b2f0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 767px) {
+      .mobile-nav {
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .mobile-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .memory-copy {
+        text-align: center;
+      }
+
+      .photo-frame {
+        max-width: 350px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+  <div class="aurora aurora-one"></div>
+  <div class="aurora aurora-two"></div>
+
+  <div class="progress-track" aria-hidden="true">
+    <div id="progress"></div>
+  </div>
+
+  <!-- Навигация -->
+  <header class="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5">
+    <nav class="glass mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-6">
+      <a href="#start" class="flex shrink-0 items-center gap-2 font-semibold tracking-tight text-white">
+        <span class="text-xl">♡</span>
+        <span>Для Алины</span>
+      </a>
+
+      <div class="mobile-nav flex items-center gap-4 text-xs sm:gap-6 sm:text-sm">
+        <a class="nav-link whitespace-nowrap" href="#beautiful">Красота</a>
+        <a class="nav-link whitespace-nowrap" href="#smart">Ум</a>
+        <a class="nav-link whitespace-nowrap" href="#funny">Юмор</a>
+        <a class="nav-link whitespace-nowrap" href="#end">В конце</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Главный экран -->
+    <section id="start" class="flex min-h-screen items-center justify-center px-5 pb-16 pt-32 text-center">
+      <div class="mx-auto max-w-4xl">
+        <div class="fade-up mb-7">
+          <span class="section-label">✦ 6 ноября 2026 года ✦</span>
+        </div>
+
+        <p class="fade-up delay-1 mb-4 text-sm font-medium tracking-[.25em] text-purple-200/70 uppercase">
+          Сегодня твой день
+        </p>
+
+        <h1 class="fade-up delay-1 text-5xl font-extrabold leading-[1.08] tracking-[-.06em] sm:text-7xl md:text-8xl">
+          С днём<br>
+          <span class="gradient-text">рождения,</span><br>
+          Алина!
+        </h1>
+
+        <p class="fade-up delay-2 mx-auto mt-7 max-w-xl text-base leading-8 text-[#c0b6cc] sm:text-lg">
+          Алиночке исполнилось 22!
+          <br class="hidden sm:block">
+          Этот небольшой сайт — о тебе и о том, как много ты значишь.
+        </p>
+
+        <div class="fade-up delay-3 mt-9 flex flex-wrap items-center justify-center gap-3">
+          <a href="#beautiful" class="primary-button">
+            Начать путешествие <span aria-hidden="true">↓</span>
+          </a>
+          <a href="pages/letter.html" class="secondary-button">
+            Письмо для тебя ↗
+          </a>
+        </div>
+
+        <div class="mt-16 text-sm text-[#82788f]">
+          Прокрути вниз, здесь всё для тебя
+          <div class="mt-3 text-xl text-purple-200/70">⌄</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Самая красивая -->
+    <section id="beautiful" class="px-5 py-20 sm:py-28">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
+        <div class="reveal">
+          <div class="photo-frame">
+            <img
+              src="assets/images/photo1.png"
+              alt="Фотография Алины"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85';"
+            >
+            <div class="photo-caption">Та самая улыбка, которую невозможно забыть ✨</div>
+          </div>
+        </div>
+
+        <div class="memory-copy reveal">
+          <span class="section-label">01 · Внешность</span>
+          <h2 class="mt-6 text-5xl font-bold sm:text-6xl">
+            Самая<br><span class="gradient-text">красивая</span>
+          </h2>
+          <p class="mt-6">
+            В тебе есть что-то особенное. Не только внешность, но и взгляд,
+            улыбка и то, как ты умеешь делать обычные моменты ярче.
+          </p>
+          <p class="mt-4">
+            Хочется, чтобы ты всегда видела в себе ту красоту, которую видят в тебе другие.
+          </p>
+          <a href="pages/beautiful.html" class="secondary-button mt-7">
+            Ещё немного о тебе ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Самая умная -->
+    <section id="smart" class="px-5 py-20 sm:py-28">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
+        <div class="memory-copy order-2 reveal md:order-1">
+          <span class="section-label">02 · Характер</span>
+          <h2 class="mt-6 text-5xl font-bold sm:text-6xl">
+            Самая<br><span class="gradient-text">умная</span>
+          </h2>
+          <p class="mt-6">
+            Мне нравится, как ты думаешь, замечаешь детали и смотришь на вещи
+            со своей точки зрения.
+          </p>
+          <p class="mt-4">
+            Пусть у тебя всегда хватает сил и уверенности идти к тому, чего ты действительно хочешь.
+          </p>
+          <a href="pages/smart.html" class="secondary-button mt-7">
+            Продолжить читать ↗
+          </a>
+        </div>
+
+        <div class="order-1 reveal md:order-2">
+          <div class="photo-frame">
+            <img
+              src="assets/images/photo2.png"
+              alt="Ещё одна фотография Алины"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85';"
+            >
+            <div class="photo-caption">Красота — это ещё и то, что у тебя внутри 💜</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Самая смешная -->
+    <section id="funny" class="px-5 py-20 sm:py-28">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
+        <div class="reveal">
+          <div class="photo-frame">
+            <img
+              src="assets/images/photo3.png"
+              alt="Фотография Алины с улыбкой"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85';"
+            >
+            <div class="photo-caption">С тобой даже обычный день становится веселее ☀️</div>
+          </div>
+        </div>
+
+        <div class="memory-copy reveal">
+          <span class="section-label">03 · Настроение</span>
+          <h2 class="mt-6 text-5xl font-bold sm:text-6xl">
+            Самая<br><span class="gradient-text">смешная</span>
+          </h2>
+          <p class="mt-6">
+            С тобой можно смеяться над совершенно глупыми вещами и всё равно
+            считать этот момент одним из лучших.
+          </p>
+          <p class="mt-4">
+            Желаю тебе побольше поводов улыбаться, искренне смеяться и собирать воспоминания,
+            к которым захочется возвращаться.
+          </p>
+          <a href="pages/memories.html" class="secondary-button mt-7">
+            Наши воспоминания ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Финал -->
+    <section id="end" class="px-5 py-24 sm:py-32">
+      <div class="glass reveal mx-auto max-w-3xl rounded-[2rem] px-6 py-12 text-center sm:px-12 sm:py-16">
+
+        <h2 class="mt-7 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          Спасибо за то,<br>
+          <span class="gradient-text">что ты есть</span>
+        </h2>
+
+        <p class="mx-auto mt-6 max-w-xl text-base leading-8 text-[#c0b6cc] sm:text-lg">
+          Спасибо за моменты, улыбки, разговоры и за то, что ты есть в моей жизни.
+          Пусть этот год принесёт тебе много счастья, спокойствия и исполнения желаний.
+        </p>
+
+        <p class="mt-8 text-2xl font-semibold text-[#f0b9d5] sm:text-3xl">
+          Я тебя люблю ❤️
+        </p>
+
+        <div class="mx-auto my-10 h-px max-w-xs bg-gradient-to-r from-transparent via-purple-300/40 to-transparent"></div>
+
+        <!-- Форма желания -->
+        <div class="mx-auto max-w-lg text-left">
+          <h3 class="text-center text-xl font-semibold sm:text-2xl">
+            Загадай желание ✨
+          </h3>
+          <p class="mt-2 text-center text-sm leading-6 text-[#a99db7]">
+            Напиши его здесь — пусть оно станет первым шагом к исполнению.
+          </p>
+
+          <form id="wish-form" class="mt-6 space-y-4">
+            <label for="wish-input" class="sr-only">Твоё желание</label>
+            <textarea
+              id="wish-input"
+              name="wish"
+              class="text-field min-h-32 resize-y"
+              placeholder="Твоё желание..."
+              maxlength="1000"
+              required
+            ></textarea>
+
+            <button type="submit" class="primary-button w-full">
+              Отправить желание ✨
+            </button>
+
+            <p id="wish-status" class="text-center" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="mt-9 flex flex-wrap justify-center gap-3">
+          <a href="#start" class="secondary-button">Вернуться в начало ↑</a>
+          <a href="https://t.me/sladkiyraf" target="_blank" rel="noopener noreferrer" class="secondary-button">
+            Написать мне ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="px-5 pb-8 text-center text-xs text-[#82788f]">
+    Сделано с любовью для Алины <span class="text-purple-300">♥</span>
+  </footer>
+
+  <script>
+    // Индикатор прокрутки
+    const progress = document.getElementById('progress');
+
+    function updateProgress() {
+      const scrollableHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+      const percent = scrollableHeight > 0
+        ? (window.scrollY / scrollableHeight) * 100
+        : 0;
+
+      progress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+
+    // Плавное появление блоков при прокрутке
+    const revealElements = document.querySelectorAll('.reveal');
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            currentObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.12
+      });
+
+      revealElements.forEach(element => observer.observe(element));
+    } else {
+      revealElements.forEach(element => element.classList.add('visible'));
+    }
+
+    // Обработка желания без перезагрузки страницы.
+    // Для реальной отправки сообщения нужен сервер или подключённый сервис.
+    const wishForm = document.getElementById('wish-form');
+    const wishInput = document.getElementById('wish-input');
+    const wishStatus = document.getElementById('wish-status');
+
+    wishForm.addEventListener('submit', event => {
+      event.preventDefault();
+
+      const wish = wishInput.value.trim();
+
+      if (!wish) {
+        wishStatus.textContent = 'Сначала напиши своё желание 💜';
+        wishInput.focus();
+        return;
+      }
+
+      const message = `Желание Алины:\n${wish}`;
+      const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent('С днём рождения, Алина!')}&text=${encodeURIComponent(message)}`;
+
+      wishStatus.textContent = 'Желание готово! Открой Telegram, чтобы отправить его.';
+
+      const existingLink = document.getElementById('wish-telegram-link');
+
+      if (existingLink) {
+        existingLink.remove();
+      }
+
+      const telegramLink = document.createElement('a');
+      telegramLink.id = 'wish-telegram-link';
+      telegramLink.href = telegramUrl;
+      telegramLink.target = '_blank';
+      telegramLink.rel = 'noopener noreferrer';
+      telegramLink.className = 'secondary-button mt-3 w-full';
+      telegramLink.textContent = 'Отправить в Telegram ↗';
+
+      wishStatus.insertAdjacentElement('afterend', telegramLink);
+    });
+  </script>
+</body>
+</html>

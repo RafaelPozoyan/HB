@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Запись на свидание с Рафулей</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">Начало</a>
+  <a href="life.html">Жизнь Алиночки</a>
+  <a href="travels.html">Путешествия Алиночки</a>
+  <a href="loved-ones.html">Близкие Алиночки</a>
+  <a href="date.html" class="active">Запись на свидание с Рафулей</a>
+</nav>
+
+<main class="page">
+  <header class="page-heading">
+    <div class="eyebrow">04 · Особое приглашение</div>
+    <h1>Запись на свидание<br>с Рафулей</h1>
+    <p>ВСТАВЬ СЮДА ТЕКСТ</p>
+  </header>
+
+  <div class="text-panel">
+    <h2>Алина, приглашаю тебя на свидание 💜</h2>
+    <p>ВСТАВЬ СЮДА ТЕКСТ</p>
+
+    <button type="button" id="accept">
+      Принять приглашение ✨
+    </button>
+
+    <p id="response" aria-live="polite"></p>
+  </div>
+
+  <a class="back-link" href="../index.html">← На главную</a>
+</main>
+
+<script>
+  document.getElementById("accept").addEventListener("click", () => {
+    document.getElementById("response").textContent =
+      "Приглашение принято! Осталось выбрать день 💜";
+  });
+</script>
+
+</body>
+</html>
