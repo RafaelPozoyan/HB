@@ -83,6 +83,102 @@
       margin-top: 20px;
     }
 
+    /* --- Переворачивающаяся карточка поздравления --- */
+    .flip-card {
+      perspective: 1600px;
+      width: 100%;
+    }
+
+    .flip-card__inner {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .8s cubic-bezier(.4, .2, .2, 1);
+      /* высота задаётся содержимым лицевой стороны */
+    }
+
+    .flip-card.is-flipped .flip-card__inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card__face {
+      border-radius: 26px;
+      padding: clamp(28px, 4vw, 46px);
+      border: 1px solid rgba(208, 178, 240, .2);
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(131, 93, 163, .14), transparent 60%),
+        rgba(255, 255, 255, .03);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    /* Лицевая сторона */
+    .flip-card__front {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 400px;
+      cursor: pointer;
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .flip-card__front:hover {
+      border-color: rgba(208, 178, 240, .42);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .22);
+    }
+
+    .flip-card__hint {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #cbbcd9;
+      font-size: 14px;
+      letter-spacing: .02em;
+    }
+
+    .flip-card__hint svg {
+      transition: transform .3s ease;
+    }
+
+    .flip-card__front:hover .flip-card__hint svg {
+      transform: rotate(180deg);
+    }
+
+    /* Обратная сторона — с текстом поздравления */
+    .flip-card__back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .flip-card__back .loved-text__title {
+      font-size: clamp(22px, 2.6vw, 30px);
+      margin-bottom: 16px;
+    }
+
+    .flip-card__back p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .flip-card__back p + p {
+      margin-top: 14px;
+    }
+
+    .flip-card__back-hint {
+      margin-top: 20px;
+      color: #9c90ad;
+      font-size: 12px;
+      letter-spacing: .03em;
+    }
+
     @media (max-width: 800px) {
       .loved-layout {
         grid-template-columns: 1fr;
@@ -91,11 +187,21 @@
       .loved-text {
         text-align: center;
       }
+
+      .flip-card__front {
+        align-items: center;
+        text-align: center;
+        min-height: 360px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .photo-float {
         animation: none;
+      }
+
+      .flip-card__inner {
+        transition: none;
       }
     }
   </style>
@@ -128,23 +234,68 @@
       </div>
     </div>
 
-    <div class="loved-text reveal">
-      <h2 class="loved-text__title">Поздравление от Рафули</h2>
-      <p>
-        Алина, спасибо тебе большое за то, что ты есть в моей жизни.
-      </p>
-      <p>
-        Ты всегда была тем человеком, который напрямую влияет на меня, и я буду
-        делать всё возможное, чтобы делать тебя счастливой.
-      </p>
-      <p>
-        С днём рождения, мелкая!!!
-      </p>
+    <div class="reveal">
+      <div class="flip-card" id="rafulya-card">
+        <div class="flip-card__inner">
+          <!-- Лицевая сторона: заголовок и подсказка -->
+          <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
+            <h2 class="loved-text__title">Поздравление от Рафули</h2>
+            <span class="flip-card__hint">
+              Нажми, чтобы открыть
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
+                <path d="M21 3v6h-6"></path>
+              </svg>
+            </span>
+          </div>
+
+          <!-- Обратная сторона: текст поздравления -->
+          <div class="flip-card__face flip-card__back">
+            <h2 class="loved-text__title">Поздравление от Рафули</h2>
+            <p>
+              Алина, спасибо тебе большое за то, что ты есть в моей жизни.
+            </p>
+            <p>
+              Ты всегда была тем человеком, который напрямую влияет на меня, и я буду
+              делать всё возможное, чтобы делать тебя счастливой.
+            </p>
+            <p>
+              С днём рождения, мелкая!!!
+            </p>
+            <span class="flip-card__back-hint">Нажми ещё раз, чтобы закрыть</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <a class="back-link" href="../index.html">← На главную</a>
 </main>
+
+<script>
+  // Переворот карточки поздравления по клику (и по Enter/Space с клавиатуры)
+  (function () {
+    var card = document.getElementById('rafulya-card');
+    if (!card) return;
+
+    var front = card.querySelector('.flip-card__front');
+
+    function toggle() {
+      card.classList.toggle('is-flipped');
+      var flipped = card.classList.contains('is-flipped');
+      front.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+    }
+
+    card.addEventListener('click', toggle);
+
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  })();
+</script>
 
 <script src="../js/gate.js"></script>
 <script src="../js/theme.js"></script>

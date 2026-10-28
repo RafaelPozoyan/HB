@@ -135,30 +135,29 @@
   position: relative;
   order: 1;
   border-radius: 26px;
-  overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
-}
-
-.country__media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
-  pointer-events: none;
 }
 
 .country__media img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  transition: transform 1.2s cubic-bezier(.2, .8, .2, 1);
+  height: auto;
+  object-fit: contain;
+  border-radius: 26px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+  animation: countryFloat 7s ease-in-out infinite;
+  will-change: transform;
 }
 
-.country:hover .country__media img {
-  transform: scale(1.06);
+/* Лёгкое парение фото над фоном (как на главной) */
+@keyframes countryFloat {
+  0%   { transform: translateY(0) rotate(0deg); }
+  50%  { transform: translateY(-16px) rotate(.4deg); }
+  100% { transform: translateY(0) rotate(0deg); }
 }
+
+/* Разные задержки, чтобы фото «дышали» не синхронно */
+.country:nth-of-type(3n+2) .country__media img { animation-delay: -2.3s; }
+.country:nth-of-type(3n+3) .country__media img { animation-delay: -4.6s; }
 
 .country__emoji {
   position: absolute;
@@ -317,6 +316,13 @@
     order: -1;
   }
 
+  /* На телефонах ограничиваем высоту, чтобы портретные фото
+     не растягивались на несколько экранов — при этом не обрезаем */
+  .country__media img {
+    max-height: 70vh;
+    object-fit: contain;
+  }
+
   .country__body,
   .country:nth-of-type(even) .country__body {
     order: 0;
@@ -350,5 +356,5 @@
 @media (prefers-reduced-motion: reduce) {
   .travel-hero__globe { animation: none; }
   .travel-reveal { opacity: 1; transform: none; }
-  .country__media img { transition: none; }
+  .country__media img { animation: none; }
 }
