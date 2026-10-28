@@ -153,6 +153,40 @@ a {
   padding-right: 4px;
   color: var(--softpink);
   font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/*
+  На телефонах навигация не должна разваливаться по пол-экрана:
+  держим всё в одну строку и разрешаем горизонтальную прокрутку.
+*/
+@media (max-width: 767px) {
+  .site-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-width: calc(100% - 20px);
+    gap: 2px;
+    padding: 6px;
+    border-radius: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-nav a {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    font-size: 12.5px;
+  }
 }
 
 /* ---------- Кнопки (единые) ---------- */
