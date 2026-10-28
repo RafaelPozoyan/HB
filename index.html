@@ -7,6 +7,8 @@
   <meta name="description" content="С днём рождения, Алина! Особенный сайт для особенного человека.">
   <title>С днём рождения, Алина! 💜</title>
 
+  <link rel="stylesheet" href="css/gate.css">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -337,72 +339,6 @@
 </head>
 
 <body class="min-h-screen">
-  <!-- Экран авторизации -->
-<div id="auth-screen"
-     class="fixed inset-0 z-[100] flex items-center justify-center
-            bg-[#121019] px-5">
-
-  <div class="absolute inset-0 pointer-events-none"
-       style="background:
-       radial-gradient(ellipse at 20% 20%, rgba(167,139,250,.18), transparent 45%),
-       radial-gradient(ellipse at 80% 80%, rgba(240,185,213,.12), transparent 45%);">
-  </div>
-
-  <form id="auth-form"
-        class="glass relative w-full max-w-md rounded-3xl p-8 text-center sm:p-10">
-
-    <div class="mb-5 text-4xl">💜</div>
-
-    <h1 class="text-3xl font-bold tracking-tight">
-      Добро пожаловать
-    </h1>
-
-    <p class="mt-3 text-sm leading-6 text-[#c0b6cc]">
-      Этот сайт создан для особенного человека
-    </p>
-
-    <div class="mt-8 space-y-4 text-left">
-      <div>
-        <label for="auth-login"
-               class="mb-2 block text-sm text-[#d9c6ed]">
-          Логин
-        </label>
-        <input id="auth-login"
-               type="text"
-               class="text-field"
-               placeholder="Введи логин"
-               autocomplete="username"
-               required>
-      </div>
-
-      <div>
-        <label for="auth-password"
-               class="mb-2 block text-sm text-[#d9c6ed]">
-          Пароль
-        </label>
-        <input id="auth-password"
-               type="password"
-               class="text-field"
-               placeholder="Введи пароль"
-               autocomplete="current-password"
-               required>
-      </div>
-    </div>
-
-    <p id="auth-error"
-       class="mt-4 min-h-5 text-sm text-rose-300"
-       role="alert"
-       aria-live="polite"></p>
-
-    <button type="submit" class="primary-button mt-2 w-full">
-      Открыть сайт ✨
-    </button>
-
-    <p class="mt-6 text-xs text-[#82788f]">
-      Только для тебя
-    </p>
-  </form>
-</div>
   <div class="aurora aurora-one"></div>
   <div class="aurora aurora-two"></div>
 
@@ -419,10 +355,10 @@
       </a>
 
       <div class="mobile-nav flex items-center gap-4 text-xs sm:gap-6 sm:text-sm">
-        <a class="nav-link whitespace-nowrap" href="#beautiful">Красота</a>
-        <a class="nav-link whitespace-nowrap" href="#smart">Ум</a>
-        <a class="nav-link whitespace-nowrap" href="#funny">Юмор</a>
-        <a class="nav-link whitespace-nowrap" href="#end">В конце</a>
+        <a class="nav-link whitespace-nowrap" href="pages/life.html">Жизнь Алиночки</a>
+        <a class="nav-link whitespace-nowrap" href="pages/loved-ones.html">Близкие Алиночки</a>
+        <a class="nav-link whitespace-nowrap" href="pages/travels.html">Путешествия Алиночки</a>
+        <a class="nav-link whitespace-nowrap" href="pages/date.html">Запись на свидание с Рафулей</a>
       </div>
     </nav>
   </header>
@@ -611,7 +547,7 @@
             ></textarea>
 
             <button type="submit" class="primary-button w-full">
-              Отправить желание ✨
+              Отправить
             </button>
 
             <p id="wish-status" class="text-center" role="status" aria-live="polite"></p>
@@ -677,64 +613,58 @@
     const wishInput = document.getElementById('wish-input');
     const wishStatus = document.getElementById('wish-status');
 
-    wishForm.addEventListener('submit', event => {
-      event.preventDefault();
-
-      const wish = wishInput.value.trim();
-
-      if (!wish) {
-        wishStatus.textContent = 'Сначала напиши своё желание 💜';
-        wishInput.focus();
-        return;
-      }
-
-      const message = `Желание Алины:\n${wish}`;
-      const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent('С днём рождения, Алина!')}&text=${encodeURIComponent(message)}`;
-
-      wishStatus.textContent = 'Желание готово! Открой Telegram, чтобы отправить его.';
-
-      const existingLink = document.getElementById('wish-telegram-link');
-
-      if (existingLink) {
-        existingLink.remove();
-      }
-
-      const telegramLink = document.createElement('a');
-      telegramLink.id = 'wish-telegram-link';
-      telegramLink.href = telegramUrl;
-      telegramLink.target = '_blank';
-      telegramLink.rel = 'noopener noreferrer';
-      telegramLink.className = 'secondary-button mt-3 w-full';
-      telegramLink.textContent = 'Отправить в Telegram ↗';
-
-      wishStatus.insertAdjacentElement('afterend', telegramLink);
-    });
-    // Авторизация
-const authForm = document.getElementById('auth-form');
-const authScreen = document.getElementById('auth-screen');
-const authError = document.getElementById('auth-error');
-
-authForm.addEventListener('submit', function (event) {
+wishForm.addEventListener('submit', async event => {
   event.preventDefault();
 
-  const login = document.getElementById('auth-login').value.trim();
-  const password = document.getElementById('auth-password').value;
+  const wish = wishInput.value.trim();
 
-  if (login === 'HappyBDay' && password === '06112026') {
-    authError.textContent = '';
-    authScreen.style.transition = 'opacity 0.5s ease';
-    authScreen.style.opacity = '0';
+  if (!wish) {
+    wishStatus.textContent = 'Сначала напиши своё желание 💜';
+    return;
+  }
 
-    setTimeout(() => {
-      authScreen.remove();
-      document.getElementById('start').scrollIntoView();
-    }, 500);
-  } else {
-    authError.textContent = 'Неверный логин или пароль. Попробуй ещё раз.';
-    document.getElementById('auth-password').value = '';
-    document.getElementById('auth-password').focus();
+  const submitButton = wishForm.querySelector('button[type="submit"]');
+
+  submitButton.disabled = true;
+  submitButton.textContent = 'Отправляем...';
+  wishStatus.textContent = '';
+
+  try {
+    const response = await fetch(
+      'https://formsubmit.co/ajax/pozoyan.2000@gmail.com',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: 'Новое желание Алины 💜',
+          message: wish,
+          _captcha: 'true'
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || result.success === false) {
+      throw new Error('Не удалось отправить письмо');
+    }
+
+    wishStatus.textContent = 'Письмо отправлено! Спасибо 💜';
+    wishInput.value = '';
+  } catch (error) {
+    console.error('Ошибка отправки:', error);
+    wishStatus.textContent =
+      'Не получилось отправить письмо. Попробуй ещё раз.';
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Отправить';
   }
 });
   </script>
+
+  <script src="js/gate.js"></script>
 </body>
 </html>

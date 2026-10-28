@@ -1,0 +1,207 @@
+/* Экран-гейт: обратный отсчёт + авторизация */
+
+/* Пока идёт проверка доступа — скрываем содержимое страницы */
+html.gate-locked body {
+  overflow: hidden;
+}
+
+html.gate-locked body > :not(.gate) {
+  visibility: hidden;
+}
+
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse at 20% 15%, rgba(167, 139, 250, .20), transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(240, 185, 213, .14), transparent 45%),
+    #121019;
+  color: #f6f0fa;
+  font-family: Inter, ui-rounded, system-ui, -apple-system, sans-serif;
+  transition: opacity .6s ease;
+}
+
+.gate.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gate__card {
+  width: 100%;
+  max-width: 460px;
+  padding: 40px 32px;
+  border: 1px solid rgba(208, 178, 240, .16);
+  border-radius: 28px;
+  background: rgba(27, 23, 37, .72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  text-align: center;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .35);
+}
+
+.gate__emoji {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 16px;
+  animation: gateHeartbeat 1.8s ease-in-out infinite;
+}
+
+@keyframes gateHeartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.gate__title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.gate__subtitle {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #c0b6cc;
+}
+
+/* Таймер */
+.gate__countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 28px 0 4px;
+}
+
+.gate__unit {
+  padding: 16px 8px 14px;
+  border: 1px solid rgba(208, 178, 240, .14);
+  border-radius: 16px;
+  background: rgba(10, 8, 15, .45);
+  text-align: center;
+}
+
+.gate__num {
+  display: block;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: #f0b9d5;
+}
+
+.gate__label {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #9d8eaa;
+}
+
+.gate__date {
+  margin: 20px 0 0;
+  font-size: 12px;
+  letter-spacing: .06em;
+  color: #82788f;
+}
+
+/* Кнопка «Пропустить отсчёт» */
+.gate__skip {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 11px 20px;
+  border: 1px solid rgba(208, 178, 240, .25);
+  border-radius: 999px;
+  background: rgba(208, 178, 240, .06);
+  color: #e8d9f7;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .25s ease, border-color .25s ease, transform .25s ease;
+}
+
+.gate__skip:hover {
+  background: rgba(208, 178, 240, .14);
+  border-color: rgba(208, 178, 240, .5);
+  transform: translateY(-2px);
+}
+
+/* Форма входа */
+.gate__form {
+  margin-top: 8px;
+  text-align: left;
+}
+
+.gate__field {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(208, 178, 240, .2);
+  border-radius: 14px;
+  background: rgba(10, 8, 15, .42);
+  color: #f6f0fa;
+  font: inherit;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.gate__field::placeholder {
+  color: #82788f;
+}
+
+.gate__field:focus {
+  border-color: #c5a5e8;
+  box-shadow: 0 0 0 3px rgba(208, 178, 240, .1);
+}
+
+.gate__btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 15px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(110deg, #d0b2f0, #f0b9d5);
+  color: #211829;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(208, 178, 240, .18);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.gate__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(208, 178, 240, .3);
+}
+
+.gate__btn:active {
+  transform: translateY(0);
+}
+
+.gate__error {
+  min-height: 20px;
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: #f5a3c0;
+  text-align: center;
+}
+
+.gate__hidden {
+  display: none;
+}
+
+@media (max-width: 420px) {
+  .gate__card { padding: 30px 20px; }
+  .gate__num { font-size: 24px; }
+  .gate__unit { padding: 12px 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gate, .gate__emoji { animation: none !important; transition-duration: .01ms !important; }
+}

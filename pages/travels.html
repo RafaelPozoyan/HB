@@ -1,12 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Путешествия Алиночки</title>
+  <link rel="stylesheet" href="../css/gate.css">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/travels.css">
 </head>
 <body>
 
@@ -18,33 +19,224 @@
   <a href="date.html">Запись на свидание с Рафулей</a>
 </nav>
 
-<main class="page">
-  <header class="page-heading">
-    <div class="eyebrow">02 · Путешествия Алиночки</div>
-    <h1>Места, которые<br>стали воспоминаниями</h1>
-    <p>ВСТАВЬ СЮДА ТЕКСТ</p>
-  </header>
+<!-- Обложка -->
+<header class="travel-hero">
+  <div class="travel-hero__globe" aria-hidden="true">🌍</div>
+  <div class="travel-hero__eyebrow">02 · Путешествия Алиночки</div>
+  <h1>География <em>твоей</em><br>улыбки</h1>
+  <p class="travel-hero__lead">
+    Пять стран, пять историй и бесконечное количество причин улыбаться.
+    Здесь — места, которые стали частью тебя.
+  </p>
+  <div class="travel-hero__count">✈️ 5 стран · один незабываемый путь</div>
+</header>
 
-  <div class="content-grid">
-    <article class="content-card">
-      <img src="../assets/images/photo1.png" alt="Путешествие">
-      <div class="card-text">
-        <h2>ВСТАВЬ СЮДА ТЕКСТ</h2>
-        <p>ВСТАВЬ СЮДА ТЕКСТ</p>
-      </div>
-    </article>
+<!-- Быстрая навигация по странам -->
+<div class="travel-jump" aria-label="Быстрый переход к странам">
+  <a href="#malaysia">🇲🇾 Малайзия</a>
+  <a href="#vietnam">🇻🇳 Вьетнам</a>
+  <a href="#thailand">🇹🇭 Таиланд</a>
+  <a href="#georgia">🇬🇪 Грузия</a>
+  <a href="#montenegro">🇲🇪 Черногория</a>
+</div>
 
-    <article class="content-card">
-      <img src="../assets/images/photo2.png" alt="Путешествие">
-      <div class="card-text">
-        <h2>ВСТАВЬ СЮДА ТЕКСТ</h2>
-        <p>ВСТАВЬ СЮДА ТЕКСТ</p>
+<main>
+  <!-- Малайзия -->
+  <section class="country travel-reveal" id="malaysia">
+    <div class="country__media">
+      <span class="country__emoji">🇲🇾</span>
+      <img
+        src="../assets/images/photo1.png"
+        alt="Малайзия"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1200&q=85';"
+      >
+    </div>
+    <div class="country__body">
+      <div class="country__index">01 · Малайзия</div>
+      <h2>Жемчужина<br>Юго-Восточной Азии</h2>
+      <div class="country__tags">
+        <span class="country__tag">Куала-Лумпур</span>
+        <span class="country__tag">Небоскрёбы</span>
+        <span class="country__tag">Уличная еда</span>
       </div>
-    </article>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — рассказ о Малайзии: как вы туда попали, что
+        удивило больше всего, какие места запомнились. Например, башни
+        Петронас на закате и неоновые улицы Куала-Лумпура.
+      </p>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — тёплые слова о моменте, который хочется
+        вспоминать снова и снова.
+      </p>
+      <blockquote class="country__quote">
+        ВСТАВЬ СЮДА ТЕКСТ — короткая цитата или фраза о Малайзии.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Вьетнам -->
+  <section class="country travel-reveal" id="vietnam">
+    <div class="country__media">
+      <span class="country__emoji">🇻🇳</span>
+      <img
+        src="../assets/images/photo2.png"
+        alt="Вьетнам"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=85';"
+      >
+    </div>
+    <div class="country__body">
+      <div class="country__index">02 · Вьетнам</div>
+      <h2>Бухты,<br>рис и фонарики</h2>
+      <div class="country__tags">
+        <span class="country__tag">Халонг</span>
+        <span class="country__tag">Хойан</span>
+        <span class="country__tag">Кофе со льдом</span>
+      </div>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — история о Вьетнаме: бухта Халонг, старый
+        город Хойан с разноцветными фонариками, запах кофе и рисовых полей.
+      </p>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — что именно сделало это путешествие особенным
+        для тебя.
+      </p>
+      <blockquote class="country__quote">
+        ВСТАВЬ СЮДА ТЕКСТ — короткая цитата или фраза о Вьетнаме.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Таиланд -->
+  <section class="country travel-reveal" id="thailand">
+    <div class="country__media">
+      <span class="country__emoji">🇹🇭</span>
+      <img
+        src="../assets/images/photo3.png"
+        alt="Таиланд"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=85';"
+      >
+    </div>
+    <div class="country__body">
+      <div class="country__index">03 · Таиланд</div>
+      <h2>Страна<br>улыбок и солнца</h2>
+      <div class="country__tags">
+        <span class="country__tag">Пхукет</span>
+        <span class="country__tag">Храмы</span>
+        <span class="country__tag">Бирюзовая вода</span>
+      </div>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — рассказ о Таиланде: белоснежные пляжи,
+        золотые храмы, тёплое море и вечера под шум прибоя.
+      </p>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — за что ты полюбила эту страну и какой момент
+        стал самым любимым.
+      </p>
+      <blockquote class="country__quote">
+        ВСТАВЬ СЮДА ТЕКСТ — короткая цитата или фраза о Таиланде.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Грузия -->
+  <section class="country travel-reveal" id="georgia">
+    <div class="country__media">
+      <span class="country__emoji">🇬🇪</span>
+      <img
+        src="../assets/images/photo1.png"
+        alt="Грузия"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=1200&q=85';"
+      >
+    </div>
+    <div class="country__body">
+      <div class="country__index">04 · Грузия</div>
+      <h2>Горы, вино<br>и гостеприимство</h2>
+      <div class="country__tags">
+        <span class="country__tag">Тбилиси</span>
+        <span class="country__tag">Казбек</span>
+        <span class="country__tag">Хинкали</span>
+      </div>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — история о Грузии: уютные улочки Тбилиси,
+        величие Кавказских гор, тёплые встречи и бесконечные застолья.
+      </p>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — за что запомнилась эта поездка и что
+        хочется повторить.
+      </p>
+      <blockquote class="country__quote">
+        ВСТАВЬ СЮДА ТЕКСТ — короткая цитата или фраза о Грузии.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Черногория -->
+  <section class="country travel-reveal" id="montenegro">
+    <div class="country__media">
+      <span class="country__emoji">🇲🇪</span>
+      <img
+        src="../assets/images/photo2.png"
+        alt="Черногория"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555990538-1e6b360a2cf5?auto=format&fit=crop&w=1200&q=85';"
+      >
+    </div>
+    <div class="country__body">
+      <div class="country__index">05 · Черногория</div>
+      <h2>Адриатика<br>и старые города</h2>
+      <div class="country__tags">
+        <span class="country__tag">Котор</span>
+        <span class="country__tag">Будва</span>
+        <span class="country__tag">Адриатика</span>
+      </div>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — рассказ о Черногории: бухта Котора, тёплое
+        Адриатическое море, каменные улочки и закаты над водой.
+      </p>
+      <p>
+        ВСТАВЬ СЮДА ТЕКСТ — какой момент стал самым тёплым воспоминанием
+        об этой стране.
+      </p>
+      <blockquote class="country__quote">
+        ВСТАВЬ СЮДА ТЕКСТ — короткая цитата или фраза о Черногории.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Финал -->
+  <div class="travel-outro">
+    <p>Сколько бы стран ни было пройдено — лучшая из них всё равно та, где рядом правильный человек.</p>
+    <a class="back-link" href="../index.html">← На главную</a>
   </div>
-
-  <a class="back-link" href="../index.html">← На главную</a>
 </main>
 
+<script>
+  // Плавное появление разделов стран при прокрутке
+  (function () {
+    const items = document.querySelectorAll('.travel-reveal');
+
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('visible'); });
+      return;
+    }
+
+    const observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    items.forEach(function (el) { observer.observe(el); });
+  })();
+</script>
+
+<script src="../js/gate.js"></script>
 </body>
 </html>

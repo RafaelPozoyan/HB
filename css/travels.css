@@ -1,0 +1,354 @@
+/* Страница «Путешествия Алиночки» */
+
+/* --- Обложка страницы --- */
+.travel-hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 72vh;
+  padding: 130px 22px 70px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.travel-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(131, 93, 163, .22), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(240, 185, 213, .12), transparent 50%);
+}
+
+.travel-hero__globe {
+  font-size: 56px;
+  line-height: 1;
+  animation: travelFloat 6s ease-in-out infinite;
+}
+
+@keyframes travelFloat {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-14px) rotate(6deg); }
+}
+
+.travel-hero__eyebrow {
+  margin-top: 22px;
+  color: #d9b4ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+
+.travel-hero h1 {
+  margin: 16px 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(44px, 8vw, 96px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -.02em;
+  color: #f8f3ff;
+}
+
+.travel-hero h1 em {
+  font-style: italic;
+  color: #d2b4f0;
+}
+
+.travel-hero__lead {
+  max-width: 640px;
+  margin: 24px auto 0;
+  color: #c0b4ce;
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.9;
+}
+
+.travel-hero__count {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 30px;
+  padding: 10px 20px;
+  border: 1px solid rgba(215, 167, 255, .22);
+  border-radius: 999px;
+  background: rgba(215, 167, 255, .07);
+  color: #e8d9f7;
+  font-size: 13px;
+  letter-spacing: .04em;
+}
+
+/* --- Быстрые якоря по странам --- */
+.travel-jump {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 900px;
+  margin: 0 auto 20px;
+  padding: 0 22px;
+  position: sticky;
+  top: 78px;
+  z-index: 9;
+}
+
+.travel-jump a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border: 1px solid rgba(215, 167, 255, .16);
+  border-radius: 999px;
+  background: rgba(22, 18, 31, .82);
+  backdrop-filter: blur(10px);
+  color: #cbbcd9;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color .25s ease, border-color .25s ease, background .25s ease, transform .25s ease;
+}
+
+.travel-jump a:hover {
+  color: #fff;
+  border-color: rgba(215, 167, 255, .5);
+  background: rgba(215, 167, 255, .14);
+  transform: translateY(-2px);
+}
+
+/* --- Раздел страны --- */
+.country {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(30px, 6vw, 80px);
+  align-items: center;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(50px, 9vw, 110px) 22px;
+  border-top: 1px solid rgba(215, 167, 255, .08);
+}
+
+.country:nth-of-type(even) .country__media {
+  order: 2;
+}
+
+.country__media {
+  position: relative;
+  order: 1;
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+}
+
+.country__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+  pointer-events: none;
+}
+
+.country__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(.2, .8, .2, 1);
+}
+
+.country:hover .country__media img {
+  transform: scale(1.06);
+}
+
+.country__emoji {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: rgba(18, 16, 25, .62);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, .14);
+  font-size: 26px;
+}
+
+.country__body {
+  order: 2;
+}
+
+.country:nth-of-type(even) .country__body {
+  order: 1;
+}
+
+.country__index {
+  color: #bba0dc;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+.country__body h2 {
+  margin: 14px 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -.02em;
+  color: #f8f3ff;
+}
+
+.country__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 0;
+}
+
+.country__tag {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(215, 167, 255, .09);
+  border: 1px solid rgba(215, 167, 255, .18);
+  color: #d9c6ed;
+  font-size: 12px;
+  letter-spacing: .02em;
+}
+
+.country__body p {
+  margin: 22px 0 0;
+  color: #c3b9ce;
+  font-size: 16px;
+  line-height: 1.95;
+}
+
+.country__body p + p {
+  margin-top: 14px;
+}
+
+.country__quote {
+  margin: 26px 0 0;
+  padding: 16px 20px;
+  border-left: 3px solid #d2b4f0;
+  border-radius: 0 14px 14px 0;
+  background: rgba(255, 255, 255, .03);
+  color: #e0d6e9;
+  font-style: italic;
+  line-height: 1.8;
+}
+
+/* Плашка-фото внутри текста, если понадобится */
+.country__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 26px;
+}
+
+.country__fact strong {
+  display: block;
+  color: #f0b9d5;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.country__fact span {
+  display: block;
+  margin-top: 4px;
+  color: #948aa2;
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* --- Финал страницы --- */
+.travel-outro {
+  max-width: 760px;
+  margin: 20px auto 0;
+  padding: 0 22px 40px;
+  text-align: center;
+}
+
+.travel-outro p {
+  color: #c0b4ce;
+  font-size: 17px;
+  line-height: 1.95;
+}
+
+.travel-outro a {
+  display: inline-block;
+  margin-top: 6px;
+  color: #d9a5f0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.travel-outro a:hover {
+  text-decoration: underline;
+}
+
+/* --- Появление секций --- */
+.travel-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .9s ease, transform .9s cubic-bezier(.2, .8, .2, 1);
+}
+
+.travel-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Адаптив --- */
+@media (max-width: 860px) {
+  .country {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    text-align: center;
+  }
+
+  .country__media,
+  .country:nth-of-type(even) .country__media {
+    order: -1;
+  }
+
+  .country__body,
+  .country:nth-of-type(even) .country__body {
+    order: 0;
+  }
+
+  .country__tags,
+  .country__facts {
+    justify-content: center;
+  }
+
+  .country__quote {
+    text-align: left;
+  }
+
+  .travel-jump {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .travel-jump::-webkit-scrollbar {
+    display: none;
+  }
+
+  .travel-jump a {
+    flex-shrink: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .travel-hero__globe { animation: none; }
+  .travel-reveal { opacity: 1; transform: none; }
+  .country__media img { transition: none; }
+}
