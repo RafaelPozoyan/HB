@@ -7,12 +7,103 @@
   <link rel="stylesheet" href="../css/gate.css">
   <link rel="stylesheet" href="../css/theme.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <style>
+    /* Стили фото как на главной странице */
+    .loved-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(36px, 6vw, 90px);
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+
+    .photo-frame {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      margin-inline: auto;
+      padding: 10px;
+      background: rgba(255, 255, 255, .045);
+      border: 1px solid rgba(208, 178, 240, .17);
+      border-radius: 24px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, .24);
+    }
+
+    .photo-frame.photo-reveal {
+      transition: opacity .9s ease, transform 1s cubic-bezier(.22,.61,.36,1), filter .9s ease;
+    }
+
+    .photo-frame img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 16px;
+      background: #24202e;
+    }
+
+    /* Лёгкое парение фотографий, как на главной */
+    @keyframes photoFloat {
+      0%   { transform: translateY(0) rotate(0deg); }
+      50%  { transform: translateY(-14px) rotate(.4deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    .photo-float {
+      animation: photoFloat 6s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .loved-text {
+      text-align: left;
+    }
+
+    .loved-text__title {
+      margin: 0 0 22px;
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.03em;
+      background: linear-gradient(110deg, #f0b9d5, #d0b2f0 50%, #a78bfa);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #d0b2f0;
+    }
+
+    .loved-text p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.9;
+      margin: 0;
+    }
+
+    .loved-text p + p {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .loved-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .loved-text {
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .photo-float {
+        animation: none;
+      }
+    }
+  </style>
 </head>
 <body>
 
 <nav class="site-nav">
   <a class="site-nav__brand" href="../index.html">♡ Для Алины</a>
-  <a href="../index.html">Начало</a>
   <a href="life.html">Жизнь Алиночки</a>
   <a href="travels.html">Путешествия Алиночки</a>
   <a href="loved-ones.html" class="active">Близкие Алиночки</a>
@@ -21,27 +112,35 @@
 
 <main class="page">
   <header class="page-heading">
-    <div class="eyebrow">03 · Близкие Алиночки</div>
     <h1>Люди, которые<br>делают жизнь теплее</h1>
-    <p>ВСТАВЬ СЮДА ТЕКСТ</p>
   </header>
 
-  <div class="content-grid">
-    <article class="content-card">
-      <img class="photo-reveal" src="../assets/images/photo1.png" alt="Близкие">
-      <div class="card-text">
-        <h2>ВСТАВЬ СЮДА ТЕКСТ</h2>
-        <p>ВСТАВЬ СЮДА ТЕКСТ</p>
+  <div class="loved-layout">
+    <div class="reveal">
+      <div class="photo-float">
+        <div class="photo-frame photo-reveal">
+          <img
+            src="../assets/images/photo4.png"
+            alt="Фотография Алины"
+            loading="lazy"
+          >
+        </div>
       </div>
-    </article>
+    </div>
 
-    <article class="content-card">
-      <img class="photo-reveal" src="../assets/images/photo2.png" alt="Общие воспоминания">
-      <div class="card-text">
-        <h2>ВСТАВЬ СЮДА ТЕКСТ</h2>
-        <p>ВСТАВЬ СЮДА ТЕКСТ</p>
-      </div>
-    </article>
+    <div class="loved-text reveal">
+      <h2 class="loved-text__title">Поздравление от Рафули</h2>
+      <p>
+        Алина, спасибо тебе большое за то, что ты есть в моей жизни.
+      </p>
+      <p>
+        Ты всегда была тем человеком, который напрямую влияет на меня, и я буду
+        делать всё возможное, чтобы делать тебя счастливой.
+      </p>
+      <p>
+        С днём рождения, мелкая!!!
+      </p>
+    </div>
   </div>
 
   <a class="back-link" href="../index.html">← На главную</a>
