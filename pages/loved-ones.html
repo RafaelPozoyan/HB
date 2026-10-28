@@ -91,9 +91,11 @@
 
     .flip-card__inner {
       position: relative;
+      display: grid;
       transform-style: preserve-3d;
       transition: transform .8s cubic-bezier(.4, .2, .2, 1);
-      /* высота задаётся содержимым лицевой стороны */
+      /* Высота подстраивается под контент: обе стороны лежат в одной
+         ячейке грида, поэтому карточка растягивается по более длинной стороне */
     }
 
     .flip-card.is-flipped .flip-card__inner {
@@ -101,6 +103,7 @@
     }
 
     .flip-card__face {
+      grid-area: 1 / 1;
       border-radius: 26px;
       padding: clamp(28px, 4vw, 46px);
       border: 1px solid rgba(208, 178, 240, .2);
@@ -117,7 +120,7 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      min-height: 400px;
+      min-height: 320px;
       cursor: pointer;
       transition: border-color .25s ease, box-shadow .25s ease;
     }
@@ -147,13 +150,10 @@
 
     /* Обратная сторона — с текстом поздравления */
     .flip-card__back {
-      position: absolute;
-      inset: 0;
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      overflow-y: auto;
     }
 
     .flip-card__back .loved-text__title {
@@ -241,7 +241,7 @@
           <div class="flip-card__face flip-card__front" role="button" tabindex="0" aria-label="Открыть поздравление от Рафули">
             <h2 class="loved-text__title">Поздравление от Рафули</h2>
             <span class="flip-card__hint">
-              Нажми, чтобы открыть
+              Нажми, чтобы открыть открытку
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 12a9 9 0 1 1-6.2-8.6"></path>
                 <path d="M21 3v6h-6"></path>
@@ -256,8 +256,11 @@
               Алина, спасибо тебе большое за то, что ты есть в моей жизни.
             </p>
             <p>
-              Ты всегда была тем человеком, который напрямую влияет на меня, и я буду
-              делать всё возможное, чтобы делать тебя счастливой.
+              Ты всегда была именно тем человеком, который напрямую влияет на меня, и я буду
+              делать всё возможное, чтобы делать тебя счастливее. Вместе мы сможем пройти любые трудности
+            </p>
+            <p>
+              Для чувства любви не существует цены — только жизнь одна.<br>Фильм «Юнона и Авось» 
             </p>
             <p>
               С днём рождения, мелкая!!!

@@ -354,6 +354,263 @@
       font-size: 14px;
     }
 
+    /* ================= Викторина ================= */
+    .quiz-shell {
+      max-width: 760px;
+      margin-inline: auto;
+    }
+
+    /* Одно «окно», внутри которого сменяются вопросы */
+    .quiz-stage {
+      position: relative;
+      padding: 30px 26px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(208, 178, 240, .16);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .quiz-step {
+      animation: quizSlideIn .5s cubic-bezier(.22,.61,.36,1) both;
+    }
+
+    .quiz-step.is-leaving {
+      animation: quizSlideOut .4s cubic-bezier(.55,.06,.68,.19) forwards;
+    }
+
+    @keyframes quizSlideIn {
+      from { opacity: 0; transform: translateY(22px) scale(.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes quizSlideOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(-22px) scale(.98); }
+    }
+
+    .quiz-count {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #b79be0;
+      margin-bottom: 12px;
+    }
+
+    .quiz-q {
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #f4ecfb;
+      margin: 0 0 18px;
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(208, 178, 240, .2);
+      background: rgba(10, 8, 15, .35);
+      color: #e6dcf2;
+      font-size: 15px;
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .2s ease, background .2s ease, color .2s ease;
+    }
+
+    .quiz-option:hover:not(.is-locked) {
+      border-color: rgba(208, 178, 240, .55);
+      background: rgba(208, 178, 240, .1);
+      transform: translateY(-2px);
+    }
+
+    .quiz-option__mark {
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(208, 178, 240, .4);
+      font-size: 13px;
+      font-weight: 800;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+
+    .quiz-option.is-correct {
+      border-color: rgba(104, 217, 148, .75);
+      background: rgba(104, 217, 148, .14);
+      color: #d8ffe9;
+    }
+
+    .quiz-option.is-correct .quiz-option__mark {
+      background: #4fbf7d;
+      border-color: #4fbf7d;
+      color: #08210f;
+    }
+
+    .quiz-option.is-wrong {
+      border-color: rgba(240, 120, 130, .75);
+      background: rgba(240, 120, 130, .12);
+      color: #ffdfe2;
+      animation: quizShake .4s ease;
+    }
+
+    .quiz-option.is-wrong .quiz-option__mark {
+      background: #e5646f;
+      border-color: #e5646f;
+      color: #2a0709;
+    }
+
+    .quiz-option.is-locked {
+      cursor: default;
+    }
+
+    .quiz-option.is-dim {
+      opacity: .5;
+    }
+
+    @keyframes quizShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .quiz-feedback {
+      margin-top: 14px;
+      min-height: 22px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .quiz-feedback.ok { color: #7fe0a6; }
+    .quiz-feedback.no { color: #f2949c; }
+
+    /* Прогресс */
+    .quiz-progress {
+      position: sticky;
+      top: 84px;
+      z-index: 5;
+      margin-bottom: 22px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: rgba(18, 16, 25, .8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(208, 178, 240, .14);
+    }
+
+    .quiz-progress__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #c9bbdb;
+      margin-bottom: 8px;
+    }
+
+    .quiz-progress__row strong { color: #f0b9d5; }
+
+    .quiz-progress__bar {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .08);
+      overflow: hidden;
+    }
+
+    .quiz-progress__fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #a78bfa, #f0b9d5);
+      transition: width .5s cubic-bezier(.22,.61,.36,1);
+    }
+
+    /* Результат */
+    .quiz-result {
+      text-align: center;
+      padding: 40px 26px;
+      border-radius: 24px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(167, 139, 250, .18), transparent 60%),
+        rgba(255, 255, 255, .04);
+      border: 1px solid rgba(208, 178, 240, .22);
+      animation: quizResultIn .7s cubic-bezier(.22,.61,.36,1) both;
+    }
+
+    @keyframes quizResultIn {
+      from { opacity: 0; transform: scale(.9) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .quiz-result__label {
+      font-size: 14px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #b9a6d6;
+      font-weight: 700;
+    }
+
+    .quiz-result__score {
+      font-size: clamp(64px, 16vw, 120px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.04em;
+      margin: 14px 0 6px;
+      background: linear-gradient(110deg, #f0b9d5, #d0b2f0 50%, #a78bfa);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #d0b2f0;
+    }
+
+    .quiz-result__of {
+      font-size: 22px;
+      color: #a99db7;
+      font-weight: 600;
+    }
+
+    .quiz-result__msg {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #d9cde8;
+    }
+
+    .quiz-result__emoji {
+      font-size: 52px;
+      margin-bottom: 6px;
+      animation: heartbeat 1.8s ease-in-out infinite;
+    }
+
+    @media (max-width: 767px) {
+      .quiz-progress {
+        top: 70px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .quiz-step,
+      .quiz-result {
+        animation: none;
+      }
+    }
+
     @media (max-width: 767px) {
       .mobile-nav {
         overflow-x: auto;
@@ -473,11 +730,11 @@
             <span class="ty-sub">самая красивая</span>
           </div>
           <p class="mt-6">
-            В тебе есть что-то особенное. Не только внешность, но и взгляд,
-            улыбка и то, как ты умеешь делать обычные моменты ярче.
+            В тебе есть что-то особенное. Не только внешность, но и уверенный взгляд, милый смех,
+            яркая улыбка и то, как ты умеешь делать обычные моменты ярче.
           </p>
           <p class="mt-4">
-            Хочется, чтобы ты всегда видела в себе ту красоту, которую видят в тебе другие.
+            Хочется, чтобы ты всегда видела в себе ту красоту, которую вижу я и все остальные.
           </p>
           <a href="pages/beautiful.html" class="secondary-button mt-7">
             Ещё немного о тебе ↗
@@ -495,8 +752,7 @@
             <span class="ty-sub">самая умная</span>
           </div>
           <p class="mt-6">
-            Мне нравится, как ты думаешь, замечаешь детали и смотришь на вещи
-            со своей точки зрения.
+            Мне нравится, как ты думаешь и замечаешь то, чего не видят другие.
           </p>
           <p class="mt-4">
             Пусть у тебя всегда хватает сил и уверенности идти к тому, чего ты действительно хочешь.
@@ -544,15 +800,49 @@
           </div>
           <p class="mt-6">
             С тобой можно смеяться над совершенно глупыми вещами и всё равно
-            считать этот момент одним из лучших.
+            считать этот момент одним из лучших. Можно даже и не делать этого вместе, ты по обыкновению своему ооооооочень смешная.
           </p>
           <p class="mt-4">
-            Желаю тебе побольше поводов улыбаться, искренне смеяться и собирать воспоминания,
-            к которым захочется возвращаться.
+            Желаю тебе больше поводов радоваться, улыбаться и искренне смеяться. Это приносит радость мне и всем окружающим.
           </p>
           <a href="pages/memories.html" class="secondary-button mt-7">
             Наши воспоминания ↗
           </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Викторина -->
+    <section id="quiz" class="px-5 py-20 sm:py-28">
+      <div class="mx-auto max-w-3xl text-center reveal">
+        <span class="section-label">Квиз!</span>
+        <h2 class="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          Хорошо ли ты<br><span class="gradient-text">знаешь Алину?</span>
+        </h2>
+      </div>
+
+      <div class="quiz-shell mt-12">
+        <!-- Прогресс -->
+        <div class="quiz-progress">
+          <div class="quiz-progress__row">
+            <span>Вопросы</span>
+            <span>Отвечено: <strong><span id="quiz-answered-count">0</span></strong> / 6</span>
+          </div>
+          <div class="quiz-progress__bar">
+            <div class="quiz-progress__fill" id="quiz-progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Одно поле: один вопрос за раз -->
+        <div id="quiz-stage" class="quiz-stage"></div>
+
+        <!-- Результат -->
+        <div id="quiz-result" class="quiz-result" hidden>
+          <div class="quiz-result__emoji" id="quiz-result-emoji">💜</div>
+          <div class="quiz-result__label">Твой результат</div>
+          <div class="quiz-result__score"><span id="quiz-final-score">0</span><span class="quiz-result__of"> / 6</span></div>
+          <div class="quiz-result__msg" id="quiz-result-msg"></div>
+          <button type="button" id="quiz-restart" class="secondary-button mt-8">Пройти заново ↺</button>
         </div>
       </div>
     </section>
@@ -713,6 +1003,220 @@ wishForm.addEventListener('submit', async event => {
     submitButton.textContent = 'Отправить';
   }
 });
+
+// ================= Викторина (по одному вопросу в одном поле) =================
+(function () {
+  const QUESTIONS = [
+    {
+      q: 'В каком часу родилась Алина?',
+      options: ['5:00', '7:00', '16:00', '21:00'],
+      correct: 3
+    },
+    {
+      q: 'Где это произошло?',
+      options: ['Москва', 'Рязань', 'На Луне рядом с лунтиком', 'Старый Оскол'],
+      correct: 3
+    },
+    {
+      q: 'Сколько весила Алина при рождении?',
+      options: ['2,3 килограмма', '3,1 килограмм', 'Достаточно'],
+      correct: 2
+    },
+    {
+      q: 'Знак зодиака Алины?',
+      options: ['Лев', 'Рак', 'Весы', 'Скорпион'],
+      correct: 3
+    },
+    {
+      q: 'А асцендент?',
+      options: ['Дева', 'Рак', 'Скорпион', 'Лев'],
+      correct: 3
+    },
+    {
+      q: 'Кто любит Алину?',
+      options: ['Рафуля', 'Подружки', 'Мама с бабушкой', 'Абсолютно все в мире!'],
+      correct: 3
+    }
+  ];
+
+  const stageEl = document.getElementById('quiz-stage');
+  const resultEl = document.getElementById('quiz-result');
+  const answeredCountEl = document.getElementById('quiz-answered-count');
+  const progressFill = document.getElementById('quiz-progress-fill');
+  const finalScoreEl = document.getElementById('quiz-final-score');
+  const resultMsgEl = document.getElementById('quiz-result-msg');
+  const resultEmojiEl = document.getElementById('quiz-result-emoji');
+  const restartBtn = document.getElementById('quiz-restart');
+
+  if (!stageEl) return;
+
+  let currentIndex = 0;
+  let correctCount = 0;
+  let answeredCount = 0;
+  let locked = false;
+
+  function updateProgress() {
+    answeredCountEl.textContent = answeredCount;
+    progressFill.style.width = (answeredCount / QUESTIONS.length * 100) + '%';
+  }
+
+  // Отрисовать текущий вопрос в поле
+  function renderQuestion() {
+    const item = QUESTIONS[currentIndex];
+    locked = false;
+
+    const step = document.createElement('div');
+    step.className = 'quiz-step';
+
+    const count = document.createElement('div');
+    count.className = 'quiz-count';
+    count.textContent = 'Вопрос ' + (currentIndex + 1) + ' из ' + QUESTIONS.length;
+    step.appendChild(count);
+
+    const qEl = document.createElement('p');
+    qEl.className = 'quiz-q';
+    qEl.textContent = item.q;
+    step.appendChild(qEl);
+
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'quiz-options';
+
+    const buttons = [];
+
+    item.options.forEach((label, oi) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quiz-option';
+      btn.innerHTML = '<span class="quiz-option__mark">' + String.fromCharCode(65 + oi) + '</span>' +
+                      '<span class="quiz-option__label">' + label + '</span>';
+      btn.dataset.index = oi;
+      btn.addEventListener('click', () => selectAnswer(oi));
+      optsWrap.appendChild(btn);
+      buttons.push(btn);
+    });
+
+    step.appendChild(optsWrap);
+
+    const feedback = document.createElement('div');
+    feedback.className = 'quiz-feedback';
+    step.appendChild(feedback);
+
+    stageEl.innerHTML = '';
+    stageEl.appendChild(step);
+
+    function selectAnswer(chosen) {
+      if (locked) return;
+      locked = true;
+      answeredCount++;
+
+      const isRight = chosen === item.correct;
+
+      buttons.forEach((b, idx) => {
+        b.classList.add('is-locked');
+        if (idx === item.correct) {
+          b.classList.add('is-correct');
+        } else if (idx === chosen) {
+          b.classList.add('is-wrong');
+        } else {
+          b.classList.add('is-dim');
+        }
+      });
+
+      if (isRight) {
+        correctCount++;
+        feedback.textContent = 'Верно! ✨';
+        feedback.classList.add('ok');
+      } else {
+        feedback.textContent = 'Не совсем — правильный ответ: ' + item.options[item.correct];
+        feedback.classList.add('no');
+      }
+
+      updateProgress();
+
+      // Даём время увидеть правильный/неправильный ответ, затем перелистываем
+      const delay = isRight ? 1000 : 1500;
+      setTimeout(goNext, delay);
+    }
+  }
+
+  // Смена вопроса с анимацией выхода
+  function goNext() {
+    const step = stageEl.querySelector('.quiz-step');
+    const advance = () => {
+      currentIndex++;
+      if (currentIndex < QUESTIONS.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    };
+
+    if (step) {
+      step.classList.add('is-leaving');
+      setTimeout(advance, 380);
+    } else {
+      advance();
+    }
+  }
+
+  function showResult() {
+    stageEl.innerHTML = '';
+    stageEl.hidden = true;
+
+    finalScoreEl.textContent = '0';
+    resultEl.hidden = false;
+
+    // Плавный «набегающий» счёт
+    let current = 0;
+    const target = correctCount;
+    const step = () => {
+      if (current < target) {
+        current++;
+        finalScoreEl.textContent = current;
+        setTimeout(step, 140);
+      }
+    };
+    step();
+
+    let msg, emoji;
+    if (correctCount === QUESTIONS.length) {
+      msg = 'Вау! Идеально! Ты знаешь Алину лучше всех 💜';
+      emoji = '🏆';
+    } else if (correctCount >= 4) {
+      msg = 'Отличный результат — ты очень хорошо знаешь Алину!';
+      emoji = '🌟';
+    } else if (correctCount >= 2) {
+      msg = 'Неплохо! Но есть куда расти 🌱';
+      emoji = '😊';
+    } else {
+      msg = 'Кажется, тебе стоит узнать Алину поближе 💫';
+      emoji = '🙈';
+    }
+
+    resultEmojiEl.textContent = emoji;
+    resultMsgEl.textContent = msg;
+
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function restartQuiz() {
+    currentIndex = 0;
+    correctCount = 0;
+    answeredCount = 0;
+    locked = false;
+    updateProgress();
+    resultEl.hidden = true;
+    stageEl.hidden = false;
+    renderQuestion();
+    stageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  restartBtn.addEventListener('click', restartQuiz);
+
+  // Старт
+  updateProgress();
+  renderQuestion();
+})();
   </script>
 
   <script src="js/theme.js"></script>
