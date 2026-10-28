@@ -8,7 +8,7 @@
   <title>С днём рождения, Алина! 💜</title>
 
   <link rel="stylesheet" href="css/gate.css">
-
+  <link rel="stylesheet" href="css/theme.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -186,13 +186,21 @@
     .photo-frame {
       position: relative;
       width: 100%;
-      max-width: 420px;
+      max-width: 520px;
       margin-inline: auto;
       padding: 10px;
       background: rgba(255, 255, 255, .045);
       border: 1px solid rgba(208, 178, 240, .17);
       border-radius: 24px;
       box-shadow: 0 25px 70px rgba(0, 0, 0, .24);
+    }
+
+    /* Когда фото анимируется появлением — не мешаем ему собственным transition */
+    .photo-frame.photo-reveal {
+      transition: opacity .9s ease, transform 1s cubic-bezier(.22,.61,.36,1), filter .9s ease;
+    }
+
+    .photo-frame:not(.photo-reveal) {
       transition: transform .35s ease, border-color .35s ease;
     }
 
@@ -242,6 +250,51 @@
       line-height: 1.08;
       letter-spacing: -.045em;
     }
+
+    /* Блок «ТЫ» + подпись под ним */
+    .ty-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      margin-top: 22px;
+    }
+
+    .ty-hero {
+      font-size: clamp(72px, 12vw, 148px);
+      font-weight: 800;
+      line-height: .82;
+      letter-spacing: -.06em;
+      background: linear-gradient(110deg, #f0b9d5, #d0b2f0 55%, #a78bfa);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #d0b2f0;
+    }
+
+    .ty-sub {
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: #e6d7f5;
+    }
+
+    /* Лёгкое парение фотографий */
+    @keyframes photoFloat {
+      0%   { transform: translateY(0) rotate(0deg); }
+      50%  { transform: translateY(-14px) rotate(.4deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* Парение применяем к внутренней обёртке, чтобы не конфликтовать
+       с эффектом появления (.photo-reveal) на самой рамке */
+    .photo-float {
+      animation: photoFloat 6s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .photo-float--delay { animation-delay: -2s; }
+    .photo-float--delay2 { animation-delay: -4s; }
 
     .text-field {
       width: 100%;
@@ -315,8 +368,12 @@
         text-align: center;
       }
 
+      .ty-block {
+        align-items: center;
+      }
+
       .photo-frame {
-        max-width: 350px;
+        max-width: 420px;
       }
     }
 
@@ -387,16 +444,7 @@
           Этот небольшой сайт — о тебе и о том, как много ты значишь.
         </p>
 
-        <div class="fade-up delay-3 mt-9 flex flex-wrap items-center justify-center gap-3">
-          <a href="#beautiful" class="primary-button">
-            Начать путешествие <span aria-hidden="true">↓</span>
-          </a>
-          <a href="pages/letter.html" class="secondary-button">
-            Письмо для тебя ↗
-          </a>
-        </div>
-
-        <div class="mt-16 text-sm text-[#82788f]">
+        <div class="fade-up delay-3 mt-16 text-sm text-[#82788f]">
           Прокрути вниз, здесь всё для тебя
           <div class="mt-3 text-xl text-purple-200/70">⌄</div>
         </div>
@@ -407,22 +455,23 @@
     <section id="beautiful" class="px-5 py-20 sm:py-28">
       <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
         <div class="reveal">
-          <div class="photo-frame">
+          <div class="photo-float">
+            <div class="photo-frame photo-reveal">
             <img
               src="assets/images/photo1.png"
               alt="Фотография Алины"
               loading="lazy"
               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85';"
             >
-            <div class="photo-caption">Та самая улыбка, которую невозможно забыть ✨</div>
+            </div>
           </div>
         </div>
 
         <div class="memory-copy reveal">
-          <span class="section-label">01 · Внешность</span>
-          <h2 class="mt-6 text-5xl font-bold sm:text-6xl">
-            Самая<br><span class="gradient-text">красивая</span>
-          </h2>
+          <div class="ty-block">
+            <span class="ty-hero">ТЫ</span>
+            <span class="ty-sub">самая красивая</span>
+          </div>
           <p class="mt-6">
             В тебе есть что-то особенное. Не только внешность, но и взгляд,
             улыбка и то, как ты умеешь делать обычные моменты ярче.
@@ -441,10 +490,10 @@
     <section id="smart" class="px-5 py-20 sm:py-28">
       <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
         <div class="memory-copy order-2 reveal md:order-1">
-          <span class="section-label">02 · Характер</span>
-          <h2 class="mt-6 text-5xl font-bold sm:text-6xl">
-            Самая<br><span class="gradient-text">умная</span>
-          </h2>
+          <div class="ty-block">
+            <span class="ty-hero">ТЫ</span>
+            <span class="ty-sub">самая умная</span>
+          </div>
           <p class="mt-6">
             Мне нравится, как ты думаешь, замечаешь детали и смотришь на вещи
             со своей точки зрения.
@@ -458,14 +507,15 @@
         </div>
 
         <div class="order-1 reveal md:order-2">
-          <div class="photo-frame">
+          <div class="photo-float photo-float--delay">
+            <div class="photo-frame photo-reveal">
             <img
               src="assets/images/photo2.png"
               alt="Ещё одна фотография Алины"
               loading="lazy"
               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85';"
             >
-            <div class="photo-caption">Красота — это ещё и то, что у тебя внутри 💜</div>
+            </div>
           </div>
         </div>
       </div>
@@ -475,22 +525,23 @@
     <section id="funny" class="px-5 py-20 sm:py-28">
       <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
         <div class="reveal">
-          <div class="photo-frame">
+          <div class="photo-float photo-float--delay2">
+            <div class="photo-frame photo-reveal">
             <img
               src="assets/images/photo3.png"
               alt="Фотография Алины с улыбкой"
               loading="lazy"
               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85';"
             >
-            <div class="photo-caption">С тобой даже обычный день становится веселее ☀️</div>
+            </div>
           </div>
         </div>
 
         <div class="memory-copy reveal">
-          <span class="section-label">03 · Настроение</span>
-          <h2 class="mt-6 text-5xl font-bold sm:text-6xl">
-            Самая<br><span class="gradient-text">смешная</span>
-          </h2>
+          <div class="ty-block">
+            <span class="ty-hero">ТЫ</span>
+            <span class="ty-sub">ооочень смешная</span>
+          </div>
           <p class="mt-6">
             С тобой можно смеяться над совершенно глупыми вещами и всё равно
             считать этот момент одним из лучших.
@@ -510,56 +561,44 @@
     <section id="end" class="px-5 py-24 sm:py-32">
       <div class="glass reveal mx-auto max-w-3xl rounded-[2rem] px-6 py-12 text-center sm:px-12 sm:py-16">
 
-        <h2 class="mt-7 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
-          Спасибо за то,<br>
-          <span class="gradient-text">что ты есть</span>
-        </h2>
+        <!-- Экран 1: поздравление -->
+        <div id="congrats-block">
+          <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+            Спасибо за то,<br>
+            <span class="gradient-text">что ты есть</span>
+          </h2>
 
-        <p class="mx-auto mt-6 max-w-xl text-base leading-8 text-[#c0b6cc] sm:text-lg">
-          Спасибо за моменты, улыбки, разговоры и за то, что ты есть в моей жизни.
-          Пусть этот год принесёт тебе много счастья, спокойствия и исполнения желаний.
-        </p>
-
-        <p class="mt-8 text-2xl font-semibold text-[#f0b9d5] sm:text-3xl">
-          Я тебя люблю ❤️
-        </p>
-
-        <div class="mx-auto my-10 h-px max-w-xs bg-gradient-to-r from-transparent via-purple-300/40 to-transparent"></div>
-
-        <!-- Форма желания -->
-        <div class="mx-auto max-w-lg text-left">
-          <h3 class="text-center text-xl font-semibold sm:text-2xl">
-            Загадай желание ✨
-          </h3>
-          <p class="mt-2 text-center text-sm leading-6 text-[#a99db7]">
-            Напиши его здесь — пусть оно станет первым шагом к исполнению.
+          <p class="mx-auto mt-6 max-w-xl text-base leading-8 text-[#c0b6cc] sm:text-lg">
+            Спасибо за моменты, улыбки, разговоры и за то, что ты есть в моей жизни.
+            Пусть этот год принесёт тебе много счастья, спокойствия и исполнения желаний.
           </p>
 
-          <form id="wish-form" class="mt-6 space-y-4">
-            <label for="wish-input" class="sr-only">Твоё желание</label>
+          <button type="button" id="show-wish-btn" class="primary-button mt-9">
+            Отправить пожелание
+          </button>
+        </div>
+
+        <!-- Экран 2: поле ввода (скрыто по умолчанию) -->
+        <div id="wish-block" hidden>
+          <form id="wish-form" class="mx-auto max-w-lg text-left">
+            <label for="wish-input" class="sr-only">Твоё пожелание</label>
             <textarea
               id="wish-input"
               name="wish"
-              class="text-field min-h-32 resize-y"
-              placeholder="Твоё желание..."
+              class="text-field min-h-40 w-full resize-y"
+              placeholder="Твоё пожелание..."
               maxlength="1000"
               required
             ></textarea>
 
-            <button type="submit" class="primary-button w-full">
+            <button type="submit" class="primary-button mt-4 w-full">
               Отправить
             </button>
 
-            <p id="wish-status" class="text-center" role="status" aria-live="polite"></p>
+            <p id="wish-status" class="mt-4 text-center" role="status" aria-live="polite"></p>
           </form>
         </div>
 
-        <div class="mt-9 flex flex-wrap justify-center gap-3">
-          <a href="#start" class="secondary-button">Вернуться в начало ↑</a>
-          <a href="https://t.me/sladkiyraf" target="_blank" rel="noopener noreferrer" class="secondary-button">
-            Написать мне ↗
-          </a>
-        </div>
       </div>
     </section>
   </main>
@@ -613,13 +652,24 @@
     const wishInput = document.getElementById('wish-input');
     const wishStatus = document.getElementById('wish-status');
 
+    // Переключение: поздравление -> форма ввода пожелания
+    const showWishBtn = document.getElementById('show-wish-btn');
+    const congratsBlock = document.getElementById('congrats-block');
+    const wishBlock = document.getElementById('wish-block');
+
+    showWishBtn.addEventListener('click', () => {
+      congratsBlock.hidden = true;
+      wishBlock.hidden = false;
+      wishInput.focus();
+    });
+
 wishForm.addEventListener('submit', async event => {
   event.preventDefault();
 
   const wish = wishInput.value.trim();
 
   if (!wish) {
-    wishStatus.textContent = 'Сначала напиши своё желание 💜';
+    wishStatus.textContent = 'Сначала напиши своё пожелание 💜';
     return;
   }
 
@@ -652,12 +702,12 @@ wishForm.addEventListener('submit', async event => {
       throw new Error('Не удалось отправить письмо');
     }
 
-    wishStatus.textContent = 'Письмо отправлено! Спасибо 💜';
+    wishStatus.textContent = 'Пожелание отправлено! Спасибо 💜';
     wishInput.value = '';
   } catch (error) {
     console.error('Ошибка отправки:', error);
     wishStatus.textContent =
-      'Не получилось отправить письмо. Попробуй ещё раз.';
+      'Не получилось отправить пожелание. Попробуй ещё раз.';
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = 'Отправить';
@@ -665,6 +715,7 @@ wishForm.addEventListener('submit', async event => {
 });
   </script>
 
+  <script src="js/theme.js"></script>
   <script src="js/gate.js"></script>
 </body>
 </html>

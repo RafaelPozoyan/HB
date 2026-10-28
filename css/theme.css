@@ -1,0 +1,283 @@
+/* ============================================================
+   ЕДИНАЯ ТЕМА САЙТА — «С днём рождения, Алина»
+   Подключается на всех страницах. Единая палитра, типографика,
+   навигация, кнопки и праздничные акценты.
+   ============================================================ */
+
+:root {
+  /* Палитра */
+  --bg: #121019;
+  --bg-deep: #0d0b13;
+  --panel: #191521;
+  --panel-soft: #1b1725;
+  --lavender: #d0b2f0;
+  --lilac: #a78bfa;
+  --softpink: #f0b9d5;
+  --text: #f6f0fa;
+  --muted: #c0b6cc;
+  --muted-dim: #82788f;
+  --line: rgba(208, 178, 240, .16);
+
+  /* Типографика */
+  --font-body: 'Inter', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+
+  /* Радиусы и тени */
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --shadow-soft: 0 20px 60px rgba(0, 0, 0, .28);
+}
+
+/* Подключаем шрифт один раз глобально */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 15% 12%, rgba(167, 139, 250, .16), transparent 42%),
+    radial-gradient(ellipse at 85% 60%, rgba(240, 185, 213, .10), transparent 42%),
+    radial-gradient(ellipse at 50% 95%, rgba(133, 94, 169, .10), transparent 45%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Лёгкая «праздничная» текстура из точек на фоне */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .14;
+  background-image:
+    radial-gradient(circle, #cdb4eb 1px, transparent 1.6px),
+    radial-gradient(circle, #a991c7 1px, transparent 1.6px);
+  background-size: 97px 113px, 151px 167px;
+  background-position: 12px 20px, 62px 73px;
+}
+
+/* Контент поверх фона */
+main, header, footer, nav, section {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Типографика ---------- */
+h1, h2, h3 {
+  color: var(--text);
+}
+
+h1, h2 {
+  letter-spacing: -.04em;
+  line-height: 1.08;
+}
+
+p {
+  color: var(--muted);
+}
+
+a {
+  color: var(--softpink);
+}
+
+/* Градиентный акцент в заголовках */
+.gradient-text {
+  background: linear-gradient(110deg, var(--softpink), var(--lavender) 50%, var(--lilac));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--lavender);
+}
+
+/* ---------- Навигация (единая для всех страниц) ---------- */
+.site-nav {
+  position: sticky;
+  top: 14px;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: 14px auto 0;
+  padding: 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(18, 16, 25, .86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .22);
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .25s ease, background .25s ease;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+  color: #fff;
+  background: rgba(208, 178, 240, .14);
+}
+
+.site-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding-right: 4px;
+  color: var(--softpink);
+  font-weight: 700;
+}
+
+/* ---------- Кнопки (единые) ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 22px;
+  border: 0;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.btn--primary {
+  background: linear-gradient(110deg, var(--lavender), var(--softpink));
+  color: #211829;
+  box-shadow: 0 10px 30px rgba(208, 178, 240, .22);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 38px rgba(208, 178, 240, .32);
+}
+
+.btn--ghost {
+  border: 1px solid rgba(208, 178, 240, .28);
+  background: rgba(255, 255, 255, .03);
+  color: #e8d9f7;
+}
+
+.btn--ghost:hover {
+  background: rgba(208, 178, 240, .10);
+  border-color: rgba(208, 178, 240, .5);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0) scale(.99);
+}
+
+/* ---------- Праздничный акцент: лента-плашка над заголовком ---------- */
+.celebration-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid rgba(208, 178, 240, .3);
+  border-radius: 999px;
+  background: rgba(208, 178, 240, .07);
+  color: #ead9fb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+/* Тонкая гирлянда точек-огоньков под шапкой */
+.celebration-divider {
+  width: min(280px, 70%);
+  height: 2px;
+  margin: 22px auto;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(240, 185, 213, .6), rgba(208, 178, 240, .6), transparent);
+}
+
+/* ---------- Фотографии: карточка + сдержанный эффект появления ---------- */
+.photo-card {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+  padding: 9px;
+  border: 1px solid rgba(208, 178, 240, .18);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, .04);
+  box-shadow: var(--shadow-soft);
+  transition: transform .45s cubic-bezier(.2, .8, .2, 1), border-color .45s ease;
+}
+
+.photo-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: calc(var(--radius-md) - 6px);
+  background: #24202e;
+}
+
+.photo-card:hover {
+  border-color: rgba(208, 178, 240, .38);
+}
+
+/*
+  Эффект появления фотографии — сдержанный:
+  лёгкий подъём + плавное проявление + очень слабый масштаб.
+  Без блёсток и вращений. Класс .photo-in-view добавляется через IntersectionObserver.
+*/
+.photo-reveal {
+  opacity: 0;
+  transform: translateY(26px) scale(.985);
+  filter: blur(6px);
+  transition:
+    opacity .9s ease,
+    transform 1s cubic-bezier(.22, .61, .36, 1),
+    filter .9s ease;
+  will-change: opacity, transform, filter;
+}
+
+.photo-reveal.photo-in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* Если пользователь предпочитает меньше движения — просто показываем фото */
+@media (prefers-reduced-motion: reduce) {
+  .photo-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}

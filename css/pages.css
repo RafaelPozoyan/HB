@@ -1,88 +1,50 @@
-* {
-  box-sizing: border-box;
-}
+/* Стили подстраниц. Базовые токены (цвета, шрифт, фон, nav, кнопки)
+   берутся из theme.css — здесь только специфика внутренних страниц. */
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 15% 10%, rgba(125, 75, 160, .16), transparent 40%),
-    #100d18;
-  color: #f8f3ff;
-  font-family: inherit;
-}
-
-nav {
-  position: sticky;
-  z-index: 10;
-  top: 12px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 5px;
-  width: fit-content;
-  max-width: calc(100% - 24px);
-  margin: 12px auto 0;
-  padding: 7px;
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 22px;
-  background: rgba(20,16,29,.88);
-  backdrop-filter: blur(16px);
-}
-
-nav a {
-  padding: 10px 13px;
-  border-radius: 14px;
-  color: #c0b4ce;
-  font-size: 12px;
-  text-decoration: none;
-  transition: .25s;
-}
-
-nav a:hover,
-nav a.active {
-  color: #f0d9ff;
-  background: rgba(215,167,255,.13);
-}
-
+/* ---------- Обёртка страницы ---------- */
 .page {
   width: min(1100px, 88%);
   margin: 0 auto;
-  padding: 85px 0 100px;
+  padding: 60px 0 100px;
 }
 
+/* ---------- Шапка страницы ---------- */
 .page-heading {
-  margin-bottom: 50px;
+  margin-bottom: 54px;
   text-align: center;
 }
 
 .page-heading .eyebrow {
+  display: inline-block;
+  padding: 7px 15px;
+  border: 1px solid rgba(208, 178, 240, .22);
+  border-radius: 999px;
+  background: rgba(208, 178, 240, .06);
   color: #d9b4ff;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: .18em;
+  letter-spacing: .16em;
   text-transform: uppercase;
 }
 
 .page-heading h1 {
-  margin: 18px 0;
-  font-family: Georgia, serif;
-  font-size: clamp(42px, 7vw, 76px);
-  font-weight: 400;
-  line-height: 1.12;
+  margin: 22px 0 18px;
+  font-family: var(--font-body);
+  font-size: clamp(40px, 6.5vw, 72px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -.045em;
 }
 
 .page-heading p {
   max-width: 620px;
   margin: 0 auto;
-  color: #c0b4ce;
+  color: var(--muted);
+  font-size: 16px;
   line-height: 1.9;
 }
 
+/* ---------- Сетка карточек ---------- */
 .content-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -91,9 +53,10 @@ nav a.active {
 
 .content-card {
   overflow: hidden;
-  border: 1px solid rgba(215,167,255,.18);
-  border-radius: 18px;
-  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(208, 178, 240, .18);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, .025);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
 }
 
 .content-card img {
@@ -101,7 +64,8 @@ nav a.active {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  transition: transform .5s ease;
+  background: #24202e;
+  transition: transform .6s cubic-bezier(.2, .8, .2, 1);
 }
 
 .content-card:hover img {
@@ -114,75 +78,71 @@ nav a.active {
 
 .card-text h2 {
   margin: 0 0 12px;
-  font-family: Georgia, serif;
-  font-size: 28px;
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.02em;
 }
 
 .card-text p {
   margin: 0;
-  color: #c0b4ce;
+  color: var(--muted);
   line-height: 1.8;
 }
 
+/* ---------- Текстовые панели ---------- */
 .text-panel {
   max-width: 760px;
   margin: 0 auto;
   padding: clamp(25px, 5vw, 55px);
-  border: 1px solid rgba(215,167,255,.2);
-  border-radius: 24px;
-  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(208, 178, 240, .2);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(131, 93, 163, .10), transparent 60%),
+    rgba(255, 255, 255, .025);
   text-align: center;
 }
 
+.text-panel h2 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
 .text-panel p {
-  color: #c0b4ce;
+  color: var(--muted);
   line-height: 2;
 }
 
 .text-panel button,
-.date-link {
-  display: inline-block;
+.text-panel .btn {
   margin-top: 20px;
-  padding: 14px 22px;
-  border: 1px solid rgba(215,167,255,.35);
-  border-radius: 13px;
-  background: rgba(215,167,255,.1);
-  color: #f8f3ff;
-  font: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  transition: .25s;
 }
 
-.text-panel button:hover,
-.date-link:hover {
-  background: rgba(215,167,255,.2);
-}
-
+/* ---------- Ссылка «назад» ---------- */
 .back-link {
-  display: block;
-  margin-top: 45px;
-  color: #d9b4ff;
+  display: inline-block;
+  margin-top: 48px;
+  color: #d9a5f0;
+  font-weight: 600;
   text-align: center;
   text-decoration: none;
+  transition: color .2s ease;
 }
 
+.back-link:hover {
+  color: #f0b9d5;
+  text-decoration: underline;
+}
+
+.page > .back-link {
+  display: block;
+}
+
+/* ---------- Адаптив ---------- */
 @media (max-width: 650px) {
-  nav {
-    width: calc(100% - 20px);
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-
-  nav a {
-    flex-shrink: 0;
-    font-size: 11px;
-  }
-
   .page {
-    padding-top: 60px;
+    padding-top: 40px;
   }
 
   .content-grid {

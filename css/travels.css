@@ -43,11 +43,11 @@
 
 .travel-hero h1 {
   margin: 16px 0 0;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(44px, 8vw, 96px);
-  font-weight: 400;
+  font-family: inherit;
+  font-size: clamp(44px, 8vw, 92px);
+  font-weight: 800;
   line-height: 1.04;
-  letter-spacing: -.02em;
+  letter-spacing: -.045em;
   color: #f8f3ff;
 }
 
@@ -194,11 +194,11 @@
 
 .country__body h2 {
   margin: 14px 0 0;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(38px, 5vw, 62px);
-  font-weight: 400;
+  font-family: inherit;
+  font-size: clamp(36px, 4.6vw, 58px);
+  font-weight: 800;
   line-height: 1.06;
-  letter-spacing: -.02em;
+  letter-spacing: -.04em;
   color: #f8f3ff;
 }
 
