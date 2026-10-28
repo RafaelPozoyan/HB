@@ -337,6 +337,72 @@
 </head>
 
 <body class="min-h-screen">
+  <!-- Экран авторизации -->
+<div id="auth-screen"
+     class="fixed inset-0 z-[100] flex items-center justify-center
+            bg-[#121019] px-5">
+
+  <div class="absolute inset-0 pointer-events-none"
+       style="background:
+       radial-gradient(ellipse at 20% 20%, rgba(167,139,250,.18), transparent 45%),
+       radial-gradient(ellipse at 80% 80%, rgba(240,185,213,.12), transparent 45%);">
+  </div>
+
+  <form id="auth-form"
+        class="glass relative w-full max-w-md rounded-3xl p-8 text-center sm:p-10">
+
+    <div class="mb-5 text-4xl">💜</div>
+
+    <h1 class="text-3xl font-bold tracking-tight">
+      Добро пожаловать
+    </h1>
+
+    <p class="mt-3 text-sm leading-6 text-[#c0b6cc]">
+      Этот сайт создан для особенного человека
+    </p>
+
+    <div class="mt-8 space-y-4 text-left">
+      <div>
+        <label for="auth-login"
+               class="mb-2 block text-sm text-[#d9c6ed]">
+          Логин
+        </label>
+        <input id="auth-login"
+               type="text"
+               class="text-field"
+               placeholder="Введи логин"
+               autocomplete="username"
+               required>
+      </div>
+
+      <div>
+        <label for="auth-password"
+               class="mb-2 block text-sm text-[#d9c6ed]">
+          Пароль
+        </label>
+        <input id="auth-password"
+               type="password"
+               class="text-field"
+               placeholder="Введи пароль"
+               autocomplete="current-password"
+               required>
+      </div>
+    </div>
+
+    <p id="auth-error"
+       class="mt-4 min-h-5 text-sm text-rose-300"
+       role="alert"
+       aria-live="polite"></p>
+
+    <button type="submit" class="primary-button mt-2 w-full">
+      Открыть сайт ✨
+    </button>
+
+    <p class="mt-6 text-xs text-[#82788f]">
+      Только для тебя
+    </p>
+  </form>
+</div>
   <div class="aurora aurora-one"></div>
   <div class="aurora aurora-two"></div>
 
@@ -643,6 +709,32 @@
 
       wishStatus.insertAdjacentElement('afterend', telegramLink);
     });
+    // Авторизация
+const authForm = document.getElementById('auth-form');
+const authScreen = document.getElementById('auth-screen');
+const authError = document.getElementById('auth-error');
+
+authForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  const login = document.getElementById('auth-login').value.trim();
+  const password = document.getElementById('auth-password').value;
+
+  if (login === 'HappyBDay' && password === '06112026') {
+    authError.textContent = '';
+    authScreen.style.transition = 'opacity 0.5s ease';
+    authScreen.style.opacity = '0';
+
+    setTimeout(() => {
+      authScreen.remove();
+      document.getElementById('start').scrollIntoView();
+    }, 500);
+  } else {
+    authError.textContent = 'Неверный логин или пароль. Попробуй ещё раз.';
+    document.getElementById('auth-password').value = '';
+    document.getElementById('auth-password').focus();
+  }
+});
   </script>
 </body>
 </html>
