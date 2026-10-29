@@ -26,7 +26,7 @@ body {
     radial-gradient(ellipse at 88% 48%, rgba(101, 77, 133, 0.12), transparent 34%),
     radial-gradient(ellipse at 48% 90%, rgba(147, 104, 155, 0.09), transparent 38%);
   background-attachment: fixed;
-  font-family: Inter, ui-rounded, system-ui, -apple-system, sans-serif;
+  font-family: 'Tenor Sans', Inter, ui-rounded, system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 

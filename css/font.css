@@ -1,0 +1,36 @@
+/* ============================================================
+   Единый шрифт сайта — Tenor Sans.
+   Подключается первым на всех страницах (до theme.css и др.),
+   чтобы @font-face был доступен всем стилям.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Tenor Sans';
+  src: url('../assets/font/TenorSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Применяем ко всему тексту сайта */
+:root {
+  --font-body: 'Tenor Sans', 'Inter', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Tenor Sans', Georgia, 'Times New Roman', serif;
+}
+
+html {
+  font-family: 'Tenor Sans', 'Inter', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: 'Tenor Sans', 'Inter', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* Формы, кнопки и интерактивные элементы тоже наследуют шрифт */
+input,
+button,
+textarea,
+select,
+optgroup {
+  font-family: inherit;
+}

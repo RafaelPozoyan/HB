@@ -1,0 +1,11 @@
+{
+  "users": [
+    { "login": "Alina",     "password": "My_birthday",   "access": ["date"] },
+    { "login": "Irina",     "password": "Birthday_pass", "access": [] },
+    { "login": "Lyudmila",  "password": "Birthday_pass", "access": [] },
+    { "login": "Sasha",     "password": "Birthday_pass", "access": [] },
+    { "login": "Alexandra", "password": "Birthday_pass", "access": [] },
+    { "login": "Ksusha",    "password": "Birthday_pass", "access": [] },
+    { "login": "Kate",      "password": "Birthday_pass", "access": [] }
+  ]
+}

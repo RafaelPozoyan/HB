@@ -19,8 +19,8 @@
   --line: rgba(208, 178, 240, .16);
 
   /* Типографика */
-  --font-body: 'Inter', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: 'Tenor Sans', 'Inter', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Tenor Sans', Georgia, 'Times New Roman', serif;
 
   /* Радиусы и тени */
   --radius-sm: 14px;
@@ -29,8 +29,7 @@
   --shadow-soft: 0 20px 60px rgba(0, 0, 0, .28);
 }
 
-/* Подключаем шрифт один раз глобально */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* Шрифт Tenor Sans подключается единым файлом css/font.css */
 
 * {
   box-sizing: border-box;
@@ -285,25 +284,19 @@ a {
 }
 
 /*
-  Эффект появления фотографии — сдержанный:
-  лёгкий подъём + плавное проявление + очень слабый масштаб.
-  Без блёсток и вращений. Класс .photo-in-view добавляется через IntersectionObserver.
+  Фотографии показываются сразу, без эффекта появления при прокрутке.
+  Классы оставляем на случай разметки, но визуально они ничего не скрывают.
 */
 .photo-reveal {
-  opacity: 0;
-  transform: translateY(26px) scale(.985);
-  filter: blur(6px);
-  transition:
-    opacity .9s ease,
-    transform 1s cubic-bezier(.22, .61, .36, 1),
-    filter .9s ease;
-  will-change: opacity, transform, filter;
+  opacity: 1;
+  transform: none;
+  filter: none;
 }
 
 .photo-reveal.photo-in-view {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
+  transform: none;
+  filter: none;
 }
 
 /* Если пользователь предпочитает меньше движения — просто показываем фото */
@@ -314,4 +307,93 @@ a {
     filter: none !important;
     transition: none !important;
   }
+}
+
+/* ============================================================
+   Доступ к закрытым страницам: затемнённая ссылка, всплывающее
+   сообщение и страница-заглушка «нет доступа».
+   ============================================================ */
+.is-locked {
+  opacity: .38 !important;
+  cursor: not-allowed !important;
+  filter: grayscale(.5);
+  pointer-events: auto; /* клик ловим, чтобы показать сообщение */
+}
+
+.is-locked:hover,
+.is-locked:focus-visible {
+  opacity: .45 !important;
+}
+
+/* Всплывающее сообщение о недоступности */
+.alina-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 10000;
+  transform: translate(-50%, 24px);
+  max-width: calc(100% - 32px);
+  padding: 14px 22px;
+  border: 1px solid rgba(208, 178, 240, .3);
+  border-radius: 16px;
+  background: rgba(27, 23, 37, .96);
+  color: #f6f0fa;
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.alina-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Страница-заглушка «нет доступа» */
+.no-access-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+
+.no-access-card {
+  width: min(520px, 100%);
+  padding: 48px 32px;
+  border: 1px solid rgba(208, 178, 240, .2);
+  border-radius: 28px;
+  background: rgba(27, 23, 37, .72);
+  text-align: center;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .3);
+}
+
+.no-access-emoji {
+  font-size: 46px;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+
+.no-access-card h1 {
+  margin: 0 0 14px;
+  font-size: 28px;
+}
+
+.no-access-card p {
+  margin: 0 0 26px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.no-access-card .back-link {
+  display: inline-block;
+  color: var(--softpink);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.no-access-card .back-link:hover {
+  text-decoration: underline;
 }

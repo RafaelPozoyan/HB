@@ -8,12 +8,15 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/font.css">
   <link rel="stylesheet" href="../css/gate.css">
   <link rel="stylesheet" href="../css/theme.css">
   <link rel="stylesheet" href="../css/pages.css">
   <link rel="stylesheet" href="../css/travels.css">
 </head>
 <body>
+
+<div class="bg-decor" aria-hidden="true"></div>
 
 <nav class="site-nav">
   <a class="site-nav__brand" href="../index.html">♡ Для Алины</a>
@@ -25,13 +28,11 @@
 
 <!-- Обложка -->
 <header class="travel-hero">
-  <div class="travel-hero__globe" aria-hidden="true">🌍</div>
   <h1>География <em>твоей</em><br>улыбки</h1>
   <p class="travel-hero__lead">
     Двенадцать стран, двенадцать историй и бесконечное количество причин улыбаться.
     Здесь — места, которые стали частью тебя.
   </p>
-  <div class="travel-hero__count">✈️ 12 стран · один незабываемый путь</div>
 </header>
 
 <!-- Быстрая навигация по странам -->
@@ -139,7 +140,7 @@
         <span class="country__tag">Джакарта</span>
       </div>
       <p>
-        Тут все поняли, что ты и в правду Алина Массон!
+        Тут все окончательно убедились, что ты и в правду Алина Массон!
       </p>
     </div>
   </section>
@@ -206,7 +207,7 @@
         <span class="country__tag">Хошимин</span>
       </div>
       <p>
-        Тут ты видела замки и ела тапок-вафлю!
+        Тут ты видела красивые замки и ела тапок-вафлю!
       </p>
     </div>
   </section>
@@ -296,7 +297,7 @@
         <span class="country__tag">Мостар</span>
       </div>
       <p>
-        Смотрела на мост RedBull и купила мне рюмку с буферами! 
+        Тут ты смотрела на мост RedBull и купила мне рюмку с буферами! 
       </p>
     </div>
   </section>
@@ -323,7 +324,7 @@
         <span class="country__tag">Гудаури</span>
       </div>
       <p>
-        Тут мы вместе жили, радовались всему хорошему, вкусно кушали и присматривали квартиру!
+        Тут мы вместе жили, радовались всему хорошему, вкусно кушали и присматривали нам квартиру!
       </p>
     </div>
   </section>
@@ -335,30 +336,8 @@
   </div>
 </main>
 
-<script>
-  // Плавное появление разделов стран при прокрутке
-  (function () {
-    const items = document.querySelectorAll('.travel-reveal');
-
-    if (!('IntersectionObserver' in window)) {
-      items.forEach(function (el) { el.classList.add('visible'); });
-      return;
-    }
-
-    const observer = new IntersectionObserver(function (entries, obs) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-
-    items.forEach(function (el) { observer.observe(el); });
-  })();
-</script>
-
 <script src="../js/gate.js"></script>
+<script src="../js/access.js"></script>
 <script src="../js/theme.js"></script>
 </body>
 </html>

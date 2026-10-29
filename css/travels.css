@@ -291,16 +291,15 @@
   text-decoration: underline;
 }
 
-/* --- Появление секций --- */
+/* --- Секции видны сразу, без появления при прокрутке --- */
 .travel-reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity .9s ease, transform .9s cubic-bezier(.2, .8, .2, 1);
+  opacity: 1;
+  transform: none;
 }
 
 .travel-reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 /* --- Адаптив --- */
@@ -357,4 +356,40 @@
   .travel-hero__globe { animation: none; }
   .travel-reveal { opacity: 1; transform: none; }
   .country__media img { animation: none; }
+}
+
+/* ============================================================
+   Фон-декор страницы путешествий: крупные, едва заметные серые
+   эмодзи (сердечки, тортики и т.д.), разбросанные по всей высоте
+   страницы. Слой не перехватывает клики и лежит под контентом.
+   ============================================================ */
+.bg-decor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.bg-decor__item {
+  position: absolute;
+  line-height: 1;
+  color: #8a8296;            /* сероватый тон */
+  opacity: .10;             /* очень «в фоне» */
+  filter: grayscale(1) brightness(1.25);
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  will-change: transform;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+/* На мобильных фон чуть плотнее виден и мельче — чтобы не было каши */
+@media (max-width: 860px) {
+  .bg-decor__item {
+    opacity: .08;
+  }
 }

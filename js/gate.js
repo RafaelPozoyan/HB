@@ -6,14 +6,93 @@
   // Момент открытия: 6 ноября 2026, 00:00 по московскому времени (UTC+3)
   const UNLOCK_DATE = new Date('2026-11-06T00:00:00+03:00');
 
-  // Временно хардкод для удобства (не безопасность, а занавеска)
-  const VALID_LOGIN = '1';
-  const VALID_PASSWORD = '1';
+  // ВРЕМЕННО ОТКЛЮЧЕНО для тестирования входа: обратный отсчёт пропускается,
+  // форма логина показывается сразу. Вернуть обратно: поставить true.
+  const COUNTDOWN_ENABLED = false;
 
-  const SESSION_KEY = 'alinaGateUnlockedSession';
+  // Путь к файлу с пользователями (data/users.json) относительно этого скрипта.
+  // Определяем по src текущего скрипта, чтобы работало и из корня, и из /pages.
+  const SESSION_KEY = 'alinaGateUser';    // JSON: { login, access: [...] }
+  const LEGACY_SESSION_KEY = 'alinaGateUnlockedSession';
 
-  // Уже открыт доступ в этой сессии? — не показываем гейт вовсе
-  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  let usersUrl = 'data/users.json';
+  try {
+    const scriptEl = document.currentScript;
+    if (scriptEl && scriptEl.src) {
+      // .../js/gate.js  ->  .../data/users.json
+      usersUrl = new URL('../data/users.json', scriptEl.src).href;
+    }
+  } catch (e) { /* игнорируем, оставим относительный путь */ }
+
+  // Кэш загруженных пользователей: { login: { password, access } }
+  let usersCache = null;
+  let usersPromise = null;
+
+  function getUsers() {
+    if (usersCache) return Promise.resolve(usersCache);
+    if (usersPromise) return usersPromise;
+
+    usersPromise = fetch(usersUrl, { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Не удалось загрузить пользователей');
+        return res.json();
+      })
+      .then(function (data) {
+        const map = {};
+        const list = (data && data.users) || [];
+        list.forEach(function (u) {
+          if (u && u.login) {
+            map[String(u.login).toLowerCase()] = {
+              login: u.login,
+              password: u.password,
+              access: Array.isArray(u.access) ? u.access.slice() : []
+            };
+          }
+        });
+        usersCache = map;
+        return map;
+      })
+      .catch(function (err) {
+        usersPromise = null; // дать шанс повторить позже
+        throw err;
+      });
+
+    return usersPromise;
+  }
+
+  // --- Текущий пользователь из сессии ---
+  function getSessionUser() {
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* игнорируем */ }
+
+    // Обратная совместимость со старым флагом «просто открыто»
+    if (sessionStorage.getItem(LEGACY_SESSION_KEY) === '1') {
+      return { login: null, access: [] };
+    }
+    return null;
+  }
+
+  // Экспортируем минимальный API, чтобы им могли пользоваться другие скрипты (access.js)
+  window.AlinaGate = {
+    getSessionUser: getSessionUser,
+    getUsers: getUsers,
+    hasAccess: function (pageKey) {
+      const user = getSessionUser();
+      if (!user || !Array.isArray(user.access)) return false;
+      return user.access.indexOf(pageKey) !== -1;
+    }
+  };
+
+  // Уже вошли в этой сессии? — не показываем гейт вовсе
+  if (getSessionUser()) {
+    // Дадим другим скриптам знать, что доступ уже открыт
+    try {
+      document.dispatchEvent(new CustomEvent('alina:session-ready', {
+        detail: getSessionUser()
+      }));
+    } catch (e) { /* игнорируем */ }
     return;
   }
 
@@ -51,7 +130,7 @@
           <label for="gate-password" class="gate__hidden">Пароль</label>
           <input id="gate-password" class="gate__field" type="password" placeholder="Пароль" autocomplete="current-password" required>
 
-          <button type="submit" class="gate__btn">Открыть сайт ✨</button>
+          <button type="submit" class="gate__btn" id="gate-submit">Открыть сайт ✨</button>
           <p class="gate__error" id="gate-error" role="alert" aria-live="polite"></p>
         </form>
       </div>
@@ -78,6 +157,12 @@
     const params = new URLSearchParams(location.search);
     const demoMode = params.get('demo') === '1';
     const testMode = params.has('test');
+
+    // Если обратный отсчёт отключён — сразу показываем форму входа
+    if (!COUNTDOWN_ENABLED) {
+      showLogin();
+      return;
+    }
 
     if (now < UNLOCK_DATE.getTime() || demoMode || testMode) {
       startCountdown();
@@ -146,7 +231,7 @@
     timerId = setInterval(tick, 1000);
   }
 
-  // --- Кнопка «Пропустить отсчёт»: сразу открывает основной сайт ---
+  // --- Кнопка «Пропустить отсчёт» ---
   let skipBound = false;
 
   function bindSkip() {
@@ -160,7 +245,8 @@
       const btn = target.closest('#gate-skip');
       if (btn) {
         event.preventDefault();
-        unlock();
+        // «Пропуск» открывает сайт как гость без спец-доступа.
+        unlock({ login: null, access: [] });
       }
     });
   }
@@ -199,27 +285,51 @@
 
       const loginInput = gate.querySelector('#gate-login');
       const passwordInput = gate.querySelector('#gate-password');
+      const submitBtn = gate.querySelector('#gate-submit');
 
       const login = loginInput ? loginInput.value.trim() : '';
       const password = passwordInput ? passwordInput.value : '';
 
-      if (login === VALID_LOGIN && password === VALID_PASSWORD) {
-        if (errorEl) errorEl.textContent = '';
-        unlock();
-      } else {
-        if (errorEl) errorEl.textContent = 'Неверный логин или пароль. Попробуй ещё раз.';
-        if (passwordInput) {
-          passwordInput.value = '';
-          passwordInput.focus();
-        }
+      if (!login || !password) {
+        if (errorEl) errorEl.textContent = 'Введите логин и пароль.';
+        return;
       }
+
+      if (errorEl) errorEl.textContent = '';
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Проверяем…'; }
+
+      getUsers()
+        .then(function (users) {
+          const user = users[login.toLowerCase()];
+          const ok = user && user.password === password;
+
+          if (ok) {
+            unlock({ login: user.login, access: user.access });
+          } else {
+            if (errorEl) errorEl.textContent = 'Неверный логин или пароль. Попробуй ещё раз.';
+            if (passwordInput) {
+              passwordInput.value = '';
+              passwordInput.focus();
+            }
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Открыть сайт ✨'; }
+          }
+        })
+        .catch(function () {
+          if (errorEl) errorEl.textContent = 'Не удалось проверить данные. Попробуй ещё раз.';
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Открыть сайт ✨'; }
+        });
     });
   }
 
   // --- Открыть сайт ---
-  function unlock() {
+  function unlock(user) {
+    const session = {
+      login: (user && user.login) || null,
+      access: (user && Array.isArray(user.access)) ? user.access : []
+    };
+
     try {
-      sessionStorage.setItem(SESSION_KEY, '1');
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
     } catch (e) { /* приватный режим — игнорируем */ }
 
     document.documentElement.classList.remove('gate-locked');
@@ -230,6 +340,11 @@
     setTimeout(function () {
       if (gate && gate.parentNode) gate.parentNode.removeChild(gate);
     }, 600);
+
+    // Сообщаем остальным скриптам, что сайт открыт (для конфети и прав доступа)
+    try {
+      document.dispatchEvent(new CustomEvent('alina:unlocked', { detail: session }));
+    } catch (e) { /* старые браузеры — игнорируем */ }
   }
 
   // --- Запуск (в самом конце, после всех объявлений — чтобы не было TDZ) ---

@@ -22,7 +22,7 @@ html.gate-locked body > :not(.gate) {
     radial-gradient(ellipse at 80% 85%, rgba(240, 185, 213, .14), transparent 45%),
     #121019;
   color: #f6f0fa;
-  font-family: Inter, ui-rounded, system-ui, -apple-system, sans-serif;
+  font-family: 'Tenor Sans', Inter, ui-rounded, system-ui, -apple-system, sans-serif;
   transition: opacity .6s ease;
 }
 
