@@ -466,8 +466,109 @@
       color: #b79be0;
     }
 
+    /* ===== Экран победы поверх поля ===== */
+    .win-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 24px;
+      text-align: center;
+      /* «замыленный» фон + затемнение */
+      background: rgba(14, 10, 22, .55);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+
+    .win-overlay.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .win-overlay__title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(44px, 10vw, 88px);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -.02em;
+      background: linear-gradient(110deg, var(--lavender), var(--softpink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 6px 24px rgba(208, 178, 240, .5));
+      transform: scale(.8);
+      transition: transform .45s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .win-overlay.is-visible .win-overlay__title {
+      transform: scale(1);
+    }
+
+    .win-overlay__subtitle {
+      margin: 0;
+      max-width: 420px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #e9dcf7;
+    }
+
+    .win-overlay__actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .win-overlay__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid rgba(208, 178, 240, .28);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .win-overlay__btn--primary {
+      border-color: transparent;
+      background: linear-gradient(110deg, var(--lavender), var(--softpink));
+      color: #211829;
+      box-shadow: 0 10px 30px rgba(208, 178, 240, .3);
+    }
+
+    .win-overlay__btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 38px rgba(208, 178, 240, .42);
+    }
+
+    .win-overlay__btn--ghost {
+      background: rgba(255, 255, 255, .05);
+      color: #e8d9f7;
+    }
+
+    .win-overlay__btn--ghost:hover {
+      background: rgba(208, 178, 240, .12);
+      border-color: rgba(208, 178, 240, .5);
+      transform: translateY(-2px);
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .cake { transition: none; }
+      .win-overlay,
+      .win-overlay__title { transition: none; }
     }
   </style>
 </head>
@@ -486,7 +587,6 @@
 
 <main class="page">
   <header class="mini-games-head">
-    <span class="celebration-badge">Мини-игра</span>
     <h1>Если не сможешь нажать —<br><span class="gradient-text">то ты самая красивая девушка в мире!</span></h1>
     <p>Попробуй поймать точку мышкой.</p>
   </header>
@@ -509,7 +609,6 @@
 
   <!-- ================= Игра 2: Загадай число (кубик) ================= -->
   <section class="dice-section">
-    <span class="dice-section__label">Вторая игра</span>
     <h2 class="dice-section__title">
       Загадай число и если кубик покажет его, то <span class="gradient-text">ты самый любимый человек в моей жизни</span>
     </h2>
@@ -534,19 +633,18 @@
     <p class="dice-result" id="dice-result" role="status" aria-live="polite">Выбери число и брось кубик…</p>
 
     <div class="dice-actions">
-      <button type="button" id="dice-roll" class="secondary-button">Бросить кубик 🎲</button>
+      <button type="button" id="dice-roll" class="secondary-button">Бросить кубик</button>
     </div>
   </section>
 
   <!-- ================= Игра 3: Червяк и тортики ================= -->
   <section class="worm-section">
-    <span class="worm-section__label">Третья игра</span>
     <h2 class="worm-section__title">
-      Покорми червяка: <span class="gradient-text">собери все тортики!</span>
+      Покорми Алину на день рождения: <span class="gradient-text">собери все тортики!</span>
     </h2>
 
     <div class="worm-stats">
-      <span>Съедено: <strong id="worm-score">0</strong></span>
+      <span>Съедено: <strong id="worm-score">0</strong> / 100</span>
     </div>
 
     <div id="worm-arena" class="worm-arena" aria-label="Поле игры: червяк собирает тортики">
@@ -557,9 +655,17 @@
         alt="Червяк"
         draggable="false"
       >
+
+      <div class="win-overlay" id="worm-win" role="dialog" aria-modal="true" aria-labelledby="worm-win-title" aria-hidden="true">
+        <h3 class="win-overlay__title" id="worm-win-title">Победа!</h3>
+        <p class="win-overlay__subtitle">Ты собрала все 100 тортиков. Алина довольна! 🎂</p>
+        <div class="win-overlay__actions">
+          <button type="button" class="win-overlay__btn win-overlay__btn--primary" id="worm-play-more">Играть дальше</button>
+          <button type="button" class="win-overlay__btn win-overlay__btn--ghost" id="worm-restart">Начать заново</button>
+        </div>
+      </div>
     </div>
 
-    <p class="worm-hint" id="worm-hint">Веди мышкой — червяк побежит за ней и будет есть тортики.</p>
   </section>
 
   <a class="back-link" href="../index.html">← На главную</a>
@@ -855,6 +961,9 @@
   const worm = document.getElementById('worm');
   const scoreEl = document.getElementById('worm-score');
   const hintEl = document.getElementById('worm-hint');
+  const winOverlay = document.getElementById('worm-win');
+  const playMoreBtn = document.getElementById('worm-play-more');
+  const restartBtn = document.getElementById('worm-restart');
 
   if (!arena || !worm) return;
 
@@ -863,6 +972,8 @@
   // «Габарит» торта в px (примерно видимый размер эмодзи 🍰).
   // Торт съедается, как только прямоугольник червя пересекает его границы.
   const CAKE_SIZE = 38;
+  // Победный порог
+  const WIN_SCORE = 100;
 
   let width = 0;
   let height = 0;
@@ -879,6 +990,7 @@
   let score = 0;
   let cakes = [];       // { el, x, y }
   let rafId = null;
+  let paused = false;   // пауза, пока открыт экран победы
 
   function measure() {
     const rect = arena.getBoundingClientRect();
@@ -923,6 +1035,41 @@
     scoreEl.textContent = score;
   }
 
+  function showWin() {
+    if (!winOverlay) return;
+    paused = true;
+    winOverlay.classList.add('is-visible');
+    winOverlay.setAttribute('aria-hidden', 'false');
+    // фокус на кнопку «Играть дальше» для доступности
+    if (playMoreBtn) playMoreBtn.focus();
+  }
+
+  function hideWin() {
+    if (!winOverlay) return;
+    winOverlay.classList.remove('is-visible');
+    winOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  // «Играть дальше»: продолжаем с текущим счётом (можно набрать ещё раз).
+  function playMore() {
+    hideWin();
+    paused = false;
+  }
+
+  // «Начать заново»: сбрасываем счёт и тортики.
+  function restartGame() {
+    hideWin();
+    paused = false;
+    score = 0;
+    updateScore();
+    resetCakes();
+    x = targetX = width / 2;
+    y = targetY = height / 2;
+  }
+
+  if (playMoreBtn) playMoreBtn.addEventListener('click', playMore);
+  if (restartBtn) restartBtn.addEventListener('click', restartGame);
+
   // Пересекаются ли два прямоугольника (AABB).
   function rectsIntersect(a, b) {
     return !(a.right < b.left || a.left > b.right ||
@@ -964,11 +1111,22 @@
         updateScore();
         // на месте съеденного появляется новый торт
         spawnCake();
+        // победа при достижении порога
+        if (score >= WIN_SCORE) {
+          showWin();
+          return;
+        }
       }
     }
   }
 
   function loop() {
+    // пока открыт экран победы — не двигаем червя и не едим
+    if (paused) {
+      rafId = requestAnimationFrame(loop);
+      return;
+    }
+
     // плавное движение червя к цели
     x += (targetX - x) * 0.2;
     y += (targetY - y) * 0.2;
