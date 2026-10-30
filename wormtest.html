@@ -1,0 +1,25 @@
+
+<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>
+<div id="out">pending</div>
+<iframe id="f" style="width:900px;height:800px;border:0;"></iframe>
+<script>
+var fr=document.getElementById('f');
+fr.src='http://localhost:8000/__storage.html';
+fr.onload=function(){
+  try{ fr.contentWindow.sessionStorage.setItem('alinaGateUser', JSON.stringify({login:'Alina',access:['date']})); }catch(e){}
+  fr.onload=null;
+  fr.src='http://localhost:8000/pages/mini-games.html';
+  fr.onload=function(){ setTimeout(function(){
+    var win=fr.contentWindow;
+    var out={};
+    out.hasSelfTest = typeof win.__wormSelfTest === 'function';
+    if(out.hasSelfTest){
+      out.run1 = win.__wormSelfTest();
+      out.run2 = win.__wormSelfTest();
+      out.scoreEl = win.document.getElementById('worm-score').textContent;
+    }
+    document.getElementById('out').textContent=JSON.stringify(out,null,1);
+    fr.remove();
+  }, 1500); };
+};
+</script></body></html>

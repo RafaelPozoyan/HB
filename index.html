@@ -621,102 +621,6 @@
         transform: none;
       }
     }
-
-    /* ================= Игра: неуловимая точка ================= */
-    .game-shell {
-      max-width: 760px;
-      margin-inline: auto;
-    }
-
-    .game-stats {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-      padding: 0 4px;
-      font-size: 14px;
-      color: #c9bbdb;
-    }
-
-    .game-stats strong {
-      color: #f0b9d5;
-    }
-
-    .game-arena {
-      position: relative;
-      width: 100%;
-      height: clamp(320px, 52vh, 460px);
-      border-radius: 22px;
-      border: 1px solid rgba(208, 178, 240, .18);
-      background:
-        radial-gradient(ellipse at 50% 0%, rgba(167, 139, 250, .1), transparent 60%),
-        rgba(10, 8, 15, .38);
-      overflow: hidden;
-      cursor: crosshair;
-      touch-action: none;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .game-dot {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 54px;
-      height: 54px;
-      margin: 0;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #f7e6ff, #d0b2f0 55%, #a78bfa 100%);
-      box-shadow:
-        0 0 0 6px rgba(208, 178, 240, .12),
-        0 0 26px rgba(208, 178, 240, .55),
-        0 8px 22px rgba(0, 0, 0, .35);
-      /* мгновенный перенос позиции + лёгкий «пуф» масштаба */
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .game-dot::after {
-      content: "";
-      position: absolute;
-      inset: 26%;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .65);
-      filter: blur(1px);
-    }
-
-    .game-dot.is-hopping {
-      animation: dotHop .3s ease-out;
-    }
-
-    @keyframes dotHop {
-      0%   { transform: translate(-50%, -50%) scale(.55); }
-      60%  { transform: translate(-50%, -50%) scale(1.12); }
-      100% { transform: translate(-50%, -50%) scale(1); }
-    }
-
-
-
-    .game-hint {
-      margin-top: 14px;
-      min-height: 24px;
-      text-align: center;
-      font-size: 14px;
-      color: #b79be0;
-    }
-
-    .game-actions {
-      display: flex;
-      justify-content: center;
-      margin-top: 16px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .game-dot {
-        transition: none;
-      }
-    }
   </style>
 </head>
 
@@ -737,6 +641,7 @@
       </a>
 
       <div class="mobile-nav flex items-center gap-4 text-xs sm:gap-6 sm:text-sm">
+        <a class="nav-link whitespace-nowrap" href="pages/mini-games.html">Мини-игры</a>
         <a class="nav-link whitespace-nowrap" href="pages/life.html">Жизнь Алины</a>
         <a class="nav-link whitespace-nowrap" href="pages/travels.html">Путешествия Алины</a>
         <a class="nav-link whitespace-nowrap" href="pages/loved-ones.html">Поздравления</a>
@@ -880,7 +785,7 @@
         <div class="quiz-progress">
           <div class="quiz-progress__row">
             <span>Вопросы</span>
-            <span>Отвечено: <strong><span id="quiz-answered-count">0</span></strong> / 6</span>
+            <span>Отвечено: <strong><span id="quiz-answered-count">0</span></strong> / 7</span>
           </div>
           <div class="quiz-progress__bar">
             <div class="quiz-progress__fill" id="quiz-progress-fill"></div>
@@ -894,39 +799,9 @@
         <div id="quiz-result" class="quiz-result" hidden>
           <div class="quiz-result__emoji" id="quiz-result-emoji">💜</div>
           <div class="quiz-result__label">Твой результат</div>
-          <div class="quiz-result__score"><span id="quiz-final-score">0</span><span class="quiz-result__of"> / 6</span></div>
+          <div class="quiz-result__score"><span id="quiz-final-score">0</span><span class="quiz-result__of"> / 7</span></div>
           <div class="quiz-result__msg" id="quiz-result-msg"></div>
           <button type="button" id="quiz-restart" class="secondary-button mt-8">Пройти заново ↺</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Игра: неуловимая точка -->
-    <section id="game" class="px-5 py-20 sm:py-28">
-      <div class="mx-auto max-w-3xl text-center reveal">
-        <span class="section-label">Мини-игра</span>
-        <h2 class="mt-6 text-3xl font-bold leading-tight tracking-tight sm:text-5xl">
-          Если не сможешь нажать —<br>
-          <span class="gradient-text">то ты самая красивая девушка в мире!</span>
-        </h2>
-        <p class="mx-auto mt-5 max-w-xl text-base leading-8 text-[#c0b6cc]">
-          Попробуй поймать точку мышкой.
-        </p>
-      </div>
-
-      <div class="game-shell mt-10">
-        <div class="game-stats">
-          <span>Попыток: <strong id="game-tries">0</strong></span>
-          <span>Ближе всех: <strong id="game-closest">—</strong></span>
-        </div>
-
-        <div id="game-arena" class="game-arena" aria-label="Поле игры с убегающей точкой">
-          <div id="game-dot" class="game-dot" aria-hidden="true"></div>
-        </div>
-
-        <p class="game-hint" id="game-hint">Поймай точку курсором...</p>
-        <div class="game-actions">
-          <button type="button" id="game-restart" class="secondary-button">Начать заново ↺</button>
         </div>
       </div>
     </section>
@@ -966,18 +841,23 @@
     },
     {
       q: 'Где это произошло?',
-      options: ['Старый Оскол', 'Москва', 'Рязань', 'На Луне, рядом с лунтиком'],
+      options: ['Старый Оскол', 'Москва', 'Рязань', 'Белгород'],
       correct: 0
     },
     {
       q: 'Сколько весила Алина при рождении?',
-      options: ['2,3 килограмма', 'Достаточно', '3,1 килограмм'],
+      options: ['2,3 килограмма', 'Сколько нужно!', '3,1 килограмма', '2,7 килограмма'],
+      correct: 1
+    },
+    {
+      q: 'Сколько лет исоплнилось Алине?',
+      options: ['21', '22', '5', '19'],
       correct: 1
     },
     {
       q: 'Знак зодиака Алины?',
-      options: ['Лев', 'Рак', 'Весы', 'Скорпион'],
-      correct: 3
+      options: ['Скорпион', 'Лев', 'Рак', 'Весы'],
+      correct: 0
     },
     {
       q: 'А асцендент?',
@@ -986,9 +866,14 @@
     },
     {
       q: 'Кто любит Алину?',
-      options: ['Рафуля', 'Подружки', 'Мама с бабушкой', 'Абсолютно все!'],
-      correct: 3
-    }
+      options: ['Раф', 'Подружки', 'Абсолютно все!', 'Семья'],
+      correct: 2
+    },
+    {
+      q: 'Какой сегодня главный праздник?',
+      options: ['Международный день саксофона', 'День рождения Алины!', 'День ориентирования без компаса', 'День Конституции Республики Татарстан'],
+      correct: 1
+    },
   ];
 
   const stageEl = document.getElementById('quiz-stage');
@@ -1168,167 +1053,6 @@
   // Старт
   updateProgress();
   renderQuestion();
-})();
-
-// ================= Игра: неуловимая точка =================
-(function () {
-  const arena = document.getElementById('game-arena');
-  const dot = document.getElementById('game-dot');
-  const triesEl = document.getElementById('game-tries');
-  const closestEl = document.getElementById('game-closest');
-  const hintEl = document.getElementById('game-hint');
-  const restartBtn = document.getElementById('game-restart');
-
-  if (!arena || !dot) return;
-
-  const DOT_SIZE = 54;        // должен совпадать с CSS .game-dot width/height
-  const HALF = DOT_SIZE / 2;
-  const SCARE_RADIUS = 150;   // радиус «испуга»: ближе — точка мгновенно улетает
-
-  let width = 0;
-  let height = 0;
-  let x = 0;   // центр точки
-  let y = 0;
-  let tries = 0;
-  let closest = Infinity;
-
-  function measure() {
-    const rect = arena.getBoundingClientRect();
-    width = rect.width;
-    height = rect.height;
-  }
-
-  function clamp(v, min, max) {
-    return Math.min(max, Math.max(min, v));
-  }
-
-  function placeDot(px, py) {
-    x = clamp(px, HALF, width - HALF);
-    y = clamp(py, HALF, height - HALF);
-    dot.style.left = x + 'px';
-    dot.style.top = y + 'px';
-  }
-
-  // Кратчайшее расстояние от точки (px,py) до отрезка (ax,ay)-(bx,by)
-  function distPointToSegment(px, py, ax, ay, bx, by) {
-    const abx = bx - ax;
-    const aby = by - ay;
-    const apx = px - ax;
-    const apy = py - ay;
-    const abLen2 = abx * abx + aby * aby;
-    let t = abLen2 > 0 ? (apx * abx + apy * aby) / abLen2 : 0;
-    t = Math.max(0, Math.min(1, t));
-    const qx = ax + abx * t;
-    const qy = ay + aby * t;
-    return Math.hypot(px - qx, py - qy);
-  }
-
-  function resetGame() {
-    measure();
-    tries = 0;
-    closest = Infinity;
-    triesEl.textContent = '0';
-    closestEl.textContent = '—';
-    hintEl.textContent = 'Наведи курсор на точку...';
-    hintEl.style.color = '';
-    placeDot(width / 2, height / 2);
-  }
-
-  function updateClosest(dist) {
-    if (dist < closest) {
-      closest = dist;
-      closestEl.textContent = Math.max(0, Math.round(dist)) + 'px';
-    }
-  }
-
-  // Выбрать новую позицию точки: далеко от курсора И так, чтобы отрезок пути
-  // мимо курсора (от старой позиции к новой) проходил не ближе minClear.
-  function pickSafeSpot(cx, cy, minClear) {
-    let best = null;
-    let bestScore = -Infinity;
-    for (let i = 0; i < 80; i++) {
-      const px = HALF + Math.random() * (width - DOT_SIZE);
-      const py = HALF + Math.random() * (height - DOT_SIZE);
-      const dToCursor = Math.hypot(px - cx, py - cy);
-      if (dToCursor < minClear) continue;
-      // насколько путь от старой точки к новой держится вдали от курсора
-      const clear = distPointToSegment(cx, cy, x, y, px, py);
-      const score = dToCursor + clear;
-      if (clear >= minClear * 0.9) {
-        return { x: px, y: py };
-      }
-      if (score > bestScore) { bestScore = score; best = { x: px, y: py }; }
-    }
-    return best || { x: HALF + Math.random() * (width - DOT_SIZE), y: HALF + Math.random() * (height - DOT_SIZE) };
-  }
-
-  function puff() {
-    dot.classList.remove('is-hopping');
-    // рефлоу, чтобы анимация класса перезапустилась
-    void dot.offsetWidth;
-    dot.classList.add('is-hopping');
-  }
-
-  // Мгновенное убегание от курсора
-  function fleeFrom(cx, cy) {
-    const spot = pickSafeSpot(cx, cy, SCARE_RADIUS + 30);
-    placeDot(spot.x, spot.y);
-    puff();
-  }
-
-  function pointerPos(e) {
-    const rect = arena.getBoundingClientRect();
-    return { cx: e.clientX - rect.left, cy: e.clientY - rect.top };
-  }
-
-  function onMove(e) {
-    if (!width || !height) measure();
-    const { cx, cy } = pointerPos(e);
-    const dist = Math.hypot(x - cx, y - cy);
-    updateClosest(dist);
-    if (dist < SCARE_RADIUS) {
-      fleeFrom(cx, cy);
-    }
-  }
-
-  function onPress(e) {
-    if (!width || !height) measure();
-    const { cx, cy } = pointerPos(e);
-    tries++;
-    triesEl.textContent = tries;
-    // Мгновенный уворот, чтобы клик гарантированно промахнулся
-    fleeFrom(cx, cy);
-    updateClosest(Math.hypot(x - cx, y - cy));
-    hintEl.style.color = '#f0b9d5';
-    hintEl.textContent = 'Не вышло!';
-  }
-
-  arena.addEventListener('pointermove', onMove);
-  arena.addEventListener('pointerdown', onPress);
-  arena.addEventListener('click', function (e) { e.preventDefault(); });
-
-  window.addEventListener('resize', function () {
-    measure();
-    placeDot(x || width / 2, y || height / 2);
-  });
-
-  restartBtn.addEventListener('click', function () {
-    resetGame();
-    arena.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting && !width) {
-          resetGame();
-        }
-      });
-    }, { threshold: 0.2 });
-    io.observe(arena);
-  }
-
-  resetGame();
 })();
 
   </script>

@@ -130,7 +130,7 @@
           <label for="gate-password" class="gate__hidden">Пароль</label>
           <input id="gate-password" class="gate__field" type="password" placeholder="Пароль" autocomplete="current-password" required>
 
-          <button type="submit" class="gate__btn" id="gate-submit">Открыть сайт ✨</button>
+          <button type="submit" class="gate__btn" id="gate-submit">Войти</button>
           <p class="gate__error" id="gate-error" role="alert" aria-live="polite"></p>
         </form>
       </div>
