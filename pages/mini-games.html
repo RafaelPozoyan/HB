@@ -49,11 +49,11 @@
       margin-bottom: 12px;
       padding: 0 4px;
       font-size: 14px;
-      color: #c9bbdb;
+      color: var(--muted);
     }
 
     .game-stats strong {
-      color: #f0b9d5;
+      color: var(--accent);
     }
 
     .game-arena {
@@ -61,10 +61,10 @@
       width: 100%;
       height: clamp(320px, 52vh, 460px);
       border-radius: 22px;
-      border: 1px solid rgba(208, 178, 240, .18);
+      border: 1px solid rgba(201, 190, 226, .16);
       background:
-        radial-gradient(ellipse at 50% 0%, rgba(167, 139, 250, .1), transparent 60%),
-        rgba(10, 8, 15, .38);
+        radial-gradient(ellipse at 50% 0%, rgba(163, 235, 177, .08), transparent 60%),
+        rgba(26, 22, 43, .55);
       overflow: hidden;
       cursor: crosshair;
       touch-action: none;
@@ -81,10 +81,10 @@
       margin: 0;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #f7e6ff, #d0b2f0 55%, #a78bfa 100%);
+      background: radial-gradient(circle at 35% 30%, #e6fbea, #a3ebb1 55%, #7fd894 100%);
       box-shadow:
-        0 0 0 6px rgba(208, 178, 240, .12),
-        0 0 26px rgba(208, 178, 240, .55),
+        0 0 0 6px rgba(163, 235, 177, .12),
+        0 0 26px rgba(163, 235, 177, .45),
         0 8px 22px rgba(0, 0, 0, .35);
       /* мгновенный перенос позиции + лёгкий «пуф» масштаба */
       pointer-events: none;
@@ -115,7 +115,7 @@
       min-height: 24px;
       text-align: center;
       font-size: 14px;
-      color: #b79be0;
+      color: var(--accent-deep);
     }
 
     .game-actions {
@@ -131,10 +131,10 @@
       justify-content: center;
       gap: 8px;
       padding: 12px 20px;
-      border: 1px solid rgba(208, 178, 240, .28);
+      border: 1px solid rgba(163, 235, 177, .3);
       border-radius: 999px;
       background: rgba(255, 255, 255, .03);
-      color: #e8d9f7;
+      color: var(--accent);
       font-family: inherit;
       font-size: 14px;
       font-weight: 600;
@@ -144,8 +144,8 @@
     }
 
     .game-actions .secondary-button:hover {
-      background: rgba(208, 178, 240, .10);
-      border-color: rgba(208, 178, 240, .5);
+      background: rgba(163, 235, 177, .10);
+      border-color: rgba(163, 235, 177, .55);
       transform: translateY(-2px);
     }
 
@@ -160,7 +160,7 @@
       max-width: 760px;
       margin: 90px auto 0;
       padding-top: 70px;
-      border-top: 1px solid rgba(208, 178, 240, .14);
+      border-top: 1px solid rgba(201, 190, 226, .14);
       text-align: center;
     }
 
@@ -170,10 +170,10 @@
       align-items: center;
       gap: 8px;
       padding: 8px 16px;
-      border: 1px solid rgba(208, 178, 240, .3);
+      border: 1px solid rgba(163, 235, 177, .3);
       border-radius: 999px;
-      background: rgba(208, 178, 240, .07);
-      color: #ead9fb;
+      background: rgba(163, 235, 177, .10);
+      color: var(--accent);
       font-size: 12px;
       font-weight: 700;
       letter-spacing: .12em;
@@ -204,10 +204,10 @@
       flex: 0 0 auto;
       width: 52px;
       height: 52px;
-      border: 1px solid rgba(208, 178, 240, .28);
+      border: 1px solid rgba(163, 235, 177, .3);
       border-radius: 14px;
       background: rgba(255, 255, 255, .03);
-      color: #e8d9f7;
+      color: var(--accent);
       font-family: inherit;
       font-size: 20px;
       font-weight: 700;
@@ -216,20 +216,20 @@
     }
 
     .dice-pick:hover {
-      border-color: rgba(208, 178, 240, .5);
-      background: rgba(208, 178, 240, .10);
+      border-color: rgba(163, 235, 177, .55);
+      background: rgba(163, 235, 177, .12);
       transform: translateY(-2px);
     }
 
     .dice-pick.is-selected {
       border-color: transparent;
-      background: linear-gradient(110deg, var(--lavender), var(--softpink));
-      color: #211829;
-      box-shadow: 0 10px 26px rgba(208, 178, 240, .35);
+      background: linear-gradient(110deg, var(--accent), var(--accent-soft));
+      color: #13261b;
+      box-shadow: 0 10px 26px rgba(163, 235, 177, .3);
     }
 
     .dice-pick:focus-visible {
-      outline: 2px solid rgba(240, 185, 213, .7);
+      outline: 2px solid rgba(163, 235, 177, .7);
       outline-offset: 2px;
     }
 
@@ -248,11 +248,11 @@
       height: 120px;
       border-radius: 22px;
       background:
-        linear-gradient(150deg, #fbf6ff 0%, #ead9fb 42%, #d3bdf0 100%);
+        linear-gradient(150deg, #f4fff6 0%, #d9f7e3 42%, #a9e6b8 100%);
       box-shadow:
         inset 0 3px 6px rgba(255, 255, 255, .9),
-        inset 0 -6px 12px rgba(133, 94, 169, .35),
-        0 10px 0 0 #b79be0,          /* нижняя «грань» — толщина кубика */
+        inset 0 -6px 12px rgba(63, 120, 96, .35),
+        0 10px 0 0 #7fd894,          /* нижняя «грань» — толщина кубика */
         0 22px 40px rgba(0, 0, 0, .45);
       transform-style: preserve-3d;
     }
@@ -284,7 +284,7 @@
       border-radius: 50%;
       align-self: center;
       justify-self: center;
-      background: radial-gradient(circle at 35% 30%, #6d4a95, #3a2557 70%);
+      background: radial-gradient(circle at 35% 30%, #1f6b4f, #0f3a2a 70%);
       box-shadow: inset 0 2px 3px rgba(0, 0, 0, .5), 0 1px 1px rgba(255, 255, 255, .6);
       opacity: 0;
       transition: opacity .12s ease;
@@ -312,12 +312,12 @@
       min-height: 28px;
       font-size: 16px;
       line-height: 1.6;
-      color: #b79be0;
+      color: var(--accent-deep);
       transition: color .3s ease;
     }
 
     .dice-result.is-win {
-      color: #f0b9d5;
+      color: var(--accent);
       font-weight: 700;
       font-size: 18px;
     }
@@ -334,21 +334,21 @@
       justify-content: center;
       gap: 8px;
       padding: 13px 26px;
-      border: 1px solid rgba(208, 178, 240, .28);
+      border: 1px solid rgba(163, 235, 177, .3);
       border-radius: 999px;
-      background: linear-gradient(110deg, var(--lavender), var(--softpink));
-      color: #211829;
+      background: linear-gradient(110deg, var(--accent), var(--accent-soft));
+      color: #13261b;
       font-family: inherit;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
-      box-shadow: 0 10px 30px rgba(208, 178, 240, .22);
+      box-shadow: 0 10px 30px rgba(163, 235, 177, .22);
     }
 
     .dice-actions .secondary-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 38px rgba(208, 178, 240, .32);
+      box-shadow: 0 14px 38px rgba(163, 235, 177, .32);
     }
 
     .dice-actions .secondary-button:disabled {
@@ -367,7 +367,7 @@
       max-width: 760px;
       margin: 90px auto 0;
       padding-top: 70px;
-      border-top: 1px solid rgba(208, 178, 240, .14);
+      border-top: 1px solid rgba(201, 190, 226, .14);
       text-align: center;
     }
 
@@ -376,10 +376,10 @@
       align-items: center;
       gap: 8px;
       padding: 8px 16px;
-      border: 1px solid rgba(208, 178, 240, .3);
+      border: 1px solid rgba(163, 235, 177, .3);
       border-radius: 999px;
-      background: rgba(208, 178, 240, .07);
-      color: #ead9fb;
+      background: rgba(163, 235, 177, .10);
+      color: var(--accent);
       font-size: 12px;
       font-weight: 700;
       letter-spacing: .12em;
@@ -402,11 +402,11 @@
       gap: 22px;
       margin: 22px 0 12px;
       font-size: 14px;
-      color: #c9bbdb;
+      color: var(--muted);
     }
 
     .worm-stats strong {
-      color: #f0b9d5;
+      color: var(--accent);
     }
 
     /* Поле игры: червь и тортики двигаются абсолютно внутри */
@@ -415,10 +415,10 @@
       width: 100%;
       height: clamp(340px, 60vh, 520px);
       border-radius: 22px;
-      border: 1px solid rgba(208, 178, 240, .18);
+      border: 1px solid rgba(201, 190, 226, .16);
       background:
-        radial-gradient(ellipse at 50% 0%, rgba(167, 139, 250, .1), transparent 60%),
-        rgba(10, 8, 15, .38);
+        radial-gradient(ellipse at 50% 0%, rgba(163, 235, 177, .08), transparent 60%),
+        rgba(26, 22, 43, .55);
       overflow: hidden;
       cursor: none;
       touch-action: none;

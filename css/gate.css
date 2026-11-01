@@ -18,10 +18,10 @@ html.gate-locked body > :not(.gate) {
   justify-content: center;
   padding: 24px;
   background:
-    radial-gradient(ellipse at 20% 15%, rgba(167, 139, 250, .20), transparent 45%),
-    radial-gradient(ellipse at 80% 85%, rgba(240, 185, 213, .14), transparent 45%),
-    #121019;
-  color: #f6f0fa;
+    radial-gradient(ellipse at 20% 15%, rgba(163, 235, 177, .12), transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(90, 74, 122, .35), transparent 48%),
+    #1a162b;
+  color: #f3effa;
   font-family: 'Tenor Sans', Inter, ui-rounded, system-ui, -apple-system, sans-serif;
   transition: opacity .6s ease;
 }
@@ -35,9 +35,9 @@ html.gate-locked body > :not(.gate) {
   width: 100%;
   max-width: 460px;
   padding: 40px 32px;
-  border: 1px solid rgba(208, 178, 240, .16);
+  border: 1px solid rgba(201, 190, 226, .16);
   border-radius: 28px;
-  background: rgba(27, 23, 37, .72);
+  background: rgba(45, 40, 62, .72);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   text-align: center;
@@ -67,7 +67,7 @@ html.gate-locked body > :not(.gate) {
   margin: 12px 0 0;
   font-size: 14px;
   line-height: 1.6;
-  color: #c0b6cc;
+  color: #b8b0cd;
 }
 
 /* Таймер */
@@ -80,9 +80,9 @@ html.gate-locked body > :not(.gate) {
 
 .gate__unit {
   padding: 16px 8px 14px;
-  border: 1px solid rgba(208, 178, 240, .14);
+  border: 1px solid rgba(201, 190, 226, .14);
   border-radius: 16px;
-  background: rgba(10, 8, 15, .45);
+  background: rgba(26, 22, 43, .55);
   text-align: center;
 }
 
@@ -92,7 +92,7 @@ html.gate-locked body > :not(.gate) {
   font-weight: 800;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  color: #f0b9d5;
+  color: #a3ebb1;
 }
 
 .gate__label {
@@ -101,14 +101,14 @@ html.gate-locked body > :not(.gate) {
   font-size: 10px;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: #9d8eaa;
+  color: #8a81a2;
 }
 
 .gate__date {
   margin: 20px 0 0;
   font-size: 12px;
   letter-spacing: .06em;
-  color: #82788f;
+  color: #8a81a2;
 }
 
 /* Кнопка «Пропустить отсчёт» */
@@ -116,10 +116,10 @@ html.gate-locked body > :not(.gate) {
   display: inline-block;
   margin-top: 22px;
   padding: 11px 20px;
-  border: 1px solid rgba(208, 178, 240, .25);
+  border: 1px solid rgba(163, 235, 177, .35);
   border-radius: 999px;
-  background: rgba(208, 178, 240, .06);
-  color: #e8d9f7;
+  background: rgba(163, 235, 177, .10);
+  color: #a3ebb1;
   font: inherit;
   font-size: 14px;
   cursor: pointer;
@@ -127,8 +127,8 @@ html.gate-locked body > :not(.gate) {
 }
 
 .gate__skip:hover {
-  background: rgba(208, 178, 240, .14);
-  border-color: rgba(208, 178, 240, .5);
+  background: rgba(163, 235, 177, .18);
+  border-color: rgba(163, 235, 177, .6);
   transform: translateY(-2px);
 }
 
@@ -142,22 +142,22 @@ html.gate-locked body > :not(.gate) {
   width: 100%;
   margin-bottom: 14px;
   padding: 14px 16px;
-  border: 1px solid rgba(208, 178, 240, .2);
+  border: 1px solid rgba(163, 235, 177, .25);
   border-radius: 14px;
-  background: rgba(10, 8, 15, .42);
-  color: #f6f0fa;
+  background: rgba(26, 22, 43, .55);
+  color: #f3effa;
   font: inherit;
   outline: none;
   transition: border-color .2s ease, box-shadow .2s ease;
 }
 
 .gate__field::placeholder {
-  color: #82788f;
+  color: #8a81a2;
 }
 
 .gate__field:focus {
-  border-color: #c5a5e8;
-  box-shadow: 0 0 0 3px rgba(208, 178, 240, .1);
+  border-color: #a3ebb1;
+  box-shadow: 0 0 0 3px rgba(163, 235, 177, .12);
 }
 
 .gate__btn {
@@ -166,18 +166,18 @@ html.gate-locked body > :not(.gate) {
   padding: 15px 24px;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(110deg, #d0b2f0, #f0b9d5);
-  color: #211829;
+  background: linear-gradient(110deg, #a3ebb1, #c9f5d2);
+  color: #13261b;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 30px rgba(208, 178, 240, .18);
+  box-shadow: 0 8px 30px rgba(163, 235, 177, .18);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .gate__btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(208, 178, 240, .3);
+  box-shadow: 0 12px 35px rgba(163, 235, 177, .3);
 }
 
 .gate__btn:active {
@@ -188,7 +188,7 @@ html.gate-locked body > :not(.gate) {
   min-height: 20px;
   margin: 14px 0 0;
   font-size: 13px;
-  color: #f5a3c0;
+  color: #f2a7b0;
   text-align: center;
 }
 

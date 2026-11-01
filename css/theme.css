@@ -5,18 +5,23 @@
    ============================================================ */
 
 :root {
-  /* Палитра */
-  --bg: #121019;
-  --bg-deep: #0d0b13;
-  --panel: #191521;
-  --panel-soft: #1b1725;
-  --lavender: #d0b2f0;
-  --lilac: #a78bfa;
-  --softpink: #f0b9d5;
-  --text: #f6f0fa;
-  --muted: #c0b6cc;
-  --muted-dim: #82788f;
-  --line: rgba(208, 178, 240, .16);
+  /* Палитра: лавандово-ночная база + мятный акцент */
+  --bg: #1a162b;
+  --bg-deep: #14111f;
+  --panel: #2d283e;
+  --panel-soft: #262236;
+  --accent: #a3ebb1;        /* мятная пастель — 10% акцента */
+  --accent-soft: #c9f5d2;
+  --accent-deep: #7fd894;
+  --text: #f3effa;
+  --muted: #b8b0cd;
+  --muted-dim: #8a81a2;
+  --line: rgba(201, 190, 226, .16);
+
+  /* Совместимость со старыми именами цветов */
+  --lavender: var(--accent);
+  --lilac: var(--accent-deep);
+  --softpink: var(--accent-soft);
 
   /* Типографика */
   --font-body: 'Tenor Sans', 'Inter', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -45,9 +50,9 @@ body {
   min-height: 100vh;
   background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse at 15% 12%, rgba(167, 139, 250, .16), transparent 42%),
-    radial-gradient(ellipse at 85% 60%, rgba(240, 185, 213, .10), transparent 42%),
-    radial-gradient(ellipse at 50% 95%, rgba(133, 94, 169, .10), transparent 45%);
+    radial-gradient(ellipse at 15% 12%, rgba(163, 235, 177, .10), transparent 42%),
+    radial-gradient(ellipse at 85% 60%, rgba(90, 74, 122, .30), transparent 45%),
+    radial-gradient(ellipse at 50% 95%, rgba(45, 40, 62, .85), transparent 48%);
   background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-body);
@@ -65,8 +70,8 @@ body::before {
   pointer-events: none;
   opacity: .14;
   background-image:
-    radial-gradient(circle, #cdb4eb 1px, transparent 1.6px),
-    radial-gradient(circle, #a991c7 1px, transparent 1.6px);
+    radial-gradient(circle, #c9f5d2 1px, transparent 1.6px),
+    radial-gradient(circle, #9fd6b4 1px, transparent 1.6px);
   background-size: 97px 113px, 151px 167px;
   background-position: 12px 20px, 62px 73px;
 }
@@ -116,16 +121,16 @@ a {
   width: min(1024px, calc(100% - 24px));
   margin: 20px auto 0;
   padding: 12px 24px;
-  border: 1px solid rgba(208, 178, 240, .13);
+  border: 1px solid rgba(201, 190, 226, .14);
   border-radius: 16px;
-  background: rgba(27, 23, 37, .72);
+  background: rgba(45, 40, 62, .72);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, .22);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .28);
 }
 
 .site-nav a {
-  color: #c0b6cc;
+  color: #b8b0cd;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.429;
@@ -136,12 +141,12 @@ a {
 
 .site-nav a:hover,
 .site-nav a:focus-visible {
-  color: #f0b9d5;
+  color: var(--accent);
 }
 
 /* Активная ссылка на текущей странице — лишь подсвечена цветом, без плашки */
 .site-nav a.active {
-  color: #f0b9d5;
+  color: var(--accent);
 }
 
 .site-nav__brand {
@@ -149,7 +154,7 @@ a {
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
-  color: #ffffff;
+  color: var(--accent);
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -.025em;
@@ -165,7 +170,7 @@ a {
 
 .site-nav__brand:hover,
 .site-nav__brand:focus-visible {
-  color: #ffffff;
+  color: var(--accent-soft);
 }
 
 /* Ряд ссылок справа (на десктопе — просто flex с отступами) */
@@ -224,25 +229,25 @@ a {
 }
 
 .btn--primary {
-  background: linear-gradient(110deg, var(--lavender), var(--softpink));
-  color: #211829;
-  box-shadow: 0 10px 30px rgba(208, 178, 240, .22);
+  background: linear-gradient(110deg, var(--accent), var(--accent-soft));
+  color: #13261b;
+  box-shadow: 0 10px 30px rgba(163, 235, 177, .22);
 }
 
 .btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 38px rgba(208, 178, 240, .32);
+  box-shadow: 0 14px 38px rgba(163, 235, 177, .32);
 }
 
 .btn--ghost {
-  border: 1px solid rgba(208, 178, 240, .28);
+  border: 1px solid rgba(163, 235, 177, .3);
   background: rgba(255, 255, 255, .03);
-  color: #e8d9f7;
+  color: var(--accent);
 }
 
 .btn--ghost:hover {
-  background: rgba(208, 178, 240, .10);
-  border-color: rgba(208, 178, 240, .5);
+  background: rgba(163, 235, 177, .10);
+  border-color: rgba(163, 235, 177, .55);
   transform: translateY(-2px);
 }
 
@@ -256,10 +261,10 @@ a {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border: 1px solid rgba(208, 178, 240, .3);
+  border: 1px solid rgba(163, 235, 177, .32);
   border-radius: 999px;
-  background: rgba(208, 178, 240, .07);
-  color: #ead9fb;
+  background: rgba(163, 235, 177, .10);
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: .12em;
@@ -272,7 +277,7 @@ a {
   height: 2px;
   margin: 22px auto;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent, rgba(240, 185, 213, .6), rgba(208, 178, 240, .6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(201, 245, 210, .6), rgba(163, 235, 177, .6), transparent);
 }
 
 /* ---------- Фотографии: карточка + сдержанный эффект появления ---------- */
@@ -281,9 +286,9 @@ a {
   width: 100%;
   margin-inline: auto;
   padding: 9px;
-  border: 1px solid rgba(208, 178, 240, .18);
+  border: 1px solid rgba(201, 190, 226, .18);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, .04);
+  background: rgba(255, 255, 255, .03);
   box-shadow: var(--shadow-soft);
   transition: transform .45s cubic-bezier(.2, .8, .2, 1), border-color .45s ease;
 }
@@ -294,11 +299,11 @@ a {
   height: 100%;
   object-fit: cover;
   border-radius: calc(var(--radius-md) - 6px);
-  background: #24202e;
+  background: #241f36;
 }
 
 .photo-card:hover {
-  border-color: rgba(208, 178, 240, .38);
+  border-color: rgba(163, 235, 177, .4);
 }
 
 /*
@@ -352,10 +357,10 @@ a {
   transform: translate(-50%, 24px);
   max-width: calc(100% - 32px);
   padding: 14px 22px;
-  border: 1px solid rgba(208, 178, 240, .3);
+  border: 1px solid rgba(163, 235, 177, .3);
   border-radius: 16px;
-  background: rgba(27, 23, 37, .96);
-  color: #f6f0fa;
+  background: rgba(45, 40, 62, .96);
+  color: var(--text);
   font-size: 15px;
   line-height: 1.5;
   text-align: center;
@@ -381,9 +386,9 @@ a {
 .no-access-card {
   width: min(520px, 100%);
   padding: 48px 32px;
-  border: 1px solid rgba(208, 178, 240, .2);
+  border: 1px solid rgba(163, 235, 177, .2);
   border-radius: 28px;
-  background: rgba(27, 23, 37, .72);
+  background: rgba(45, 40, 62, .72);
   text-align: center;
   box-shadow: 0 30px 90px rgba(0, 0, 0, .3);
 }

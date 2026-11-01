@@ -17,8 +17,8 @@
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse at 20% 10%, rgba(131, 93, 163, .22), transparent 55%),
-    radial-gradient(ellipse at 85% 90%, rgba(240, 185, 213, .12), transparent 50%);
+    radial-gradient(ellipse at 20% 10%, rgba(163, 235, 177, .10), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(90, 74, 122, .32), transparent 50%);
 }
 
 .travel-hero__globe {
@@ -34,7 +34,7 @@
 
 .travel-hero__eyebrow {
   margin-top: 22px;
-  color: #d9b4ff;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: .22em;
@@ -48,18 +48,18 @@
   font-weight: 800;
   line-height: 1.04;
   letter-spacing: -.045em;
-  color: #f8f3ff;
+  color: var(--text);
 }
 
 .travel-hero h1 em {
   font-style: italic;
-  color: #d2b4f0;
+  color: var(--accent);
 }
 
 .travel-hero__lead {
   max-width: 640px;
   margin: 24px auto 0;
-  color: #c0b4ce;
+  color: var(--muted);
   font-size: clamp(15px, 2vw, 18px);
   line-height: 1.9;
 }
@@ -70,10 +70,10 @@
   align-items: center;
   margin-top: 30px;
   padding: 10px 20px;
-  border: 1px solid rgba(215, 167, 255, .22);
+  border: 1px solid rgba(163, 235, 177, .3);
   border-radius: 999px;
-  background: rgba(215, 167, 255, .07);
-  color: #e8d9f7;
+  background: rgba(163, 235, 177, .10);
+  color: var(--accent);
   font-size: 13px;
   letter-spacing: .04em;
 }
@@ -97,20 +97,20 @@
   align-items: center;
   gap: 7px;
   padding: 9px 15px;
-  border: 1px solid rgba(215, 167, 255, .16);
+  border: 1px solid rgba(201, 190, 226, .16);
   border-radius: 999px;
-  background: rgba(22, 18, 31, .82);
+  background: rgba(45, 40, 62, .85);
   backdrop-filter: blur(10px);
-  color: #cbbcd9;
+  color: var(--muted);
   font-size: 13px;
   text-decoration: none;
   transition: color .25s ease, border-color .25s ease, background .25s ease, transform .25s ease;
 }
 
 .travel-jump a:hover {
-  color: #fff;
-  border-color: rgba(215, 167, 255, .5);
-  background: rgba(215, 167, 255, .14);
+  color: var(--accent);
+  border-color: rgba(163, 235, 177, .5);
+  background: rgba(163, 235, 177, .12);
   transform: translateY(-2px);
 }
 
@@ -169,9 +169,9 @@
   width: 54px;
   height: 54px;
   border-radius: 16px;
-  background: rgba(18, 16, 25, .62);
+  background: rgba(26, 22, 43, .62);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, .14);
+  border: 1px solid rgba(201, 190, 226, .14);
   font-size: 26px;
 }
 
@@ -184,7 +184,7 @@
 }
 
 .country__index {
-  color: #bba0dc;
+  color: var(--accent-deep);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: .24em;
@@ -198,7 +198,7 @@
   font-weight: 800;
   line-height: 1.06;
   letter-spacing: -.04em;
-  color: #f8f3ff;
+  color: var(--text);
 }
 
 .country__tags {
@@ -211,16 +211,16 @@
 .country__tag {
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(215, 167, 255, .09);
-  border: 1px solid rgba(215, 167, 255, .18);
-  color: #d9c6ed;
+  background: rgba(201, 190, 226, .10);
+  border: 1px solid rgba(201, 190, 226, .2);
+  color: #d6d0e8;
   font-size: 12px;
   letter-spacing: .02em;
 }
 
 .country__body p {
   margin: 22px 0 0;
-  color: #c3b9ce;
+  color: var(--muted);
   font-size: 16px;
   line-height: 1.95;
 }
@@ -232,10 +232,10 @@
 .country__quote {
   margin: 26px 0 0;
   padding: 16px 20px;
-  border-left: 3px solid #d2b4f0;
+  border-left: 3px solid var(--accent);
   border-radius: 0 14px 14px 0;
-  background: rgba(255, 255, 255, .03);
-  color: #e0d6e9;
+  background: rgba(255, 255, 255, .035);
+  color: #ded8ee;
   font-style: italic;
   line-height: 1.8;
 }
@@ -250,7 +250,7 @@
 
 .country__fact strong {
   display: block;
-  color: #f0b9d5;
+  color: var(--accent);
   font-size: 22px;
   font-weight: 700;
   line-height: 1.1;
@@ -259,7 +259,7 @@
 .country__fact span {
   display: block;
   margin-top: 4px;
-  color: #948aa2;
+  color: var(--muted-dim);
   font-size: 12px;
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -274,7 +274,7 @@
 }
 
 .travel-outro p {
-  color: #c0b4ce;
+  color: var(--muted);
   font-size: 17px;
   line-height: 1.95;
 }
@@ -282,7 +282,7 @@
 .travel-outro a {
   display: inline-block;
   margin-top: 6px;
-  color: #d9a5f0;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 600;
 }
@@ -379,7 +379,7 @@
 .bg-decor__item {
   position: absolute;
   line-height: 1;
-  color: #8a8296;            /* сероватый тон */
+  color: #7d7494;            /* серый с лавандовым подтоном */
   opacity: .10;             /* очень «в фоне» */
   filter: grayscale(1) brightness(1.25);
   transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
@@ -408,9 +408,9 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(208, 178, 240, .22) 22%,
-    rgba(208, 178, 240, .30) 50%,
-    rgba(208, 178, 240, .22) 78%,
+    rgba(201, 190, 226, .2) 22%,
+    rgba(201, 190, 226, .28) 50%,
+    rgba(201, 190, 226, .2) 78%,
     transparent
   );
   pointer-events: none;
@@ -424,7 +424,7 @@
   width: 7px;
   height: 7px;
   border-radius: 1.5px;
-  background: rgba(208, 178, 240, .55);
+  background: rgba(163, 235, 177, .6);
   transform: translate(-50%, -50%) rotate(45deg);
   pointer-events: none;
 }
