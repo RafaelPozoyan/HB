@@ -21,19 +21,21 @@
     }
 
     .mini-games-head h1 {
-      margin: 18px 0;
+      margin: 22px auto 0;
+      max-width: 640px;
       font-family: var(--font-display);
-      font-size: clamp(38px, 6vw, 64px);
+      font-size: clamp(24px, 4vw, 36px);
       font-weight: 400;
-      line-height: 1.12;
+      line-height: 1.3;
       letter-spacing: -.02em;
     }
 
     .mini-games-head p {
       max-width: 620px;
-      margin: 0 auto;
+      margin: 14px auto 0;
       color: var(--muted);
-      line-height: 1.9;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
     /* ================= Игра: неуловимая точка ================= */
@@ -362,7 +364,7 @@
       .dice.is-rolling { animation: none; }
     }
 
-    /* ================= Игра 3: червяк и тортики ================= */
+    /* ================= Игра 3: червяк и вкусняшки ================= */
     .worm-section {
       max-width: 760px;
       margin: 90px auto 0;
@@ -409,7 +411,7 @@
       color: var(--accent);
     }
 
-    /* Поле игры: червь и тортики двигаются абсолютно внутри */
+    /* Поле игры: червь и вкусняшки двигаются абсолютно внутри */
     .worm-arena {
       position: relative;
       width: 100%;
@@ -441,11 +443,12 @@
       filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .4));
     }
 
-    /* Тортики */
+    /* Угощения (картинки из assets/images/games) */
     .cake {
       position: absolute;
-      font-size: 38px;
-      line-height: 1;
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 1;
@@ -456,6 +459,36 @@
     .cake.is-eaten {
       opacity: 0;
       transform: translate(-50%, -50%) scale(1.6);
+    }
+
+    /* Кнопка перезапуска под полем */
+    .worm-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .worm-actions .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: 1px solid rgba(163, 235, 177, .3);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .03);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .worm-actions .secondary-button:hover {
+      background: rgba(163, 235, 177, .10);
+      border-color: rgba(163, 235, 177, .55);
+      transform: translateY(-2px);
     }
 
     .worm-hint {
@@ -578,7 +611,6 @@
   <a class="site-nav__brand" href="../index.html"><span>♡</span><span>Для Алины</span></a>
   <div class="site-nav-links">
     <a href="mini-games.html" class="active">Мини-игры</a>
-    <a href="life.html">Жизнь Алины</a>
     <a href="travels.html">Путешествия Алины</a>
     <a href="loved-ones.html">Поздравления</a>
     <a href="date.html">Запись на свиданку</a>
@@ -637,17 +669,17 @@
     </div>
   </section>
 
-  <!-- ================= Игра 3: Червяк и тортики ================= -->
+  <!-- ================= Игра 3: Червяк и вкусняшки ================= -->
   <section class="worm-section">
     <h2 class="worm-section__title">
-      Покорми Алину на день рождения: <span class="gradient-text">собери все тортики!</span>
+      Покорми Алину на день рождения: <span class="gradient-text">собери все вкусняшки!</span>
     </h2>
 
     <div class="worm-stats">
       <span>Съедено: <strong id="worm-score">0</strong> / 100</span>
     </div>
 
-    <div id="worm-arena" class="worm-arena" aria-label="Поле игры: червяк собирает тортики">
+    <div id="worm-arena" class="worm-arena" aria-label="Поле игры: червяк собирает вкусняшки">
       <img
         id="worm"
         class="worm"
@@ -658,12 +690,16 @@
 
       <div class="win-overlay" id="worm-win" role="dialog" aria-modal="true" aria-labelledby="worm-win-title" aria-hidden="true">
         <h3 class="win-overlay__title" id="worm-win-title">Победа!</h3>
-        <p class="win-overlay__subtitle">Ты собрала все 100 тортиков. Алина довольна! 🎂</p>
+        <p class="win-overlay__subtitle">Ты собрала все 100 вкусняшек. Алина довольна! 🎂</p>
         <div class="win-overlay__actions">
           <button type="button" class="win-overlay__btn win-overlay__btn--primary" id="worm-play-more">Играть дальше</button>
           <button type="button" class="win-overlay__btn win-overlay__btn--ghost" id="worm-restart">Начать заново</button>
         </div>
       </div>
+    </div>
+
+    <div class="worm-actions">
+      <button type="button" id="worm-play-restart" class="secondary-button">Начать заново ↺</button>
     </div>
 
   </section>
@@ -901,6 +937,14 @@
     return 1 + Math.floor(Math.random() * 6);
   }
 
+  // Случайная грань, которая гарантированно НЕ равна загаданному числу
+  function randomFaceExcept(value) {
+    const options = [1, 2, 3, 4, 5, 6].filter(function (v) {
+      return v !== value;
+    });
+    return options[Math.floor(Math.random() * options.length)];
+  }
+
   function roll() {
     if (rolling) return;
 
@@ -914,17 +958,20 @@
     resultEl.classList.remove('is-win');
     resultEl.textContent = 'Кубик катится…';
 
+    const alina = isAlina();
+
     // На время анимации быстро мелькаем гранями
     const flicker = setInterval(function () {
-      showValue(randomFace());
+      showValue(alina ? randomFace() : randomFaceExcept(selected));
     }, 70);
 
     dice.classList.remove('is-rolling');
     void dice.offsetWidth; // сброс анимации
     dice.classList.add('is-rolling');
 
-    // Итог определяется заранее: у Alina — всегда загаданное число
-    const finalValue = isAlina() ? selected : randomFace();
+    // Итог определяется заранее: у Alina — всегда загаданное число,
+    // у всех остальных — любая грань, кроме загаданной
+    const finalValue = alina ? selected : randomFaceExcept(selected);
 
     // Длительность анимации ~0.9s
     setTimeout(function () {
@@ -934,11 +981,9 @@
       // Небольшая пауза-акцент перед показом результата
       showValue(finalValue);
 
-      if (finalValue === selected) {
+      if (alina) {
         resultEl.textContent = 'Выпало ' + finalValue + ' — ' +
-          (isAlina()
-            ? 'это загаданное число! Ты самый любимый человек в моей жизни 💜'
-            : 'совпадение!');
+          'это загаданное число! Ты самый любимый человек в моей жизни 💜';
         resultEl.classList.add('is-win');
       } else {
         resultEl.textContent = 'Выпало ' + finalValue + '. Попробуй ещё раз — загадай число и брось снова.';
@@ -955,7 +1000,7 @@
   showValue(randomFace());
 })();
 
-// ================= Игра 3: Червяк и тортики =================
+// ================= Игра 3: Червяк и вкусняшки =================
 (function () {
   const arena = document.getElementById('worm-arena');
   const worm = document.getElementById('worm');
@@ -964,14 +1009,31 @@
   const winOverlay = document.getElementById('worm-win');
   const playMoreBtn = document.getElementById('worm-play-more');
   const restartBtn = document.getElementById('worm-restart');
+  const restartPageBtn = document.getElementById('worm-play-restart');
 
   if (!arena || !worm) return;
 
-  // Сколько тортиков держим на поле одновременно
+  // Сколько угощений держим на поле одновременно
   const CAKE_COUNT = 6;
-  // «Габарит» торта в px (примерно видимый размер эмодзи 🍰).
-  // Торт съедается, как только прямоугольник червя пересекает его границы.
-  const CAKE_SIZE = 38;
+
+  /*
+    Все картинки-угощения из assets/images/games (кроме самого червя worm.png).
+    Размер задаётся вручную: внутри холстов много прозрачных полей
+    (у Kinder Country контент занимает ~35% ширины и ~90% высоты),
+    поэтому одинаковый размер рамки делал бы такие картинки мелкими.
+    encodeURI нужен из-за пробелов и скобок в именах файлов.
+  */
+  const FOODS = [
+    { src: '../assets/images/games/39692378_5-edited-free (carve.photos).png', size: 50 },
+    { src: '../assets/images/games/images-no-bg-preview (carve.photos).png', size: 68 },
+    { src: '../assets/images/games/cHyFBOVUOYdcMD1g8NBrOf7p9RoGb_bREzrv-Y2GAlg=-no-bg-preview (carve.photos).png', size: 64 }
+  ].map(function (food) {
+    return { src: encodeURI(food.src), size: food.size };
+  });
+
+  function randomFood() {
+    return FOODS[Math.floor(Math.random() * FOODS.length)];
+  }
   // Победный порог
   const WIN_SCORE = 100;
 
@@ -988,9 +1050,12 @@
   let targetY = 0;
 
   let score = 0;
-  let cakes = [];       // { el, x, y }
+  let cakes = [];       // { el, x, y, size }
   let rafId = null;
   let paused = false;   // пауза, пока открыт экран победы
+  // Победа показывается один раз за забег: после «Играть дальше»
+  // счёт уже > WIN_SCORE, и повторно экран победы не выскакивает
+  let winShown = false;
 
   function measure() {
     const rect = arena.getBoundingClientRect();
@@ -1005,11 +1070,17 @@
     return Math.min(max, Math.max(min, v));
   }
 
-  // Создать один торт в случайном месте (не на самом краю)
+  // Создать одно угощение в случайном месте (не на самом краю)
   function spawnCake(existing) {
-    const el = document.createElement('div');
+    const food = randomFood();
+
+    const el = document.createElement('img');
     el.className = 'cake';
-    el.textContent = '🍰';
+    el.src = food.src;
+    el.alt = '';
+    el.draggable = false;
+    el.style.width = food.size + 'px';
+    el.style.height = food.size + 'px';
     arena.appendChild(el);
 
     const margin = 28;
@@ -1018,7 +1089,7 @@
     el.style.left = cx + 'px';
     el.style.top = cy + 'px';
 
-    const cake = { el: el, x: cx, y: cy };
+    const cake = { el: el, x: cx, y: cy, size: food.size };
     (existing || cakes).push(cake);
     return cake;
   }
@@ -1056,10 +1127,11 @@
     paused = false;
   }
 
-  // «Начать заново»: сбрасываем счёт и тортики.
+  // «Начать заново»: сбрасываем счёт и угощения.
   function restartGame() {
     hideWin();
     paused = false;
+    winShown = false;
     score = 0;
     updateScore();
     resetCakes();
@@ -1069,6 +1141,7 @@
 
   if (playMoreBtn) playMoreBtn.addEventListener('click', playMore);
   if (restartBtn) restartBtn.addEventListener('click', restartGame);
+  if (restartPageBtn) restartPageBtn.addEventListener('click', restartGame);
 
   // Пересекаются ли два прямоугольника (AABB).
   function rectsIntersect(a, b) {
@@ -1094,7 +1167,7 @@
     const wRect = wormRect();
     for (let i = cakes.length - 1; i >= 0; i--) {
       const c = cakes[i];
-      const half = CAKE_SIZE / 2;
+      const half = (c.size || 44) / 2;
       const cakeRect = {
         left: c.x - half,
         right: c.x + half,
@@ -1109,10 +1182,12 @@
         cakes.splice(i, 1);
         score++;
         updateScore();
-        // на месте съеденного появляется новый торт
+        // на месте съеденного появляется новое угощение
         spawnCake();
-        // победа при достижении порога
-        if (score >= WIN_SCORE) {
+        // победа показывается только один раз за забег —
+        // после «Играть дальше» игра идёт бесконечно
+        if (score >= WIN_SCORE && !winShown) {
+          winShown = true;
           showWin();
           return;
         }
@@ -1174,6 +1249,7 @@
     y = targetY = height / 2;
     worm.style.left = x + 'px';
     worm.style.top = y + 'px';
+    winShown = false;
     resetCakes();
     updateScore();
     if (rafId) cancelAnimationFrame(rafId);
@@ -1199,7 +1275,7 @@
     const padY = wormH / 2;
     targetX = clamp(targetX, padX, width - padX);
     targetY = clamp(targetY, padY, height - padY);
-    // переставить тортики, если поле уменьшилось
+    // переставить угощения, если поле уменьшилось
     cakes.forEach(function (c) {
       if (c.x > width - 20 || c.y > height - 20) {
         const margin = 28;

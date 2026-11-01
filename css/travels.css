@@ -11,15 +11,11 @@
   overflow: hidden;
 }
 
-.travel-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(ellipse at 20% 10%, rgba(163, 235, 177, .10), transparent 55%),
-    radial-gradient(ellipse at 85% 90%, rgba(90, 74, 122, .32), transparent 50%);
-}
+/*
+  Отдельная подложка под заголовком убрана: её радиальный градиент
+  обрезался по границам блока и при прокрутке была видна светлая
+  горизонтальная граница. Фон теперь общий, из theme.css.
+*/
 
 .travel-hero__globe {
   font-size: 56px;

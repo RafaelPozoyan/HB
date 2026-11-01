@@ -76,9 +76,15 @@
       background: rgba(163, 235, 177, .08);
     }
 
-    /* Маленькая тихая кнопка «Я не знаю» под каждым полем */
-    .dont-know-btn {
-      margin-top: 8px;
+    /* Быстрые варианты ответа под полями */
+    .quick-picks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .quick-pick {
       padding: 6px 12px;
       border: 1px solid rgba(163, 235, 177, .25);
       border-radius: 999px;
@@ -90,13 +96,13 @@
       transition: background .2s ease, border-color .2s ease, color .2s ease;
     }
 
-    .dont-know-btn:hover {
+    .quick-pick:hover {
       border-color: rgba(163, 235, 177, .5);
       background: rgba(163, 235, 177, .10);
       color: var(--accent);
     }
 
-    .dont-know-btn.is-active {
+    .quick-pick.is-active {
       border-color: rgba(163, 235, 177, .65);
       background: rgba(163, 235, 177, .18);
       color: #d6f8dd;
@@ -143,7 +149,6 @@
   <a class="site-nav__brand" href="../index.html"><span>♡</span><span>Для Алины</span></a>
   <div class="site-nav-links">
     <a href="mini-games.html">Мини-игры</a>
-    <a href="life.html">Жизнь Алины</a>
     <a href="travels.html">Путешествия Алины</a>
     <a href="loved-ones.html">Поздравления</a>
     <a href="date.html" class="active">Запись на свиданку</a>
@@ -187,10 +192,13 @@
           id="q-when"
           name="Когда пойти"
           class="response-form__textarea response-form__input"
-          placeholder="Введите ответ или выберите Я не знаю ☹️"
+          placeholder="Введите ответ или выберите один из предложенных ответов"
           required
         >
-        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+        <div class="quick-picks">
+          <button type="button" class="quick-pick" data-pick="Когда рафуля захочет" aria-pressed="false">Когда рафуля захочет</button>
+          <button type="button" class="quick-pick" data-pick="Я не знаю ☹️" aria-pressed="false">Я не знаю ☹️</button>
+        </div>
       </div>
 
       <div class="response-form__field" data-field>
@@ -200,10 +208,16 @@
           id="q-where"
           name="Куда пойти"
           class="response-form__textarea response-form__input"
-          placeholder="Введите ответ или выберите Я не знаю ☹️"
+          placeholder="Введите ответ или выберите один из предложенных ответов"
           required
         >
-        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+        <div class="quick-picks">
+          <button type="button" class="quick-pick" data-pick="В центр" aria-pressed="false">В центр</button>
+          <button type="button" class="quick-pick" data-pick="В лес" aria-pressed="false">В лес</button>
+          <button type="button" class="quick-pick" data-pick="Кататься на машинке" aria-pressed="false">Кататься на машинке</button>
+          <button type="button" class="quick-pick" data-pick="В киношку" aria-pressed="false">В киношку</button>
+          <button type="button" class="quick-pick" data-pick="Я не знаю ☹️" aria-pressed="false">Я не знаю ☹️</button>
+        </div>
       </div>
 
       <div class="response-form__field" data-field>
@@ -213,23 +227,17 @@
           id="q-food"
           name="Что кушать"
           class="response-form__textarea response-form__input"
-          placeholder="Введите ответ или выберите Я не знаю ☹️"
+          placeholder="Введите ответ или выберите один из предложенных ответов"
           required
         >
-        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
-      </div>
-
-      <div class="response-form__field" data-field>
-        <label for="q-walk" class="response-form__label">Где вы будете гулять?</label>
-        <input
-          type="text"
-          id="q-walk"
-          name="Где гулять"
-          class="response-form__textarea response-form__input"
-          placeholder="Введите ответ или выберите Я не знаю ☹️"
-          required
-        >
-        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+        <div class="quick-picks">
+          <button type="button" class="quick-pick" data-pick="Я не умею!!!" aria-pressed="false">Я не умею!!!</button>
+          <button type="button" class="quick-pick" data-pick="Роллы" aria-pressed="false">Роллы</button>
+          <button type="button" class="quick-pick" data-pick="Супчик" aria-pressed="false">Супчик</button>
+          <button type="button" class="quick-pick" data-pick="Бургер" aria-pressed="false">Бургер</button>
+          <button type="button" class="quick-pick" data-pick="Пиццу 🤮" aria-pressed="false">Пиццу 🤮</button>
+          <button type="button" class="quick-pick" data-pick="Я не знаю ☹️" aria-pressed="false">Я не знаю ☹️</button>
+        </div>
       </div>
 
       <div class="response-form__field" data-field>
@@ -242,7 +250,9 @@
           rows="3"
           required
         ></textarea>
-        <button type="button" class="dont-know-btn" data-dont-know aria-pressed="false">Я не знаю ☹️</button>
+        <div class="quick-picks">
+          <button type="button" class="quick-pick" data-pick="Я не знаю ☹️" aria-pressed="false">Я не знаю ☹️</button>
+        </div>
       </div>
 
       <div class="response-form__actions">
@@ -267,14 +277,11 @@
     var status = document.getElementById('response-status');
     var submitBtn = document.getElementById('send-answer');
 
-    var DONT_KNOW_TEXT = 'Я не знаю ☹️';
-
     // Все поля формы
     var fields = [
       document.getElementById('q-when'),
       document.getElementById('q-where'),
       document.getElementById('q-food'),
-      document.getElementById('q-walk'),
       document.getElementById('q-wishes')
     ];
 
@@ -283,8 +290,9 @@
       el.dataset.originalPlaceholder = el.placeholder;
     });
 
-    function isDontKnow(el) {
-      return el.readOnly && el.value === DONT_KNOW_TEXT;
+    // Поле заполнено кнопкой быстрого выбора
+    function isPicked(el) {
+      return el.readOnly && el.value.trim() !== '';
     }
 
     // Показать форму после «Принять приглашение»
@@ -301,27 +309,40 @@
       status.classList.remove('is-error', 'is-ok');
     }
 
-    // Кнопки «Я не знаю» под каждым полем — заполняют только своё поле
-    form.querySelectorAll('[data-dont-know]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var field = btn.closest('[data-field]');
-        var input = field.querySelector('input, textarea');
-        var active = btn.classList.toggle('is-active');
+    // Кнопки быстрых ответов под полями — заполняют только своё поле
+    form.querySelectorAll('.quick-picks').forEach(function (group) {
+      var field = group.closest('[data-field]');
+      var input = field ? field.querySelector('input, textarea') : null;
+      var picks = group.querySelectorAll('.quick-pick');
 
-        if (active) {
-          input.value = DONT_KNOW_TEXT;
-          input.readOnly = true;
-          input.removeAttribute('required');
-          input.placeholder = '';
-          btn.setAttribute('aria-pressed', 'true');
-        } else {
-          input.value = '';
-          input.readOnly = false;
-          input.setAttribute('required', '');
-          input.placeholder = input.dataset.originalPlaceholder || '';
-          btn.setAttribute('aria-pressed', 'false');
-        }
-        clearStatus();
+      if (!input) return;
+
+      picks.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var wasActive = btn.classList.contains('is-active');
+
+          // снимаем выделение со всех кнопок этой группы
+          picks.forEach(function (other) {
+            other.classList.remove('is-active');
+            other.setAttribute('aria-pressed', 'false');
+          });
+
+          if (wasActive) {
+            // повторный клик — очищаем поле
+            input.value = '';
+            input.readOnly = false;
+            input.setAttribute('required', '');
+            input.placeholder = input.dataset.originalPlaceholder || '';
+          } else {
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-pressed', 'true');
+            input.value = btn.dataset.pick;
+            input.readOnly = true;
+            input.removeAttribute('required');
+            input.placeholder = '';
+          }
+          clearStatus();
+        });
       });
     });
 
@@ -342,9 +363,9 @@
       for (var i = 0; i < fields.length; i++) {
         var el = fields[i];
         // поле обязательно, если не выбрано «Я не знаю» и оно пустое
-        if (!isDontKnow(el) && !el.value.trim()) {
+        if (!isPicked(el) && !el.value.trim()) {
           el.focus();
-          status.textContent = 'Пожалуйста, ответь на все вопросы или выбери «Я не знаю ☹️» под нужным полем.';
+          status.textContent = 'Пожалуйста, ответь на все вопросы или выбери один из предложенных под нужным полем.';
           status.classList.add('is-error');
           return;
         }

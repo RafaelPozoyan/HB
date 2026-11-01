@@ -100,6 +100,21 @@ a {
   color: var(--softpink);
 }
 
+/*
+  Кнопка «← На главную» на всех подстраницах — единый мятный акцент.
+  Селектор с элементом (a.back-link) намеренно сильнее .back-link из pages.css,
+  чтобы цвет не зависел от того, в каком окружении стоит ссылка.
+*/
+a.back-link,
+.back-link {
+  color: var(--accent);
+}
+
+a.back-link:hover,
+.back-link:hover {
+  color: var(--accent-soft);
+}
+
 /* Градиентный акцент в заголовках */
 .gradient-text {
   background: linear-gradient(110deg, var(--softpink), var(--lavender) 50%, var(--lilac));
@@ -412,7 +427,7 @@ a {
 
 .no-access-card .back-link {
   display: inline-block;
-  color: var(--softpink);
+  color: var(--accent);
   text-decoration: none;
   font-weight: 600;
 }
