@@ -288,6 +288,28 @@
   }
 }
 
+@media (max-width: 767px) {
+  /* На телефоне «Для Алины» прокручивается вместе со ссылками */
+  .top-dock > nav {
+    overflow-x: auto;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .top-dock > nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .top-dock .site-nav-links,
+  .top-dock .mobile-nav {
+    overflow: visible;
+    flex: 0 0 auto;
+    /* если всё влезает — ссылки прижимаются вправо, если нет — прокручиваются */
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 700px) {
   .top-dock {
     gap: 6px;
@@ -324,13 +346,46 @@
     font-size: 9px;
   }
 
+  /* На маленькой кнопке пульсирующее кольцо вылезало за бар —
+     заменяем его на мягкое свечение */
+  .nav-player__play.is-playing::after {
+    display: none;
+  }
+
+  .nav-player__play.is-playing {
+    box-shadow: 0 0 0 3px rgba(163, 235, 177, .18), 0 6px 16px rgba(163, 235, 177, .35);
+  }
+
+  /* Эквалайзер показываем только когда музыка играет — меньше визуального шума */
+  .nav-player__play:not(.is-playing) + .nav-player__eq {
+    display: none;
+  }
+
+  .nav-player__eq {
+    width: 11px;
+    height: 12px;
+    gap: 3px;
+  }
+
   .nav-player__pick {
     max-width: 80px;
     font-size: 10.5px;
   }
 
-  .nav-player__eq {
-    height: 10px;
+  /* Раскрытие — плавное по высоте, а не по ширине: чипсы не обрезаются */
+  .nav-player__list {
+    max-height: 0;
+    padding: 0;
+    margin-left: 0;
+    transition: max-height .3s ease, opacity .22s ease, margin-top .3s ease;
+  }
+
+  .nav-player.is-open .nav-player__list {
+    max-width: 100%;
+    max-height: 240px;
+    margin: 8px 0 0;
+    padding: 4px 0 0;
+    opacity: 1;
   }
 
   .nav-player.is-open .nav-player__track {
