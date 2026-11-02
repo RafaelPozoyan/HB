@@ -314,15 +314,20 @@
 </head>
 <body>
 
-<nav class="site-nav">
-  <a class="site-nav__brand" href="../index.html"><span>♡</span><span>Для Алины</span></a>
-  <div class="site-nav-links">
-    <a href="mini-games.html">Мини-игры</a>
-    <a href="travels.html">Путешествия Алины</a>
-    <a href="loved-ones.html" class="active">Поздравления</a>
-    <a href="date.html">Запись на свиданку</a>
-  </div>
-</nav>
+<!-- Плеер и бар: место под плеер задано сразу в разметке, чтобы бар не сдвигался при загрузке -->
+<div class="top-dock is-sticky">
+  <div class="nav-player" aria-hidden="true"></div>
+
+  <nav class="site-nav">
+    <a class="site-nav__brand" href="../index.html"><span>♡</span><span>Для Алины</span></a>
+    <div class="site-nav-links">
+      <a href="mini-games.html">Мини-игры</a>
+      <a href="travels.html">Путешествия Алины</a>
+      <a href="loved-ones.html" class="active">Поздравления</a>
+      <a href="date.html">Запись на свиданку</a>
+    </div>
+  </nav>
+</div>
 
 <main class="page">
   <header class="page-heading">

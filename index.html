@@ -697,19 +697,24 @@
 
   <!-- Навигация -->
   <header class="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5">
-    <nav class="glass mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-6">
-      <a href="#start" class="flex shrink-0 items-center gap-2 font-semibold tracking-tight text-[#a3ebb1]">
-        <span class="text-xl">♡</span>
-        <span>Для Алины</span>
-      </a>
+    <!-- Место под плеер задано сразу в разметке, чтобы бар не сдвигался при загрузке -->
+    <div class="top-dock">
+      <div class="nav-player" aria-hidden="true"></div>
 
-      <div class="mobile-nav flex items-center gap-4 text-xs sm:gap-6 sm:text-sm">
-        <a class="nav-link whitespace-nowrap" href="pages/mini-games.html">Мини-игры</a>
-        <a class="nav-link whitespace-nowrap" href="pages/travels.html">Путешествия Алины</a>
-        <a class="nav-link whitespace-nowrap" href="pages/loved-ones.html">Поздравления</a>
-        <a class="nav-link whitespace-nowrap" href="pages/date.html">Запись на свиданку</a>
-      </div>
-    </nav>
+      <nav class="glass mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-6">
+        <a href="#start" class="flex shrink-0 items-center gap-2 font-semibold tracking-tight text-[#a3ebb1]">
+          <span class="text-xl">♡</span>
+          <span>Для Алины</span>
+        </a>
+
+        <div class="mobile-nav flex items-center gap-4 text-xs sm:gap-6 sm:text-sm">
+          <a class="nav-link whitespace-nowrap" href="pages/mini-games.html">Мини-игры</a>
+          <a class="nav-link whitespace-nowrap" href="pages/travels.html">Путешествия Алины</a>
+          <a class="nav-link whitespace-nowrap" href="pages/loved-ones.html">Поздравления</a>
+          <a class="nav-link whitespace-nowrap" href="pages/date.html">Запись на свиданку</a>
+        </div>
+      </nav>
+    </div>
   </header>
 
   <main>

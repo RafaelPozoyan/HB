@@ -45,10 +45,16 @@
 /* ------------------------------------------------------------ панель */
 
 .nav-player {
+  --nav-player-bar-h: 54px;  /* высота бара: строка управления держит её всегда */
+  --nav-player-w: 162px;     /* ширина бара: не зависит от длины названия трека */
+  position: relative;        /* база для выпадающего поверх страницы списка */
+  z-index: 25;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
+  flex-direction: column;    /* строка управления + список под ней */
+  align-items: stretch;
+  gap: 0;
+  flex: 0 0 var(--nav-player-w);
+  width: var(--nav-player-w);
   align-self: stretch;
   padding: 0 13px 0 6px;
   border: 1px solid rgba(201, 190, 226, .14);
@@ -60,10 +66,29 @@
   transition: border-color .3s ease, box-shadow .3s ease;
 }
 
+/*
+  Пока скрипт не заполнил панель, в разметке стоит пустая заглушка —
+  она занимает нужное место (бар не прыгает), но не видна.
+*/
+.nav-player:empty {
+  visibility: hidden;
+}
+
+/*
+  Строка с кнопками: высота зафиксирована под высоту закрытого бара —
+  поэтому play и название трека стоят на месте, что бы ни происходило.
+*/
+.nav-player__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  /* минус рамки панели (1px сверху и снизу) */
+  min-height: calc(var(--nav-player-bar-h) - 2px);
+}
+
+/* Сама панель не меняет ни ширину, ни высоту — список выпадает поверх */
 .nav-player.is-open {
-  flex-wrap: wrap;
-  align-content: flex-start;
-  padding-bottom: 8px;
   border-color: rgba(163, 235, 177, .38);
   box-shadow: 0 12px 35px rgba(0, 0, 0, .28), 0 0 0 3px rgba(163, 235, 177, .07);
 }
@@ -157,8 +182,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  flex: 0 0 auto;
-  max-width: 112px;
+  flex: 1 1 auto;            /* забирает остаток ширины бара */
+  min-width: 0;
   padding: 0;
   border: none;
   background: transparent;
@@ -183,6 +208,8 @@
 }
 
 .nav-player__label {
+  flex: 1 1 auto;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -210,29 +237,34 @@
 
 /* ------------------------------------------- раскрывающийся список песен */
 
-/* Список песен: раскрывается вниз колонкой внутри самой панели */
+/* Список песен: выпадает поверх страницы, панель при этом не меняет размеры */
 .nav-player__list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 30;
   display: flex;
   flex-direction: column;
-  flex: 0 0 auto;
-  width: 0;                  /* в закрытом виде не влияет на ширину панели */
   gap: 4px;
-  min-width: 0;
-  max-height: 0;
-  margin-top: 0;
-  padding: 0;
-  overflow: hidden;
+  padding: 8px;
+  border: 1px solid rgba(163, 235, 177, .28);
+  border-radius: 14px;
+  background: rgba(38, 33, 54, .97);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
   opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
   pointer-events: none;
-  transition: max-height .32s ease, opacity .2s ease, margin-top .3s ease;
+  transition: opacity .2s ease, transform .24s cubic-bezier(.22, .8, .3, 1), visibility .2s;
 }
 
 .nav-player.is-open .nav-player__list {
-  flex: 1 1 100%;
-  width: auto;
-  max-height: 260px;
-  margin-top: 8px;
   opacity: 1;
+  visibility: visible;
+  transform: none;
   pointer-events: auto;
 }
 
@@ -249,6 +281,8 @@
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
   transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
@@ -305,25 +339,17 @@
     padding: 0 6px;
   }
 
-  /* На телефоне раскрытая панель занимает свою строку, бар остаётся под ней */
-  .top-dock.is-open {
-    flex-wrap: wrap;
-  }
-
-  .top-dock.is-open > nav {
-    flex: 1 1 100%;
-    width: 100%;
-  }
-
-  .nav-player.is-open {
-    width: 100%;
-    max-width: 100%;
-  }
-
+  /* Раскрытие и на телефоне не меняет ширину панели —
+     список просто уходит вниз, а бар остаётся рядом и прокручивается */
   .nav-player {
+    --nav-player-w: 140px;
     padding: 0 9px 0 4px;
-    gap: 6px;
+    gap: 0;
     border-radius: 14px;
+  }
+
+  .nav-player__row {
+    gap: 6px;
   }
 
   .nav-player__play {
@@ -354,7 +380,6 @@
   }
 
   .nav-player__pick {
-    max-width: 80px;
     font-size: 10.5px;
   }
 

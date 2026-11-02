@@ -22,19 +22,31 @@
 
   // ---------------------------------------------------------------- разметка
 
-  var root = document.createElement('div');
-  root.className = 'nav-player';
-  root.innerHTML =
-    '<button type="button" class="nav-player__play" aria-label="Включить музыку">' +
-      '<span class="nav-player__icon">▶</span>' +
-    '</button>' +
-    '<div class="nav-player__eq" aria-hidden="true"><span></span><span></span><span></span></div>' +
-    '<button type="button" class="nav-player__pick" aria-haspopup="true" aria-expanded="false"' +
-      ' aria-label="Выбрать песню">' +
-      '<span class="nav-player__label">Музыка</span>' +
-      '<span class="nav-player__caret" aria-hidden="true">▼</span>' +
-    '</button>' +
+  var PLAYER_HTML =
+    '<div class="nav-player__row">' +
+      '<button type="button" class="nav-player__play" aria-label="Включить музыку">' +
+        '<span class="nav-player__icon">▶</span>' +
+      '</button>' +
+      '<div class="nav-player__eq" aria-hidden="true"><span></span><span></span><span></span></div>' +
+      '<button type="button" class="nav-player__pick" aria-haspopup="true" aria-expanded="false"' +
+        ' aria-label="Выбрать песню">' +
+        '<span class="nav-player__label">Музыка</span>' +
+        '<span class="nav-player__caret" aria-hidden="true">▼</span>' +
+      '</button>' +
+    '</div>' +
     '<div class="nav-player__list" role="group" aria-label="Список песен"></div>';
+
+  // Место под плеер уже есть в разметке страницы (пустая заглушка) —
+  // поэтому бар не сдвигается, пока скрипт не заполнит панель.
+  var root = document.querySelector('.top-dock > .nav-player');
+  if (root) {
+    root.removeAttribute('aria-hidden');
+    root.innerHTML = PLAYER_HTML;
+  } else {
+    root = document.createElement('div');
+    root.className = 'nav-player';
+    root.innerHTML = PLAYER_HTML;
+  }
 
   var listEl = root.querySelector('.nav-player__list');
 
@@ -56,21 +68,28 @@
   var dockEl = null;
 
   function mount() {
-    if (document.body.contains(root)) return;
+    // на обычной странице док и панель уже стоят в разметке
+    if (document.body.contains(root)) {
+      dockEl = root.closest('.top-dock');
+      return;
+    }
 
     var nav = document.querySelector('.site-nav') || document.querySelector('nav.glass');
     if (!nav) return;
 
-    var dock = document.createElement('div');
-    dock.className = 'top-dock';
-    // Если бар был приклеен к верху (position: sticky), «плавающей» делаем всю панель
-    if (window.getComputedStyle(nav).position === 'sticky') {
-      dock.className += ' is-sticky';
+    var dock = nav.closest('.top-dock');
+    if (!dock) {
+      dock = document.createElement('div');
+      dock.className = 'top-dock';
+      // Если бар был приклеен к верху (position: sticky), «плавающей» делаем всю панель
+      if (window.getComputedStyle(nav).position === 'sticky') {
+        dock.className += ' is-sticky';
+      }
+      nav.parentNode.insertBefore(dock, nav);
+      dock.appendChild(nav);
     }
 
-    nav.parentNode.insertBefore(dock, nav);
-    dock.appendChild(root);
-    dock.appendChild(nav);
+    dock.insertBefore(root, dock.firstChild);
     dockEl = dock;
   }
 
@@ -93,6 +112,22 @@
 
   var current = -1;
   var waitingGesture = false;
+
+  // В выпадающем списке текст каждой песни чередуется:
+  // 3 с — название трека, 3 с — исполнитель, и так по кругу
+  var CHIP_SWAP_MS = 3000;
+  var chipsShowArtist = false;
+
+  function paintChips() {
+    items.forEach(function (item, i) {
+      item.textContent = chipsShowArtist ? TRACKS[i].artist : TRACKS[i].title;
+    });
+  }
+
+  setInterval(function () {
+    chipsShowArtist = !chipsShowArtist;
+    paintChips();
+  }, CHIP_SWAP_MS);
 
   function readState() {
     try {
@@ -125,6 +160,7 @@
       item.classList.toggle('is-active', i === index);
     });
     if (index >= 0) {
+      // в баре всегда название песни, исполнитель показывается в списке
       labelEl.textContent = TRACKS[index].title;
       // короткая анимация «подпрыгивания» при смене трека
       labelEl.classList.remove('is-pop');
