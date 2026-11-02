@@ -334,12 +334,194 @@
     </div>
   </section>
 
+  <!-- Карта путешествий -->
+  <section class="travel-map" aria-labelledby="travel-map-title">
+    <h2 class="travel-map__title" id="travel-map-title">Карта поездок</h2>
+
+    <div class="travel-map__frame">
+      <svg class="travel-map__svg" viewBox="0 0 900 476" role="img"
+           aria-label="Схематичная карта Евразии и Океании с флажками стран, где побывала Алина">
+        <g class="travel-map__land" aria-hidden="true"></g>
+        <g class="travel-map__grid" aria-hidden="true"></g>
+        <g class="travel-map__points"></g>
+      </svg>
+    </div>
+
+    <p class="travel-map__hint">Нажми на флажок, чтобы вернуться к истории</p>
+  </section>
+
   <!-- Финал -->
   <div class="travel-outro">
     <p>«Путешествия учат больше, чем что бы то ни было. Иногда один день, проведенный в других местах, дает больше, чем десять лет жизни дома» — Анатоль Франс.</p>
     <a class="back-link" href="../index.html">← На главную</a>
   </div>
 </main>
+
+<script>
+// ================= Карта путешествий =================
+(function () {
+  var svg = document.querySelector('.travel-map__svg');
+  if (!svg) return;
+
+  // Координаты центров стран + небольшой сдвиг, чтобы близкие точки не слипались
+  var PLACES = [
+    { id: 'malaysia',   flag: '🇲🇾', name: 'Малайзия',   lat: 3.10,  lon: 101.70, dx: -7,  dy: -6 },
+    { id: 'singapore',  flag: '🇸🇬', name: 'Сингапур',   lat: 1.35,  lon: 103.82, dx: 8,   dy: 9 },
+    { id: 'china',      flag: '🇨🇳', name: 'Китай',      lat: 31.23, lon: 121.47 },
+    { id: 'indonesia',  flag: '🇮🇩', name: 'Индонезия',  lat: -6.21, lon: 106.85 },
+    { id: 'thailand',   flag: '🇹🇭', name: 'Таиланд',    lat: 7.88,  lon: 98.39 },
+    { id: 'cambodia',   flag: '🇰🇭', name: 'Камбоджа',   lat: 13.36, lon: 103.86 },
+    { id: 'vietnam',    flag: '🇻🇳', name: 'Вьетнам',    lat: 16.05, lon: 108.22 },
+    { id: 'korea',      flag: '🇰🇷', name: 'Корея',      lat: 37.57, lon: 126.98 },
+    { id: 'uae',        flag: '🇦🇪', name: 'ОАЭ',        lat: 25.20, lon: 55.27 },
+    { id: 'montenegro', flag: '🇲🇪', name: 'Черногория', lat: 42.44, lon: 19.26, dx: 10, dy: 11 },
+    { id: 'bosnia',     flag: '🇧🇦', name: 'Босния',     lat: 43.86, lon: 18.41, dx: -10, dy: -8 },
+    { id: 'georgia',    flag: '🇬🇪', name: 'Грузия',     lat: 41.72, lon: 44.79 }
+  ];
+
+  var W = 900;
+  var H = 476;
+  var LON_MIN = -10, LON_MAX = 145;
+  var LAT_MIN = -20, LAT_MAX = 62;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function projectX(lon) { return (lon - LON_MIN) / (LON_MAX - LON_MIN) * W; }
+  function projectY(lat) { return (LAT_MAX - lat) / (LAT_MAX - LAT_MIN) * H; }
+
+  function el(name, attrs) {
+    var node = document.createElementNS(NS, name);
+    for (var key in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, key)) node.setAttribute(key, attrs[key]);
+    }
+    return node;
+  }
+
+  // Контуры суши (грубые): Евразия, Австралия, Новая Гвинея и острова
+  // Юго-Восточной Азии — чтобы было видно, где именно проходили поездки
+  var LAND = [
+    [ /* Евразия */
+      [-9.5, 43.5], [-9.0, 37.0], [-5.6, 36.0], [-1.0, 38.0], [3.0, 41.5],
+      [6.5, 43.0], [10.0, 44.0], [13.0, 45.5], [14.0, 40.5], [17.0, 40.0],
+      [19.0, 40.5], [23.0, 37.5], [26.0, 38.5], [30.0, 36.5], [36.0, 36.0],
+      [35.0, 31.0], [34.0, 28.0], [39.0, 20.0], [44.0, 12.5], [52.0, 15.0],
+      [59.0, 22.0], [57.0, 25.5], [50.5, 29.0], [48.5, 30.5], [56.0, 27.0],
+      [62.0, 25.0], [67.0, 24.0], [72.0, 20.0], [76.0, 8.0], [81.0, 13.0],
+      [88.0, 21.0], [94.0, 16.0], [98.0, 8.0], [104.0, 1.5], [106.0, 10.0],
+      [109.0, 16.0], [106.0, 21.0], [110.0, 21.0], [114.0, 22.5], [120.0, 24.0],
+      [122.0, 31.0], [120.0, 38.0], [126.0, 40.0], [129.0, 35.0], [129.0, 43.0],
+      [135.0, 48.0], [140.0, 53.0], [143.0, 59.0], [140.0, 65.0], [120.0, 70.0],
+      [100.0, 68.0], [80.0, 68.0], [60.0, 66.0], [40.0, 66.0], [30.0, 70.0],
+      [20.0, 68.0], [10.0, 62.0], [5.0, 58.0], [8.0, 54.0], [4.0, 52.0],
+      [-1.5, 49.0], [-4.5, 48.0]
+    ],
+    [ /* Австралия */
+      [113.0, -21.5], [114.5, -29.0], [115.0, -34.5], [119.0, -34.5],
+      [126.0, -32.5], [134.0, -33.0], [140.0, -38.0], [146.0, -39.0],
+      [146.0, -18.0], [142.0, -11.0], [136.0, -12.5], [130.0, -11.5],
+      [126.0, -14.0], [122.0, -17.0]
+    ],
+    [ /* Новая Гвинея */
+      [131.0, -1.5], [141.0, -2.5], [147.0, -8.0], [141.0, -9.5],
+      [135.0, -8.0], [130.0, -4.0]
+    ],
+    [ /* Суматра */
+      [95.5, 5.0], [103.0, 1.0], [106.0, -6.0], [102.0, -5.5], [96.0, 3.0]
+    ],
+    [ /* Ява и Бали */
+      [105.5, -5.8], [110.5, -6.2], [114.5, -8.3], [114.0, -7.0],
+      [110.0, -5.6], [105.5, -5.2]
+    ],
+    [ /* Борнео */
+      [109.0, 2.0], [117.0, 4.5], [119.0, 1.0], [117.0, -3.5],
+      [110.0, -3.0], [109.0, 0.0]
+    ],
+    [ /* Сулавеси */
+      [119.5, 1.5], [125.0, 1.5], [121.0, -5.5], [119.0, -3.0]
+    ],
+    [ /* Филиппины */
+      [120.0, 18.5], [124.0, 12.0], [126.5, 7.0], [122.0, 6.0], [120.0, 12.0]
+    ],
+    [ /* Шри-Ланка */
+      [80.0, 9.5], [82.0, 7.0], [80.5, 6.0], [79.8, 8.0]
+    ]
+  ];
+
+  var landGroup = svg.querySelector('.travel-map__land');
+  if (landGroup) {
+    LAND.forEach(function (poly) {
+      landGroup.appendChild(el('polygon', {
+        points: poly.map(function (p) {
+          var lon = Math.min(LON_MAX, Math.max(LON_MIN, p[0]));
+          var lat = Math.min(LAT_MAX, Math.max(LAT_MIN, p[1]));
+          return projectX(lon).toFixed(1) + ',' + projectY(lat).toFixed(1);
+        }).join(' ')
+      }));
+    });
+  }
+
+  // Сетка меридианов и параллелей
+  var grid = svg.querySelector('.travel-map__grid');
+  var lon, lat;
+  for (lon = 0; lon <= 140; lon += 20) {
+    grid.appendChild(el('line', {
+      x1: projectX(lon), y1: 0, x2: projectX(lon), y2: H,
+      class: lon === 0 ? 'is-main' : ''
+    }));
+  }
+  for (lat = -20; lat <= 60; lat += 20) {
+    grid.appendChild(el('line', {
+      x1: 0, y1: projectY(lat), x2: W, y2: projectY(lat),
+      class: lat === 0 ? 'is-main' : ''
+    }));
+  }
+
+  // Позиции точек
+  var coords = PLACES.map(function (place) {
+    return {
+      x: projectX(place.lon) + (place.dx || 0),
+      y: projectY(place.lat) + (place.dy || 0)
+    };
+  });
+
+  // Точки с флажками
+  var pointsGroup = svg.querySelector('.travel-map__points');
+
+  PLACES.forEach(function (place, i) {
+    var c = coords[i];
+    var g = el('g', {
+      class: 'travel-map__point',
+      tabindex: '0',
+      role: 'link',
+      'aria-label': place.name + ' — перейти к истории'
+    });
+
+    var halo = el('circle', { class: 'travel-map__halo', cx: c.x, cy: c.y, r: 15 });
+    halo.style.animationDelay = (i * 0.25).toFixed(2) + 's';
+
+    g.appendChild(halo);
+    g.appendChild(el('circle', { cx: c.x, cy: c.y, r: 5 }));
+
+    var flag = el('text', { x: c.x, y: c.y - 20 });
+    flag.textContent = place.flag;
+    g.appendChild(flag);
+
+    function go() {
+      var target = document.getElementById(place.id);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    g.addEventListener('click', go);
+    g.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        go();
+      }
+    });
+
+    pointsGroup.appendChild(g);
+  });
+})();
+</script>
 
 <script src="../js/gate.js"></script>
 <script src="../js/access.js"></script>

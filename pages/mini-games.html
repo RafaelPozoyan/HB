@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/gate.css">
   <link rel="stylesheet" href="../css/theme.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/cake.css">
   <style>
     /* Заголовок страницы в стиле подстраниц */
     .mini-games-head {
@@ -159,11 +160,49 @@
 
     /* ================= Игра 2: загадай число (кубик) ================= */
     .dice-section {
+      position: relative;
       max-width: 760px;
       margin: 90px auto 0;
       padding-top: 70px;
-      border-top: 1px solid rgba(201, 190, 226, .14);
       text-align: center;
+    }
+
+    /* Разделитель между играми — как на страницах «Поздравления» и «Путешествия» */
+    .dice-section::before,
+    .worm-section::before,
+    .roulette-section::before,
+    .cake-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 6%;
+      right: 6%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(201, 190, 226, .2) 22%,
+        rgba(201, 190, 226, .28) 50%,
+        rgba(201, 190, 226, .2) 78%,
+        transparent
+      );
+      pointer-events: none;
+    }
+
+    .dice-section::after,
+    .worm-section::after,
+    .roulette-section::after,
+    .cake-section::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 1.5px;
+      background: rgba(163, 235, 177, .6);
+      transform: translate(-50%, -50%) rotate(45deg);
+      pointer-events: none;
     }
 
     /* Разделитель между играми */
@@ -335,29 +374,28 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 13px 26px;
+      padding: 12px 20px;
       border: 1px solid rgba(163, 235, 177, .3);
       border-radius: 999px;
-      background: linear-gradient(110deg, var(--accent), var(--accent-soft));
-      color: #13261b;
+      background: rgba(255, 255, 255, .03);
+      color: var(--accent);
       font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
-      box-shadow: 0 10px 30px rgba(163, 235, 177, .22);
+      transition: transform .2s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
     }
 
     .dice-actions .secondary-button:hover {
+      background: rgba(163, 235, 177, .10);
+      border-color: rgba(163, 235, 177, .55);
       transform: translateY(-2px);
-      box-shadow: 0 14px 38px rgba(163, 235, 177, .32);
     }
 
     .dice-actions .secondary-button:disabled {
       opacity: .6;
       cursor: default;
       transform: none;
-      box-shadow: none;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -366,10 +404,10 @@
 
     /* ================= Игра 3: червяк и вкусняшки ================= */
     .worm-section {
+      position: relative;
       max-width: 760px;
       margin: 90px auto 0;
       padding-top: 70px;
-      border-top: 1px solid rgba(201, 190, 226, .14);
       text-align: center;
     }
 
@@ -462,13 +500,16 @@
     }
 
     /* Кнопка перезапуска под полем */
-    .worm-actions {
+    .worm-actions,
+    .roulette-actions {
       display: flex;
       justify-content: center;
       margin-top: 16px;
     }
 
-    .worm-actions .secondary-button {
+    .worm-actions .secondary-button,
+    .roulette-actions .secondary-button,
+    .cake-actions .secondary-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -485,10 +526,145 @@
       transition: transform .2s ease, background .2s ease, border-color .2s ease;
     }
 
-    .worm-actions .secondary-button:hover {
+    .worm-actions .secondary-button:hover,
+    .roulette-actions .secondary-button:hover,
+    .cake-actions .secondary-button:hover {
       background: rgba(163, 235, 177, .10);
       border-color: rgba(163, 235, 177, .55);
       transform: translateY(-2px);
+    }
+
+    /* ================= Игра 4: рулетка «Какая ты Алина» ================= */
+    .roulette-section {
+      position: relative;
+      max-width: 760px;
+      margin: 90px auto 0;
+      padding-top: 70px;
+      text-align: center;
+    }
+
+    .roulette-section__title {
+      margin: 22px auto 0;
+      max-width: 640px;
+      font-family: var(--font-display);
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -.02em;
+    }
+
+    .roulette-stage {
+      position: relative;
+      width: min(600px, 94vw);
+      margin: 34px auto 0;
+    }
+
+    /* Указатель, на который смотрит выпавший сектор */
+    .roulette-pointer {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 15px solid var(--accent);
+      z-index: 3;
+      filter: drop-shadow(0 4px 10px rgba(163, 235, 177, .45));
+    }
+
+    .roulette {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid rgba(163, 235, 177, .35);
+      /* Сектора рисует скрипт (conic-gradient собирается из числа вариантов),
+         здесь только запасной фон и угол сектора по умолчанию */
+      background: #2d283e;
+      --seg: 60deg;
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, .35),
+        inset 0 0 0 6px rgba(26, 22, 43, .55);
+      will-change: transform;
+    }
+
+    /* Тонкие линии между секторами */
+    .roulette::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: repeating-conic-gradient(
+        from -0.5deg,
+        rgba(201, 190, 226, .28) 0 1deg,
+        transparent 1deg var(--seg)
+      );
+      pointer-events: none;
+    }
+
+    /* Подписи секторов: колонка во всё колесо, повёрнутая к своему сектору */
+    /*
+      Подписи секторов: каждая стоит на своём секторе и едет вместе с колесом,
+      но текст остаётся горизонтальным — компенсируем и собственный угол,
+      и текущий поворот колеса (--wheel-rot).
+    */
+    .roulette__label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: 50% 50%;
+      transform:
+        translate(-50%, -50%)
+        rotate(var(--label-angle, 0deg))
+        translateY(calc(-1 * var(--label-radius, 0px)))
+        rotate(calc(-1 * var(--label-angle, 0deg)))
+        rotate(calc(-1 * var(--wheel-rot, 0deg)));
+      font-size: var(--label-size, 13px);
+      font-weight: 800;
+      letter-spacing: .01em;
+      text-transform: uppercase;
+      color: var(--text);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* Ступица с именем — стоит на месте, пока колесо крутится */
+    .roulette__hub {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 36%;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #1a162b;
+      border: 2px solid rgba(163, 235, 177, .45);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .45);
+      color: var(--accent);
+      font-size: clamp(12px, 3.2vw, 16px);
+      font-weight: 800;
+      letter-spacing: .16em;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .roulette-result {
+      margin-top: 26px;
+      min-height: 28px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--accent-deep);
+      transition: color .3s ease;
+    }
+
+    .roulette-result.is-win {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 18px;
     }
 
     .worm-hint {
@@ -702,6 +878,54 @@
       <button type="button" id="worm-play-restart" class="secondary-button">Начать заново ↺</button>
     </div>
 
+  </section>
+
+  <!-- ================= Игра 4: Рулетка «Какая ты Алина» ================= -->
+  <section class="roulette-section">
+    <h2 class="roulette-section__title">
+      Крути рулетку и поймай одно из <span class="gradient-text">качеств</span> Алины
+    </h2>
+
+    <div class="roulette-stage">
+      <div class="roulette-pointer" aria-hidden="true"></div>
+      <div class="roulette" id="roulette">
+        <div id="roulette-labels"></div>
+      </div>
+      <div class="roulette__hub" aria-hidden="true">АЛИНА</div>
+    </div>
+
+    <p class="roulette-result" id="roulette-result" role="status" aria-live="polite"></p>
+
+    <div class="roulette-actions">
+      <button type="button" id="roulette-spin" class="secondary-button">Деп</button>
+    </div>
+  </section>
+
+  <!-- ================= Игра 5: торт со свечками ================= -->
+  <section class="cake-section">
+    <h2 class="cake-section__title">
+      Загадай желание и <span class="gradient-text">задуй свечи</span>
+    </h2>
+
+    <div class="cake-scene">
+      <div class="bday-cake" id="cake">
+        <div class="cake__candles" id="cake-candles"></div>
+        <div class="cake__tier cake__tier--top"></div>
+        <div class="cake__tier cake__tier--bottom"></div>
+        <div class="cake__plate"></div>
+      </div>
+    </div>
+
+    <div class="cake-meter" id="cake-meter" hidden>
+      <div class="cake-meter__fill" id="cake-meter-fill"></div>
+      <div class="cake-meter__mark" id="cake-meter-mark" aria-hidden="true"></div>
+    </div>
+
+    <div class="cake-actions">
+      <button type="button" id="cake-mic" class="secondary-button">Задуть свечи</button>
+    </div>
+
+    <p class="cake-status" id="cake-status" role="status" aria-live="polite"></p>
   </section>
 
   <a class="back-link" href="../index.html">← На главную</a>
@@ -1287,8 +1511,137 @@
     });
   }
 })();
+
+// ================= Игра 4: Рулетка «Какая ты Алина» =================
+(function () {
+  const wheel = document.getElementById('roulette');
+  const labelsEl = document.getElementById('roulette-labels');
+  const spinBtn = document.getElementById('roulette-spin');
+  const resultEl = document.getElementById('roulette-result');
+
+  if (!wheel || !labelsEl || !spinBtn || !resultEl) return;
+
+  const OPTIONS = [
+    'красивая',
+    'умная',
+    'смешная',
+    'веселая',
+    'восхитительная',
+    'ошеломительная',
+    'милая',
+    'добрая',
+    'уверенная'
+  ];
+  // Угол одного сектора, длина вращения и доля радиуса для подписей
+  const SEGMENT = 360 / OPTIONS.length;
+  const SPIN_MS = 4200;
+  const RADIUS_RATIO = 0.78;
+  // Три тона секторов по кругу: панель, мятная подсветка, панель чуть светлее
+  const TONES = ['#2d283e', 'rgba(163, 235, 177, .16)', '#262236'];
+
+  // Сектора собираются из числа вариантов — добавили вариант, колесо подстроилось само
+  const stops = OPTIONS.map(function (option, i) {
+    return TONES[i % TONES.length] + ' ' + (i * SEGMENT) + 'deg ' + ((i + 1) * SEGMENT) + 'deg';
+  });
+  wheel.style.background = 'conic-gradient(' + stops.join(', ') + ')';
+  wheel.style.setProperty('--seg', SEGMENT + 'deg');
+
+  // Подписи секторов: положение на колесе задаётся углом, текст остаётся ровным
+  const labels = OPTIONS.map(function (option, i) {
+    const el = document.createElement('div');
+    el.className = 'roulette__label';
+    el.textContent = option;
+    labelsEl.appendChild(el);
+    return { el: el, angle: i * SEGMENT + SEGMENT / 2 };
+  });
+
+  function layoutLabels() {
+    const R = wheel.clientWidth / 2;
+    // Кегль пропорционален диаметру колеса, иначе капс не влезает
+    // на телефонах, где колесо во всю ширину экрана
+    const size = Math.max(7, Math.min(13.5, R * 0.046));
+    // на маленьком колесе подписи держим чуть ближе к центру
+    const ratio = R < 170 ? 0.70 : (R < 220 ? 0.75 : RADIUS_RATIO);
+    const radius = R * ratio;
+
+    wheel.style.setProperty('--label-size', size.toFixed(2) + 'px');
+    labels.forEach(function (item) {
+      item.el.style.setProperty('--label-angle', item.angle + 'deg');
+      item.el.style.setProperty('--label-radius', radius + 'px');
+    });
+  }
+
+  function applyRotation(deg) {
+    wheel.style.transform = 'rotate(' + deg + 'deg)';
+    // подписи компенсируют поворот колеса и остаются читаемыми
+    wheel.style.setProperty('--wheel-rot', deg + 'deg');
+  }
+
+  let spinning = false;
+  let rotation = 0;
+
+  function spin() {
+    if (spinning) return;
+    spinning = true;
+    spinBtn.disabled = true;
+    resultEl.classList.remove('is-win');
+    resultEl.textContent = 'Крутим…';
+
+    const index = Math.floor(Math.random() * OPTIONS.length);
+
+    // Указатель стоит сверху (0°), поэтому колесо надо довернуть так,
+    // чтобы центр выпавшего сектора оказался ровно под ним.
+    const targetAngle = (360 - (index * SEGMENT + SEGMENT / 2)) % 360;
+    const delta = ((targetAngle - (rotation % 360)) + 360) % 360;
+    const from = rotation;
+    const to = rotation + 360 * 5 + delta;
+    rotation = to;
+
+    function finish() {
+      spinning = false;
+      spinBtn.disabled = false;
+      resultEl.textContent = 'Алина — ' + OPTIONS[index] + ' 💚';
+      resultEl.classList.add('is-win');
+    }
+
+    const reduced = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduced) {
+      applyRotation(to);
+      finish();
+      return;
+    }
+
+    const start = performance.now();
+
+    function frame(now) {
+      const t = Math.min(1, (now - start) / SPIN_MS);
+      const eased = 1 - Math.pow(1 - t, 4);   // плавное затухание
+      applyRotation(from + (to - from) * eased);
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        finish();
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  layoutLabels();
+  window.addEventListener('resize', layoutLabels);
+
+  // Пересчитываем радиус подписей, когда меняется размер самого колеса
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(layoutLabels).observe(wheel);
+  }
+
+  spinBtn.addEventListener('click', spin);
+})();
 </script>
 
+<script src="../js/candles.js"></script>
 <script src="../js/gate.js"></script>
 <script src="../js/access.js"></script>
 <script src="../js/theme.js"></script>

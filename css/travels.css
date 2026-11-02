@@ -425,3 +425,117 @@
   pointer-events: none;
 }
 
+
+/* ============================================================
+   Карта путешествий: схематичная сетка + точки стран
+   ============================================================ */
+.travel-map {
+  max-width: 1000px;
+  margin: 40px auto 50px;
+  padding: 0 22px;
+}
+
+.travel-map__title {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.travel-map__frame {
+  padding: 14px;
+  border: 1px solid rgba(201, 190, 226, .18);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(163, 235, 177, .08), transparent 60%),
+    rgba(45, 40, 62, .55);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+}
+
+.travel-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.travel-map__land polygon {
+  fill: rgba(163, 235, 177, .10);
+  stroke: rgba(201, 190, 226, .25);
+  stroke-width: 1;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.travel-map__grid line {
+  stroke: rgba(201, 190, 226, .1);
+  stroke-width: 1;
+}
+
+.travel-map__grid line.is-main {
+  stroke: rgba(201, 190, 226, .22);
+}
+
+.travel-map__point {
+  cursor: pointer;
+  outline: none;
+}
+
+.travel-map__point circle:not(.travel-map__halo) {
+  fill: var(--accent);
+  transition: r .2s ease, filter .2s ease;
+}
+
+.travel-map__point .travel-map__halo {
+  fill: rgba(163, 235, 177, .18);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mapPulse 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.travel-map__point text {
+  font-size: 20px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.travel-map__point:hover circle:not(.travel-map__halo),
+.travel-map__point:focus-visible circle:not(.travel-map__halo) {
+  r: 7;
+  filter: drop-shadow(0 0 10px rgba(163, 235, 177, .9));
+}
+
+.travel-map__point:focus-visible .travel-map__halo {
+  fill: rgba(163, 235, 177, .4);
+}
+
+@keyframes mapPulse {
+  0%, 100% { transform: scale(1); opacity: .9; }
+  50%      { transform: scale(1.35); opacity: .35; }
+}
+
+.travel-map__hint {
+  margin: 14px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted-dim);
+}
+
+@media (max-width: 600px) {
+  .travel-map {
+    margin-bottom: 34px;
+    padding: 0 14px;
+  }
+
+  .travel-map__frame {
+    padding: 8px;
+    border-radius: 18px;
+  }
+
+  .travel-map__point text {
+    font-size: 26px;   /* флажки крупнее, иначе на телефоне не читаются */
+  }
+}

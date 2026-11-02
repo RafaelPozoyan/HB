@@ -158,6 +158,42 @@
       box-shadow: 0 14px 40px rgba(0, 0, 0, .28);
     }
 
+    /* Разделитель между секциями — как на страницах «Поздравления» и «Путешествия» */
+    .section-divider {
+      position: relative;
+    }
+
+    .section-divider::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 6%;
+      right: 6%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(201, 190, 226, .2) 22%,
+        rgba(201, 190, 226, .28) 50%,
+        rgba(201, 190, 226, .2) 78%,
+        transparent
+      );
+      pointer-events: none;
+    }
+
+    .section-divider::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 1.5px;
+      background: rgba(163, 235, 177, .6);
+      transform: translate(-50%, -50%) rotate(45deg);
+      pointer-events: none;
+    }
+
     .nav-link {
       color: #b8b0cd;
       transition: color .25s ease;
@@ -734,7 +770,7 @@
     </section>
 
     <!-- Самая умная -->
-    <section id="smart" class="px-5 py-20 sm:py-28">
+    <section id="smart" class="section-divider px-5 py-20 sm:py-28">
       <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
         <div class="memory-copy order-2 reveal md:order-1">
           <div class="ty-block">
@@ -765,7 +801,7 @@
     </section>
 
     <!-- Самая смешная -->
-    <section id="funny" class="px-5 py-20 sm:py-28">
+    <section id="funny" class="section-divider px-5 py-20 sm:py-28">
       <div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
         <div class="reveal">
           <div class="photo-float photo-float--delay2">
@@ -797,7 +833,7 @@
     </section>
 
     <!-- Викторина -->
-    <section id="quiz" class="px-5 py-20 sm:py-28">
+    <section id="quiz" class="section-divider px-5 py-20 sm:py-28">
       <div class="mx-auto max-w-3xl text-center reveal">
         <span class="section-label">Квиз!</span>
         <h2 class="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
