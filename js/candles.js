@@ -136,7 +136,7 @@
 
       threshold = Math.min(THRESHOLD_CAP, Math.max(THRESHOLD_FLOOR, ambient * NOISE_FACTOR));
       updateMark();
-      setStatus('А теперь дунь в микрофон — полоска должна дойти до метки 💨');
+      setStatus('Дуй!');
       listen();
     }, 50);
   }
