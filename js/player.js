@@ -1,0 +1,291 @@
+// Музыкальная панель сайта.
+// Сама создаёт мини-бар слева от главного и вставляет себя в документ,
+// поэтому на любой странице достаточно одной строки подключения.
+// Список песен раскрывается внутри самой панели.
+// Трек и позиция сохраняются в localStorage — музыка продолжается
+// при переходе между страницами.
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'alinaMusicPlayer';
+
+  // Пути считаем от самого скрипта, чтобы работало и из корня, и из /pages
+  var self = document.currentScript;
+  var base = self && self.src ? self.src.replace(/js\/player\.js.*$/, '') : './';
+
+  var TRACKS = [
+    { title: 'West Coast', artist: 'Lana Del Rey', file: 'Lana Del Rey - West Coast.mp3' },
+    { title: 'Self Aware', artist: 'Temper City', file: 'Temper City - Self Aware (новая музыка 2026).mp3' },
+    { title: 'Сверчки', artist: 'Zoloto', file: 'Zoloto - Сверчки.mp3' },
+    { title: 'Magic', artist: 'Coldplay', file: 'Coldplay - Magic.mp3' }
+  ];
+
+  // ---------------------------------------------------------------- разметка
+
+  var root = document.createElement('div');
+  root.className = 'nav-player';
+  root.innerHTML =
+    '<button type="button" class="nav-player__play" aria-label="Включить музыку">' +
+      '<span class="nav-player__icon">▶</span>' +
+    '</button>' +
+    '<div class="nav-player__eq" aria-hidden="true"><span></span><span></span><span></span></div>' +
+    '<button type="button" class="nav-player__pick" aria-haspopup="true" aria-expanded="false"' +
+      ' aria-label="Выбрать песню">' +
+      '<span class="nav-player__label">Музыка</span>' +
+      '<span class="nav-player__caret" aria-hidden="true">▼</span>' +
+    '</button>' +
+    '<div class="nav-player__list" role="group" aria-label="Список песен"></div>';
+
+  var listEl = root.querySelector('.nav-player__list');
+
+  // Кнопки треков живут прямо в панели и раскрываются вместе с ней
+  var items = TRACKS.map(function (track, i) {
+    var item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'nav-player__track';
+    item.dataset.index = String(i);
+    item.textContent = track.title;
+    item.title = track.artist + ' — ' + track.title;
+    listEl.appendChild(item);
+    return item;
+  });
+
+  // Вставляем панель [плеер] [главный бар] в документ.
+  // Функция идемпотентна: её же вызывает наблюдатель, если страница
+  // перерисовала <body> (например, экран «Доступ закрыт»).
+  var dockEl = null;
+
+  function mount() {
+    if (document.body.contains(root)) return;
+
+    var nav = document.querySelector('.site-nav') || document.querySelector('nav.glass');
+    if (!nav) return;
+
+    var dock = document.createElement('div');
+    dock.className = 'top-dock';
+    // Если бар был приклеен к верху (position: sticky), «плавающей» делаем всю панель
+    if (window.getComputedStyle(nav).position === 'sticky') {
+      dock.className += ' is-sticky';
+    }
+
+    nav.parentNode.insertBefore(dock, nav);
+    dock.appendChild(root);
+    dock.appendChild(nav);
+    dockEl = dock;
+  }
+
+  mount();
+
+  if ('MutationObserver' in window) {
+    new MutationObserver(mount).observe(document.body, { childList: true });
+  }
+
+  var playBtn = root.querySelector('.nav-player__play');
+  var iconEl = root.querySelector('.nav-player__icon');
+  var pickBtn = root.querySelector('.nav-player__pick');
+  var labelEl = root.querySelector('.nav-player__label');
+
+  // ---------------------------------------------------------------- состояние
+
+  var audio = new Audio();
+  audio.preload = 'metadata';
+  audio.loop = false;
+
+  var current = -1;
+  var waitingGesture = false;
+
+  function readState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || typeof data.i !== 'number' || data.i < 0 || data.i >= TRACKS.length) return null;
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        i: current,
+        t: audio.currentTime || 0,
+        p: !audio.paused && !audio.ended
+      }));
+    } catch (e) { /* приватный режим — просто не сохраняем */ }
+  }
+
+  function trackUrl(index) {
+    return base + 'assets/music/' + encodeURI(TRACKS[index].file);
+  }
+
+  function markActive(index) {
+    items.forEach(function (item, i) {
+      item.classList.toggle('is-active', i === index);
+    });
+    if (index >= 0) {
+      labelEl.textContent = TRACKS[index].title;
+      // короткая анимация «подпрыгивания» при смене трека
+      labelEl.classList.remove('is-pop');
+      void labelEl.offsetWidth;
+      labelEl.classList.add('is-pop');
+    } else {
+      labelEl.textContent = 'Музыка';
+    }
+  }
+
+  function setPlayingUI(playing) {
+    iconEl.textContent = playing ? '❚❚' : '▶';
+    playBtn.classList.toggle('is-playing', playing);
+    playBtn.setAttribute('aria-label', playing ? 'Пауза' : 'Включить музыку');
+  }
+
+  function loadTrack(index, autoplay, startAt) {
+    current = index;
+    markActive(index);
+    audio.src = trackUrl(index);
+
+    if (startAt > 0) {
+      // ждём метаданные, иначе currentTime не выставится
+      audio.addEventListener('loadedmetadata', function once() {
+        audio.removeEventListener('loadedmetadata', once);
+        try { audio.currentTime = startAt; } catch (e) { /* сервер без Range */ }
+      });
+    }
+
+    if (autoplay) play();
+    else setPlayingUI(false);
+  }
+
+  // Если браузер не разрешил автозапуск на новой странице,
+  // включаем музыку при первом же действии пользователя
+  function armGestureResume() {
+    if (waitingGesture) return;
+    waitingGesture = true;
+    setPlayingUI(false);
+
+    function resume() {
+      waitingGesture = false;
+      document.removeEventListener('pointerdown', resume, true);
+      document.removeEventListener('keydown', resume, true);
+      document.removeEventListener('touchstart', resume, true);
+      if (audio.paused) play();
+    }
+
+    document.addEventListener('pointerdown', resume, true);
+    document.addEventListener('keydown', resume, true);
+    document.addEventListener('touchstart', resume, true);
+  }
+
+  function play() {
+    if (current === -1) {
+      loadTrack(0, true);
+      return;
+    }
+    var started = audio.play();
+    if (started && typeof started.catch === 'function') {
+      started.catch(function () {
+        armGestureResume();
+      });
+    }
+  }
+
+  function toggle() {
+    if (current === -1) {
+      loadTrack(0, true);
+      return;
+    }
+    if (audio.paused) play();
+    else audio.pause();
+  }
+
+  // ------------------------------------------- раскрытие списка внутри бара
+
+  function openList() {
+    root.classList.add('is-open');
+    if (dockEl) dockEl.classList.add('is-open');
+    pickBtn.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeList() {
+    root.classList.remove('is-open');
+    if (dockEl) dockEl.classList.remove('is-open');
+    pickBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  pickBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (root.classList.contains('is-open')) closeList();
+    else openList();
+  });
+
+  items.forEach(function (item) {
+    item.addEventListener('click', function () {
+      var index = parseInt(item.dataset.index, 10);
+      if (index === current) {
+        toggle();
+        closeList();
+        return;
+      }
+      loadTrack(index, true);
+      closeList();
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    if (root.classList.contains('is-open') && !root.contains(e.target)) closeList();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && root.classList.contains('is-open')) closeList();
+  });
+
+  playBtn.addEventListener('click', toggle);
+
+  // ---------------------------------------------------------------- аудио
+
+  audio.addEventListener('play', function () {
+    setPlayingUI(true);
+    saveState();
+  });
+
+  audio.addEventListener('pause', function () {
+    setPlayingUI(false);
+    saveState();
+  });
+
+  audio.addEventListener('timeupdate', function () {
+    // сохраняем не чаще раза в секунду
+    if (!audio.lastSaved || audio.currentTime - audio.lastSaved > 1 || audio.currentTime < audio.lastSaved) {
+      audio.lastSaved = audio.currentTime;
+      saveState();
+    }
+  });
+
+  audio.addEventListener('ended', function () {
+    var next = (current + 1) % TRACKS.length;
+    loadTrack(next, true);
+  });
+
+  // Сохраняем позицию перед уходом со страницы
+  window.addEventListener('pagehide', saveState);
+  window.addEventListener('beforeunload', saveState);
+
+  // ---------------------------------------------------------------- восстановление
+
+  var saved = readState();
+  if (saved) {
+    loadTrack(saved.i, false, saved.t || 0);
+    if (saved.p) {
+      // продолжаем с того же места; если браузер запретит автозапуск —
+      // включим при первом действии пользователя
+      audio.addEventListener('loadedmetadata', function () {
+        play();
+      }, { once: true });
+    }
+  } else {
+    markActive(-1);
+    setPlayingUI(false);
+  }
+})();

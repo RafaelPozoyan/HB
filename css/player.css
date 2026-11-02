@@ -1,0 +1,358 @@
+/* ============================================================
+   Музыкальная панель: отдельный мини-бар слева от главного.
+   Высота — как у главного бара. Список песен раскрывается
+   внутри самой панели (никаких отдельных всплывашек).
+   ============================================================ */
+
+/* Контейнер, объединяющий плеер и навбар в одну строку */
+.top-dock {
+  display: flex;
+  align-items: stretch;      /* панель тянется до высоты навбара */
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+}
+
+/* Если навбар был position: sticky — панель должна остаться «плавающей» */
+.top-dock.is-sticky {
+  position: sticky;
+  top: 12px;
+  z-index: 60;
+  margin: 20px auto 0;
+  padding: 0 12px;
+}
+
+/* Внутри панели навбар — обычный элемент строки и своей высоты */
+.top-dock > nav {
+  position: static;
+  align-self: flex-start;
+  margin: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  width: min(760px, 100%);   /* уже, чем исходные 1024px */
+}
+
+/* Ссылки не должны вылезать за бар, когда панель занимает часть строки */
+.top-dock .site-nav-links {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.top-dock .site-nav-links::-webkit-scrollbar {
+  display: none;
+}
+
+/* ------------------------------------------------------------ панель */
+
+.nav-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  align-self: stretch;
+  padding: 0 13px 0 6px;
+  border: 1px solid rgba(201, 190, 226, .14);
+  border-radius: 16px;
+  background: rgba(45, 40, 62, .72);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .28);
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+
+.nav-player.is-open {
+  border-color: rgba(163, 235, 177, .38);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .28), 0 0 0 3px rgba(163, 235, 177, .07);
+}
+
+/* Кнопка play/pause с пульсирующим кольцом, пока музыка играет */
+.nav-player__play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(110deg, var(--accent), var(--accent-soft));
+  color: #13261b;
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(163, 235, 177, .28);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.nav-player__play::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid rgba(163, 235, 177, .55);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-player__play.is-playing::after {
+  animation: navPulse 2.2s ease-out infinite;
+}
+
+@keyframes navPulse {
+  0%   { opacity: .6; transform: scale(.86); }
+  65%  { opacity: 0;  transform: scale(1.35); }
+  100% { opacity: 0;  transform: scale(1.35); }
+}
+
+.nav-player__play:hover {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 8px 22px rgba(163, 235, 177, .42);
+}
+
+.nav-player__play:focus-visible {
+  outline: 2px solid rgba(163, 235, 177, .75);
+  outline-offset: 3px;
+}
+
+/* Анимированный эквалайзер рядом с кнопкой */
+.nav-player__eq {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 0 auto;
+  gap: 2px;
+  width: 10px;
+  height: 13px;
+}
+
+.nav-player__eq span {
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: .3;
+  transform: scaleY(.22);
+  transform-origin: bottom;
+  transition: transform .3s ease, opacity .3s ease;
+}
+
+.nav-player__play.is-playing + .nav-player__eq span {
+  opacity: .9;
+  animation: navEq .9s ease-in-out infinite alternate;
+}
+
+.nav-player__play.is-playing + .nav-player__eq span:nth-child(2) { animation-delay: -.3s; }
+.nav-player__play.is-playing + .nav-player__eq span:nth-child(3) { animation-delay: -.6s; }
+
+@keyframes navEq {
+  from { transform: scaleY(.22); }
+  to   { transform: scaleY(1); }
+}
+
+/* Название песни — кнопка раскрытия списка */
+.nav-player__pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  max-width: 112px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .2s ease;
+}
+
+.nav-player__pick:hover {
+  color: var(--accent-soft);
+}
+
+.nav-player__pick:focus-visible {
+  outline: 2px solid rgba(163, 235, 177, .6);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.nav-player__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Смена трека — название «подпрыгивает» */
+.nav-player__label.is-pop {
+  animation: navPop .35s ease;
+}
+
+@keyframes navPop {
+  0%   { opacity: .1; transform: translateY(5px); }
+  100% { opacity: 1;  transform: none; }
+}
+
+.nav-player__caret {
+  flex: 0 0 auto;
+  font-size: 7px;
+  opacity: .75;
+  transition: transform .25s ease;
+}
+
+.nav-player.is-open .nav-player__caret {
+  transform: rotate(180deg);
+}
+
+/* ------------------------------------------- раскрывающийся список песен */
+
+.nav-player__list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 0;
+  margin-left: 0;
+  padding: 4px 0;            /* место, чтобы наведение не резалось границей */
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    max-width .38s cubic-bezier(.22, .8, .3, 1),
+    opacity .22s ease,
+    margin-left .3s ease;
+}
+
+.nav-player.is-open .nav-player__list {
+  max-width: 420px;
+  margin-left: 4px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-player__track {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border: 1px solid rgba(163, 235, 177, .28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .03);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+/* Без transform: сдвиг обрезался бы границей списка */
+.nav-player__track:hover {
+  background: rgba(163, 235, 177, .14);
+  border-color: rgba(163, 235, 177, .6);
+  color: var(--accent-soft);
+}
+
+.nav-player__track:focus-visible {
+  outline: 2px solid rgba(163, 235, 177, .6);
+  outline-offset: 2px;
+}
+
+.nav-player__track.is-active {
+  border-color: transparent;
+  background: linear-gradient(110deg, var(--accent), var(--accent-soft));
+  color: #13261b;
+  box-shadow: 0 6px 16px rgba(163, 235, 177, .25);
+}
+
+/* ------------------------------------------- адаптив */
+
+/*
+  На узких экранах список не помещается в строку — он переносится
+  на вторую строку внутри той же панели, панель просто становится выше.
+*/
+@media (max-width: 1199px) {
+  .nav-player.is-open {
+    flex-wrap: wrap;
+    align-content: center;
+    width: 200px;              /* растем вниз, а не вбок — навбар не сжимается */
+    padding-bottom: 10px;
+  }
+
+  .nav-player.is-open .nav-player__list {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    max-width: 100%;
+    margin: 8px 0 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .top-dock {
+    gap: 6px;
+  }
+
+  .top-dock.is-sticky {
+    padding: 0 6px;
+  }
+
+  /* На телефоне раскрытая панель занимает свою строку, бар остаётся под ней */
+  .top-dock.is-open {
+    flex-wrap: wrap;
+  }
+
+  .top-dock.is-open > nav {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .nav-player.is-open {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .nav-player {
+    padding: 0 9px 0 4px;
+    gap: 6px;
+    border-radius: 14px;
+  }
+
+  .nav-player__play {
+    width: 24px;
+    height: 24px;
+    font-size: 9px;
+  }
+
+  .nav-player__pick {
+    max-width: 80px;
+    font-size: 10.5px;
+  }
+
+  .nav-player__eq {
+    height: 10px;
+  }
+
+  .nav-player.is-open .nav-player__track {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-player__play::after,
+  .nav-player__eq span,
+  .nav-player__label.is-pop {
+    animation: none !important;
+  }
+
+  .nav-player__list,
+  .nav-player__play,
+  .nav-player__pick,
+  .nav-player__caret,
+  .nav-player__track,
+  .nav-player__eq span,
+  .nav-player {
+    transition: none;
+  }
+}
