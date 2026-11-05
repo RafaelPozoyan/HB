@@ -4,7 +4,7 @@
   'use strict';
 
   // Момент открытия: 6 ноября 2026, 00:00 по московскому времени (UTC+3)
-  const UNLOCK_DATE = new Date('2026-11-05T00:00:00+03:00');
+  const UNLOCK_DATE = new Date('2026-11-06T00:00:00+03:00');
 
   // ВРЕМЕННО ОТКЛЮЧЕНО для тестирования входа: обратный отсчёт пропускается,
   // форма логина показывается сразу. Вернуть обратно: поставить true.
@@ -115,8 +115,6 @@
         </div>
 
         <p class="gate__date">6 ноября 2026 · 00:00 МСК</p>
-
-        <button type="button" class="gate__skip" id="gate-skip">Пропустить отсчёт →</button>
       </div>
 
       <div id="gate-login-view" class="gate__hidden">
@@ -144,9 +142,6 @@
   function mount() {
     document.body.appendChild(gate);
     document.body.style.overflow = 'hidden';
-
-    // Кнопка «Пропустить» — вешаем через делегирование один раз
-    bindSkip();
 
     // Запускаем логику гейта
     runGate();
@@ -229,26 +224,6 @@
 
     tick();
     timerId = setInterval(tick, 1000);
-  }
-
-  // --- Кнопка «Пропустить отсчёт» ---
-  let skipBound = false;
-
-  function bindSkip() {
-    if (skipBound) return;
-    skipBound = true;
-
-    document.addEventListener('click', function (event) {
-      const target = event.target;
-      if (!target || typeof target.closest !== 'function') return;
-
-      const btn = target.closest('#gate-skip');
-      if (btn) {
-        event.preventDefault();
-        // «Пропуск» открывает сайт как гость без спец-доступа.
-        unlock({ login: null, access: [] });
-      }
-    });
   }
 
   // --- Форма входа ---

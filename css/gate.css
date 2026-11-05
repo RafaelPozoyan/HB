@@ -111,27 +111,6 @@ html.gate-locked body > :not(.gate) {
   color: #8a81a2;
 }
 
-/* Кнопка «Пропустить отсчёт» */
-.gate__skip {
-  display: inline-block;
-  margin-top: 22px;
-  padding: 11px 20px;
-  border: 1px solid rgba(163, 235, 177, .35);
-  border-radius: 999px;
-  background: rgba(163, 235, 177, .10);
-  color: #a3ebb1;
-  font: inherit;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .25s ease, border-color .25s ease, transform .25s ease;
-}
-
-.gate__skip:hover {
-  background: rgba(163, 235, 177, .18);
-  border-color: rgba(163, 235, 177, .6);
-  transform: translateY(-2px);
-}
-
 /* Форма входа */
 .gate__form {
   margin-top: 8px;
