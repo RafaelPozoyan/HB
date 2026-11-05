@@ -120,6 +120,11 @@
       margin-top: 0;
     }
 
+    /* Резервные кнопки: класс .btn задаёт display, поэтому hidden нужно усилить */
+    .response-form__actions .btn[hidden] {
+      display: none;
+    }
+
     .response-form__status {
       margin-top: 16px;
       min-height: 22px;
@@ -265,6 +270,11 @@
         <button type="submit" id="send-answer" class="btn btn--primary">
           Отправить
         </button>
+        <!-- Показываются, только если почтовый сервис недоступен -->
+        <a id="send-mail" class="btn btn--ghost" href="#" hidden>Отправить письмом</a>
+        <button type="button" id="copy-answer" class="btn btn--ghost" hidden>
+          Скопировать ответ
+        </button>
       </div>
 
       <p id="response-status" class="response-form__status" role="status" aria-live="polite"></p>
@@ -282,6 +292,16 @@
     var form = document.getElementById('response-form');
     var status = document.getElementById('response-status');
     var submitBtn = document.getElementById('send-answer');
+    var mailLink = document.getElementById('send-mail');
+    var copyBtn = document.getElementById('copy-answer');
+
+    // Куда приходит ответ и сколько ждём ответа от почтового сервиса
+    var RECIPIENT_EMAIL = 'pozoyan.2000@gmail.com';
+    // Основной канал — Web3Forms (ключ привязан к почте владельца)
+    var WEB3FORMS_KEY = '1f501596-55a6-4625-a8de-8347e28494a4';
+    // Резервный канал — FormSubmit
+    var FORM_SUBMIT_URL = 'https://formsubmit.co/ajax/2fa32a0ce8b7e889ff90c78fa28c2ccb';
+    var SEND_TIMEOUT_MS = 12000;
 
     // Все поля формы
     var fields = [
@@ -361,6 +381,109 @@
       });
     });
 
+    // POST JSON с таймаутом: без него кнопка навсегда остаётся в «Отправляем...»
+    function postJson(url, body) {
+      var controller = new AbortController();
+      var timer = setTimeout(function () { controller.abort(); }, SEND_TIMEOUT_MS);
+
+      function done() { clearTimeout(timer); }
+
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal
+      }).then(function (response) {
+        done();
+        return response.json().then(function (data) {
+          return { response: response, data: data };
+        }, function () {
+          // сервис ответил не JSON (например, страницу ошибки Cloudflare)
+          return { response: response, data: {} };
+        });
+      }, function (error) {
+        done();
+        throw error;
+      });
+    }
+
+    function isFailure(res) {
+      return !res.response.ok ||
+        res.data.success === false ||
+        res.data.success === 'false';
+    }
+
+    function sendViaFormSubmit(payload) {
+      return postJson(FORM_SUBMIT_URL, payload).then(function (res) {
+        if (isFailure(res)) {
+          throw new Error(res.data.message || 'FormSubmit недоступен');
+        }
+      });
+    }
+
+    function sendViaWeb3Forms(subject, text) {
+      if (!WEB3FORMS_KEY) {
+        return Promise.reject(new Error('Web3Forms не настроен'));
+      }
+      return postJson('https://api.web3forms.com/submit', {
+        access_key: WEB3FORMS_KEY,
+        subject: subject,
+        from_name: 'Сайт для Алины',
+        message: text
+      }).then(function (res) {
+        if (isFailure(res)) {
+          throw new Error(res.data.message || 'Web3Forms недоступен');
+        }
+      });
+    }
+
+    function prepareMailFallback(text) {
+      var subject = 'Ответ на приглашение на свидание 💜';
+      mailLink.href = 'mailto:' + RECIPIENT_EMAIL +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(text);
+      copyBtn.dataset.text = text;
+    }
+
+    function hideFallback() {
+      mailLink.hidden = true;
+      copyBtn.hidden = true;
+      copyBtn.textContent = 'Скопировать ответ';
+    }
+
+    function showFallback() {
+      mailLink.hidden = false;
+      copyBtn.hidden = false;
+    }
+
+    copyBtn.addEventListener('click', function () {
+      var text = copyBtn.dataset.text || '';
+
+      function manualCopy() {
+        var area = document.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        try { document.execCommand('copy'); } catch (err) { /* ignore */ }
+        document.body.removeChild(area);
+        copyBtn.textContent = 'Скопировано ✓';
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          copyBtn.textContent = 'Скопировано ✓';
+        }, manualCopy);
+      } else {
+        manualCopy();
+      }
+    });
+
     // Валидация перед отправкой
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -378,57 +501,51 @@
       }
 
       // Собираем данные формы в объект
+      var subject = 'Ответ на приглашение на свидание 💜';
       var payload = {
-        _subject: 'Ответ на приглашение на свидание 💜',
+        _subject: subject,
         _template: 'table',
         _captcha: 'false'
       };
-      fields.forEach(function (el) {
+      var answerText = fields.map(function (el) {
         payload[el.name] = el.value.trim();
-      });
+        return el.name + ': ' + el.value.trim();
+      }).join('\n');
+
+      // Готовим резервный вариант заранее — чтобы ответ не потерялся
+      prepareMailFallback(answerText);
+      hideFallback();
 
       // Блокируем кнопку, чтобы не отправить дважды
       submitBtn.disabled = true;
       submitBtn.textContent = 'Отправляем...';
 
-      try {
-        var response = await fetch(
-          'https://formsubmit.co/ajax/2fa32a0ce8b7e889ff90c78fa28c2ccb',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify(payload)
-          }
-        );
-
-        var result = await response.json();
-
-        if (!response.ok || result.success === 'false' || result.success === false) {
-          // FormSubmit вернул ошибку (например, форма ещё не активирована)
-          var reason = result && result.message ? result.message : 'Не удалось отправить форму';
-          throw new Error(reason);
-        }
-
-        // Успех — прячем форму и показываем сообщение
+      function showSuccess() {
         form.hidden = true;
+        hideFallback();
         var responseEl = document.getElementById('response');
         responseEl.textContent = 'Ваши предпочтения направлены Рафуле, ждите ответа!';
         responseEl.classList.add('is-ok');
         responseEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } catch (error) {
-        console.error('Ошибка отправки:', error);
-        // Показываем причину, если она пришла от FormSubmit, иначе общее сообщение
-        var msg = error && error.message ? error.message : '';
-        var isFormSubmitMsg = msg && msg !== 'Не удалось отправить форму' && msg !== 'Failed to fetch';
-        status.textContent = isFormSubmitMsg
-          ? msg
-          : 'Не получилось отправить. Попробуй ещё раз.';
-        status.classList.add('is-error');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Отправить';
+      }
+
+      try {
+        await sendViaWeb3Forms(subject, answerText);
+        showSuccess();
+      } catch (web3formsError) {
+        console.warn('Web3Forms не сработал:', web3formsError);
+
+        try {
+          await sendViaFormSubmit(payload);
+          showSuccess();
+        } catch (formSubmitError) {
+          console.error('Ошибка отправки:', formSubmitError);
+          status.textContent = 'Почтовый сервис сейчас недоступен. Отправь ответ письмом — адрес и текст уже подставлены — или скопируй ответ и пришли его Рафуле в Telegram.';
+          status.classList.add('is-error');
+          showFallback();
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Попробовать снова';
+        }
       }
     });
   })();

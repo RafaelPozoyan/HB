@@ -239,6 +239,7 @@
   // ------------------------------------------- раскрытие списка внутри бара
 
   function openList() {
+    hideHint();
     root.classList.add('is-open');
     if (dockEl) dockEl.classList.add('is-open');
     pickBtn.setAttribute('aria-expanded', 'true');
@@ -271,18 +272,96 @@
 
   document.addEventListener('click', function (e) {
     if (root.classList.contains('is-open') && !root.contains(e.target)) closeList();
+    if (root.classList.contains('has-hint') && !root.contains(e.target)) hideHint();
   });
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && root.classList.contains('is-open')) closeList();
+    if (e.key === 'Escape') hideHint();
   });
 
   playBtn.addEventListener('click', toggle);
+
+  // ------------------------------------------------- подсказка «включи музыку»
+
+  // Показываем подсказку один раз за сессию: после входа на сайт она
+  // анимированно появляется под плеером и мягко исчезает сама.
+  var HINT_SEEN_KEY = 'alinaMusicHintSeen';
+  var hintEl = null;
+  var hintTimer = null;
+
+  function hintWasShown() {
+    try { return sessionStorage.getItem(HINT_SEEN_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function markHintShown() {
+    try { sessionStorage.setItem(HINT_SEEN_KEY, '1'); } catch (e) { /* приватный режим */ }
+  }
+
+  function ensureHint() {
+    if (hintEl) return hintEl;
+
+    hintEl = document.createElement('button');
+    hintEl.type = 'button';
+    hintEl.className = 'nav-player__hint';
+    hintEl.innerHTML =
+      '<span class="nav-player__hint-notes" aria-hidden="true">' +
+        '<span>♪</span><span>♫</span><span>♩</span>' +
+      '</span>' +
+      '<span class="nav-player__hint-text">Включи музыку</span>' +
+      '<span class="nav-player__hint-wave" aria-hidden="true">' +
+        '<span></span><span></span><span></span>' +
+      '</span>';
+
+    hintEl.addEventListener('click', function (e) {
+      e.stopPropagation();
+      hideHint();
+      play();
+    });
+
+    root.appendChild(hintEl);
+    return hintEl;
+  }
+
+  function showHint() {
+    if (hintWasShown()) return;
+    if (!audio.paused) { markHintShown(); return; }
+    if (!document.body.contains(root)) return;                       // док ещё не смонтирован
+    if (document.documentElement.classList.contains('gate-locked')) return; // ждём вход
+
+    markHintShown();
+    ensureHint();
+    root.classList.add('has-hint');
+
+    hintTimer = setTimeout(hideHint, 11000);
+  }
+
+  function hideHint() {
+    if (!hintEl || !root.classList.contains('has-hint')) return;
+    clearTimeout(hintTimer);
+    root.classList.remove('has-hint');
+  }
+
+  function scheduleHint() {
+    if (hintWasShown()) return;
+    if (!audio.paused) return;
+
+    // Если сайт ещё закрыт гейтом — подсказываем только после входа
+    if (document.documentElement.classList.contains('gate-locked')) {
+      document.addEventListener('alina:unlocked', function () {
+        setTimeout(showHint, 900);   // даём гейту раствориться
+      }, { once: true });
+      return;
+    }
+
+    setTimeout(showHint, 900);
+  }
 
   // ---------------------------------------------------------------- аудио
 
   audio.addEventListener('play', function () {
     setPlayingUI(true);
+    hideHint();
     saveState();
   });
 
@@ -324,4 +403,7 @@
     markActive(-1);
     setPlayingUI(false);
   }
+
+  // Подсказка о музыке — после того как состояние плеера восстановлено
+  scheduleHint();
 })();

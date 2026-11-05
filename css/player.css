@@ -306,6 +306,150 @@
   box-shadow: 0 6px 16px rgba(163, 235, 177, .25);
 }
 
+/* ------------------------------------------- подсказка «включи музыку» */
+
+/*
+  Появляется под баром после входа на сайт: пульсирующая кнопка play,
+  парящие ноты и мягкая подсказка. Логика показа — в player.js.
+*/
+.nav-player__hint {
+  position: absolute;
+  top: calc(100% + 13px);
+  left: 0;
+  z-index: 29;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px 9px 10px;
+  border: 1px solid rgba(163, 235, 177, .42);
+  border-radius: 999px;
+  background: rgba(38, 33, 54, .97);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  color: #eafff0;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px) scale(.88);
+  transform-origin: 24px 0;
+  pointer-events: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .42);
+  transition:
+    opacity .3s ease,
+    transform .38s cubic-bezier(.22, .8, .3, 1),
+    visibility .3s;
+}
+
+/* Хвостик-стрелочка, смотрящая на кнопку play */
+.nav-player__hint::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 16px;
+  width: 9px;
+  height: 9px;
+  background: inherit;
+  border-left: 1px solid rgba(163, 235, 177, .42);
+  border-top: 1px solid rgba(163, 235, 177, .42);
+  transform: rotate(45deg);
+}
+
+.nav-player.has-hint .nav-player__hint {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+  animation: navHintIn .55s cubic-bezier(.22, .9, .3, 1) both;
+}
+
+@keyframes navHintIn {
+  0%   { opacity: 0; transform: translateY(-10px) scale(.82); }
+  55%  { opacity: 1; transform: translateY(2px) scale(1.04); }
+  100% { opacity: 1; transform: none; }
+}
+
+.nav-player__hint:hover {
+  border-color: rgba(163, 235, 177, .7);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .5), 0 0 0 3px rgba(163, 235, 177, .08);
+}
+
+.nav-player__hint:focus-visible {
+  outline: 2px solid rgba(163, 235, 177, .75);
+  outline-offset: 3px;
+}
+
+/* Парящие ноты */
+.nav-player__hint-notes {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.nav-player__hint-notes span {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: navHintNote 2.4s ease-in-out infinite;
+}
+
+.nav-player__hint-notes span:nth-child(1) { animation-delay: 0s; }
+.nav-player__hint-notes span:nth-child(2) { animation-delay: .8s; font-size: 10px; }
+.nav-player__hint-notes span:nth-child(3) { animation-delay: 1.6s; font-size: 11px; }
+
+@keyframes navHintNote {
+  0%   { opacity: 0; transform: translateY(4px) scale(.7); }
+  20%  { opacity: 1; }
+  65%  { opacity: .85; }
+  100% { opacity: 0; transform: translateY(-12px) scale(1.05); }
+}
+
+/* Мини-эквалайзер в конце подсказки */
+.nav-player__hint-wave {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 0 0 auto;
+  height: 11px;
+}
+
+.nav-player__hint-wave span {
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transform-origin: bottom;
+  animation: navHintWave .9s ease-in-out infinite alternate;
+}
+
+.nav-player__hint-wave span:nth-child(2) { animation-delay: -.3s; }
+.nav-player__hint-wave span:nth-child(3) { animation-delay: -.6s; }
+
+@keyframes navHintWave {
+  from { transform: scaleY(.25); opacity: .5; }
+  to   { transform: scaleY(1); opacity: 1; }
+}
+
+/* Пока подсказка висит — кнопка play мягко пульсирует */
+.nav-player.has-hint .nav-player__play {
+  animation: navHintPlayPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes navHintPlayPulse {
+  0%, 100% { box-shadow: 0 6px 16px rgba(163, 235, 177, .28), 0 0 0 0 rgba(163, 235, 177, .45); }
+  70%      { box-shadow: 0 6px 16px rgba(163, 235, 177, .28), 0 0 0 10px rgba(163, 235, 177, 0); }
+}
+
 /* ------------------------------------------- адаптив */
 
 @media (max-width: 767px) {
@@ -387,12 +531,32 @@
     padding: 6px 10px;
     font-size: 11px;
   }
+
+  .nav-player__hint {
+    top: calc(100% + 10px);
+    gap: 6px;
+    padding: 8px 12px 8px 8px;
+    font-size: 11px;
+  }
+
+  .nav-player__hint::before {
+    left: 13px;
+  }
+
+  .nav-player__hint-notes {
+    width: 12px;
+    font-size: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .nav-player__play::after,
   .nav-player__eq span,
-  .nav-player__label.is-pop {
+  .nav-player__label.is-pop,
+  .nav-player__hint,
+  .nav-player__hint-notes span,
+  .nav-player__hint-wave span,
+  .nav-player.has-hint .nav-player__play {
     animation: none !important;
   }
 
@@ -402,6 +566,7 @@
   .nav-player__caret,
   .nav-player__track,
   .nav-player__eq span,
+  .nav-player__hint,
   .nav-player {
     transition: none;
   }
